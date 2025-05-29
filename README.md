@@ -1,4 +1,4 @@
-# Dallyeobom-FE
+# Dallyeobom APP
 
 ## Get started
 
