@@ -1,17 +1,17 @@
 import { useAuthStore } from '@/stores/auth-store';
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   const { userId, logout } = useAuthStore();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!userId) {
-      router.replace('/login');
-    }
-  }, [router, userId]);
+  // 아래 얘 때문에 에러가 난다
+  // useEffect(() => {
+  //   if (!userId) {
+  //     router.replace('/login');
+  //   }
+  // }, [router, userId]);
 
   const handleLogout = () => {
     Alert.alert('', '로그아웃하시겠습니까?', [

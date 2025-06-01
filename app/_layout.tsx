@@ -1,8 +1,17 @@
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { View } from 'react-native';
 import 'react-native-reanimated';
+
+async function enableMocking() {
+  if (!__DEV__) {
+    return;
+  }
+  await import('../msw.polyfills');
+  const { server } = await import('../mocks/server');
+  server.listen();
+}
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -13,8 +22,12 @@ export default function RootLayout() {
     return null;
   }
 
+  enableMocking().then(() => {
+    // AppRegistry.registerComponent(appName, () => App)
+  });
+
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <View>
       <Stack>
         <Stack.Screen
           name="index"
@@ -27,6 +40,6 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
-    </ThemeProvider>
+    </View>
   );
 }
