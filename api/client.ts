@@ -5,6 +5,7 @@ export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 const client = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  adapter: 'fetch',
 });
 
 client.interceptors.request.use((config) => {

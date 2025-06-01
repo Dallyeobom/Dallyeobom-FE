@@ -4,15 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import 'react-native-reanimated';
 
-async function enableMocking() {
-  if (!__DEV__) {
-    return;
-  }
-  await import('../msw.polyfills');
-  const { server } = await import('../mocks/server');
-  server.listen();
-}
-
 export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -22,12 +13,8 @@ export default function RootLayout() {
     return null;
   }
 
-  enableMocking().then(() => {
-    // AppRegistry.registerComponent(appName, () => App)
-  });
-
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Stack>
         <Stack.Screen
           name="index"

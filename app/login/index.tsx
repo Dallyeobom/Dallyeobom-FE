@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/auth-store';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -18,6 +18,8 @@ const LoginScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
 
+  const router = useRouter();
+
   const handleLogin = async () => {
     if (!userId || !password) {
       Alert.alert('에러', '아이디, 비밀번호 모두 입력하세요.');
@@ -25,7 +27,8 @@ const LoginScreen: React.FC = () => {
     }
     setLoading(true);
     try {
-      await login(userId, password);
+      const result = await login(userId, password);
+      console.log('Login API 결과입니다', result);
       Alert.alert('성공', '로그인되었습니다.');
       router.push('/');
     } catch (err: any) {
@@ -56,7 +59,7 @@ const LoginScreen: React.FC = () => {
           <ActivityIndicator size="large" />
         ) : (
           <Button
-            title="로그인"
+            title="로그인2222222"
             onPress={handleLogin}
           />
         )}

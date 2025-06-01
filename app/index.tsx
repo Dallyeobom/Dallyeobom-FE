@@ -1,7 +1,20 @@
+import RootLayout from '@/app/_layout';
 import { useAuthStore } from '@/stores/auth-store';
 import { useRouter } from 'expo-router';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, AppRegistry, Pressable, StyleSheet, Text, View } from 'react-native';
+import appConfig from '../app.json';
+async function enableMocking() {
+  if (!__DEV__) {
+    return;
+  }
+  await import('../msw.polyfills');
+  const { server } = await import('../mocks/server');
+  server.listen({ onUnhandledRequest: 'error' });
+}
 
+enableMocking().then(() => {
+  AppRegistry.registerComponent(appConfig.expo.name, () => RootLayout);
+});
 export default function HomeScreen() {
   const { userId, logout } = useAuthStore();
   const router = useRouter();
@@ -31,6 +44,13 @@ export default function HomeScreen() {
       <Text>현재 사용자: {userId}</Text>
       <Pressable onPress={handleLogout}>
         <Text style={styles.logoutText}>로그아웃</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          router.push('/login');
+        }}
+      >
+        <Text style={styles.logoutText}>로그인페이지로가기</Text>
       </Pressable>
     </View>
   );
