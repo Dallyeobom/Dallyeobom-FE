@@ -17,13 +17,14 @@ const SignUpScreen: React.FC = () => {
 
   const handleSignUp = async () => {
     if (!nickName) {
-      Alert.alert('에러', '닉네임을 입력해주세요');
+      Alert.alert('error', '닉네임을 입력해주세요');
       return;
     }
+
     try {
       const result = await signup(nickName);
       if (result >= 400) {
-        return Alert.alert('Error', '회원가입에 실패하였습니다다');
+        return Alert.alert('error', '회원가입에 실패하였습니다다');
       }
       Alert.alert('success', '회원가입에 성공하였습니다', [
         { text: 'OK', onPress: () => router.navigate('/') },
@@ -37,6 +38,7 @@ const SignUpScreen: React.FC = () => {
       <View style={styles.form}>
         <Text style={styles.label}>아이디</Text>
         <TextInput
+          testID="signup"
           style={styles.input}
           autoCapitalize="none"
           value={nickName}

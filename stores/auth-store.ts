@@ -1,11 +1,7 @@
+import { LoginResponse } from '@/types/auth';
 import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 import * as authAPI from '../api/auth.service';
-
-type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-};
 
 interface AuthState {
   userId: string | null;

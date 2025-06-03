@@ -3,7 +3,7 @@ import { delay, http, HttpResponse } from 'msw';
 
 export const handlers = [
   http.all('*', async () => {
-    await delay(1000);
+    await delay(100);
   }),
   http.post(`${API_BASE_URL}/api/v1/auth/temporal/login`, async () => {
     return HttpResponse.json({
@@ -11,6 +11,7 @@ export const handlers = [
       refreshToken: 'refreshToken',
     });
   }),
+
   http.post(`${API_BASE_URL}/api/v1/auth/temporal/create`, async () => {
     return new HttpResponse(null, { status: 201 });
   }),

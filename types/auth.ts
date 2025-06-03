@@ -11,3 +11,6 @@ export interface LoginResponse {
 export interface SignUpParams {
   nickname: string;
 }
+export interface SignUpResponse {
+  status: number;
+}
