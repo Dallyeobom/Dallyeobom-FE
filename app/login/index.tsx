@@ -59,7 +59,7 @@ const LoginScreen: React.FC = () => {
           <ActivityIndicator size="large" />
         ) : (
           <Button
-            title="로그인2222222"
+            title="로그인"
             onPress={handleLogin}
           />
         )}

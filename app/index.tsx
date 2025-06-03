@@ -45,13 +45,24 @@ export default function HomeScreen() {
       <Pressable onPress={handleLogout}>
         <Text style={styles.logoutText}>로그아웃</Text>
       </Pressable>
-      <Pressable
-        onPress={() => {
-          router.push('/login');
-        }}
-      >
-        <Text style={styles.logoutText}>로그인페이지로가기</Text>
-      </Pressable>
+      <View style={styles.button}>
+        <Pressable
+          onPress={() => {
+            router.push('/login');
+          }}
+        >
+          <Text style={styles.logoutText}>로그인페이지로가기</Text>
+        </Pressable>
+      </View>
+      <View style={styles.button}>
+        <Pressable
+          onPress={() => {
+            router.push('/signup');
+          }}
+        >
+          <Text style={styles.logoutText}>회원가입페이지로가기</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -72,5 +83,10 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 18,
     fontWeight: '400',
+  },
+  button: {
+    borderColor: 'blue',
+    borderWidth: 2,
+    marginBottom: 2,
   },
 });
