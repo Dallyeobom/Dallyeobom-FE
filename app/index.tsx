@@ -1,17 +1,30 @@
+import RootLayout from '@/app/_layout';
 import { useAuthStore } from '@/stores/auth-store';
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, AppRegistry, Pressable, StyleSheet, Text, View } from 'react-native';
+import appConfig from '../app.json';
+async function enableMocking() {
+  if (!__DEV__) {
+    return;
+  }
+  await import('../msw.polyfills');
+  const { server } = await import('../mocks/server');
+  server.listen({ onUnhandledRequest: 'error' });
+}
 
+enableMocking().then(() => {
+  AppRegistry.registerComponent(appConfig.expo.name, () => RootLayout);
+});
 export default function HomeScreen() {
   const { userId, logout } = useAuthStore();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!userId) {
-      router.replace('/login');
-    }
-  }, [router, userId]);
+  // 아래 얘 때문에 에러가 난다
+  // useEffect(() => {
+  //   if (!userId) {
+  //     router.replace('/login');
+  //   }
+  // }, [router, userId]);
 
   const handleLogout = () => {
     Alert.alert('', '로그아웃하시겠습니까?', [
@@ -32,6 +45,24 @@ export default function HomeScreen() {
       <Pressable onPress={handleLogout}>
         <Text style={styles.logoutText}>로그아웃</Text>
       </Pressable>
+      <View style={styles.button}>
+        <Pressable
+          onPress={() => {
+            router.push('/login');
+          }}
+        >
+          <Text style={styles.logoutText}>로그인페이지로가기</Text>
+        </Pressable>
+      </View>
+      <View style={styles.button}>
+        <Pressable
+          onPress={() => {
+            router.push('/signup');
+          }}
+        >
+          <Text style={styles.logoutText}>회원가입페이지로가기</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -52,5 +83,10 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 18,
     fontWeight: '400',
+  },
+  button: {
+    borderColor: 'blue',
+    borderWidth: 2,
+    marginBottom: 2,
   },
 });
