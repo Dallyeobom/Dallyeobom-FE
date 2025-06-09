@@ -1,8 +1,6 @@
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { View } from 'react-native';
 import 'react-native-reanimated';
 
 export default function RootLayout() {
@@ -16,7 +14,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <View style={{ flex: 1 }}>
+      {/* <View style={{ flex: 1 }}>
         <Stack>
           <Stack.Screen
             name="index"
@@ -33,7 +31,13 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
-      </View>
+      </View> */}
+      <Stack>
+        <Stack.Screen
+          name="(tabs)"
+          options={{ headerShown: false }}
+        />
+      </Stack>
     </ThemeProvider>
   );
 }
