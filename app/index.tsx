@@ -1,6 +1,8 @@
 import RootLayout from '@/app/_layout';
 import { useAuthStore } from '@/stores/auth-store';
+import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Alert, AppRegistry, Pressable, StyleSheet, Text, View } from 'react-native';
 import appConfig from '../app.json';
 async function enableMocking() {
@@ -16,6 +18,8 @@ enableMocking().then(() => {
   AppRegistry.registerComponent(appConfig.expo.name, () => RootLayout);
 });
 export default function HomeScreen() {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { userId, logout } = useAuthStore();
   const router = useRouter();
 
@@ -36,6 +40,28 @@ export default function HomeScreen() {
     ]);
   };
 
+  const handleGetLocation = () => {
+    let text = 'Waiting...';
+    if (errorMsg) {
+      text = errorMsg;
+    } else if (location) {
+      text = JSON.stringify(location);
+    }
+  };
+  useEffect(() => {
+    async function getCurrentLocation() {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    }
+
+    getCurrentLocation();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -61,6 +87,12 @@ export default function HomeScreen() {
           }}
         >
           <Text style={styles.logoutText}>회원가입페이지로가기</Text>
+        </Pressable>
+      </View>
+      <View style={styles.button}>
+        <Pressable onPress={handleGetLocation}>
+          <Text style={styles.logoutText}>위치 정보 가져오기</Text>
+          <Text>{JSON.stringify(location)}</Text>
         </Pressable>
       </View>
     </View>
