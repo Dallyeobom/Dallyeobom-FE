@@ -16,10 +16,10 @@ function TabLayout() {
             />
           ),
           title: 'Ranking',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}
-              name="star-outline"
+              name={focused ? 'star' : 'star-outline'}
               color={color}
             />
           ),
@@ -35,10 +35,10 @@ function TabLayout() {
             />
           ),
           title: 'Home',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}
-              name="home-outline"
+              name={focused ? 'home' : 'home-outline'}
               color={color}
             />
           ),
@@ -54,10 +54,10 @@ function TabLayout() {
               android_ripple={{ color: 'transparent' }}
             />
           ),
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}
-              name="search-outline"
+              name={focused ? 'search' : 'search-outline'}
               color={color}
             />
           ),
@@ -73,10 +73,10 @@ function TabLayout() {
               android_ripple={{ color: 'transparent' }}
             />
           ),
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}
-              name="person-outline"
+              name={focused ? 'person' : 'person-outline'}
               color={color}
             />
           ),
