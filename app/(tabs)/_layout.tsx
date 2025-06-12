@@ -1,4 +1,5 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { PlatformPressable } from '@react-navigation/elements';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
@@ -8,11 +9,17 @@ function TabLayout() {
       <Tabs.Screen
         name="ranking"
         options={{
+          tabBarButton: (props) => (
+            <PlatformPressable
+              {...props}
+              android_ripple={{ color: 'transparent' }}
+            />
+          ),
           title: 'Ranking',
           tabBarIcon: ({ color }) => (
-            <FontAwesome
+            <Ionicons
               size={28}
-              name="star"
+              name="star-outline"
               color={color}
             />
           ),
@@ -21,11 +28,17 @@ function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          tabBarButton: (props) => (
+            <PlatformPressable
+              {...props}
+              android_ripple={{ color: 'transparent' }}
+            />
+          ),
           title: 'Home',
           tabBarIcon: ({ color }) => (
-            <FontAwesome
+            <Ionicons
               size={28}
-              name="home"
+              name="home-outline"
               color={color}
             />
           ),
@@ -35,10 +48,16 @@ function TabLayout() {
         name="search"
         options={{
           title: 'Search',
+          tabBarButton: (props) => (
+            <PlatformPressable
+              {...props}
+              android_ripple={{ color: 'transparent' }}
+            />
+          ),
           tabBarIcon: ({ color }) => (
-            <FontAwesome
+            <Ionicons
               size={28}
-              name="search"
+              name="search-outline"
               color={color}
             />
           ),
@@ -48,10 +67,16 @@ function TabLayout() {
         name="profile"
         options={{
           title: 'Profile',
+          tabBarButton: (props) => (
+            <PlatformPressable
+              {...props}
+              android_ripple={{ color: 'transparent' }}
+            />
+          ),
           tabBarIcon: ({ color }) => (
-            <FontAwesome
+            <Ionicons
               size={28}
-              name="user"
+              name="person-outline"
               color={color}
             />
           ),
