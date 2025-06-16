@@ -1,14 +1,14 @@
+import appConfig from '@/app.json';
 import RootLayout from '@/app/_layout';
 import { useAuthStore } from '@/stores/auth-store';
 import { useRouter } from 'expo-router';
 import { Alert, AppRegistry, Pressable, StyleSheet, Text, View } from 'react-native';
-import appConfig from '../app.json';
 async function enableMocking() {
   if (!__DEV__) {
     return;
   }
-  await import('../msw.polyfills');
-  const { server } = await import('../mocks/server');
+  await import('@/msw.polyfills');
+  const { server } = await import('@/mocks/server');
   server.listen({ onUnhandledRequest: 'error' });
 }
 
@@ -18,13 +18,6 @@ enableMocking().then(() => {
 export default function HomeScreen() {
   const { userId, logout } = useAuthStore();
   const router = useRouter();
-
-  // 아래 얘 때문에 에러가 난다
-  // useEffect(() => {
-  //   if (!userId) {
-  //     router.replace('/login');
-  //   }
-  // }, [router, userId]);
 
   const handleLogout = () => {
     Alert.alert('', '로그아웃하시겠습니까?', [
