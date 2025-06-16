@@ -11,14 +11,22 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
+  const isLoggedIn = false;
   return (
     <ThemeProvider value={DefaultTheme}>
       <Stack>
-        <Stack.Screen
-          name="(tabs)"
-          options={{ headerShown: false }}
-        />
+        {/* 로그인이 안되었을때 보이는 장면 */}
+        <Stack.Protected guard={!isLoggedIn}>
+          <Stack.Screen name="login" />
+        </Stack.Protected>
+
+        {/* 로그인이 됬을때 보이는 화면 */}
+        <Stack.Protected guard={isLoggedIn}>
+          <Stack.Screen
+            name="(tabs)"
+            options={{ headerShown: false }}
+          />
+        </Stack.Protected>
       </Stack>
     </ThemeProvider>
   );
