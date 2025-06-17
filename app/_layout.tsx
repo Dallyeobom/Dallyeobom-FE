@@ -14,10 +14,24 @@ export default function RootLayout() {
   const isLoggedIn = false;
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#4c1ef4',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerShown: false,
+        }}
+      >
         {/* 로그인이 안되었을때 보이는 장면 */}
         <Stack.Protected guard={!isLoggedIn}>
-          <Stack.Screen name="login" />
+          <Stack.Screen
+            name="login"
+            options={{}}
+          />
         </Stack.Protected>
 
         {/* 로그인이 됬을때 보이는 화면 */}
