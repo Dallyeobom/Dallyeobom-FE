@@ -1,6 +1,13 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -59,13 +66,17 @@ const LoginScreen: React.FC = () => {
           />
         </Animated.View>
         <View style={styles.loginButtonContainer}>
-          {/* <Image
-            style={{ height: 60 }}
-            source={require('@/assets/images/tooltip.png')}
-          ></Image> */}
+          <View>
+            <Image
+              style={{ width: 260 }}
+              source={require('@/assets/images/tooltip.png')}
+            ></Image>
+          </View>
           <View style={styles.kakaoButton}>
             <Image source={require('@/assets/images/kakao-symbol.png')}></Image>
-            <Text style={styles.kakaoButtonText}>카카오톡으로 3초만에 시작하기</Text>
+            <Pressable>
+              <Text style={styles.kakaoButtonText}>카카오톡으로 3초만에 시작하기</Text>
+            </Pressable>
           </View>
         </View>
       </View>
@@ -122,7 +133,6 @@ const styles = StyleSheet.create({
   loginButtonContainer: {
     position: 'absolute',
     bottom: 40,
-
     zIndex: 10,
 
     width: '100%',
