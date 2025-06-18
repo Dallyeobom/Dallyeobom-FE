@@ -38,12 +38,13 @@ const LoginScreen: React.FC = () => {
       <View style={styles.subContainer}>
         <View style={styles.mainTextContainer}>
           <Text style={styles.mainText}>당신의 런닝 파트너</Text>
-          {/* <View style={{ width: 200, height: 50 }}>
-            <Image source={require('@/assets/images/typo-logo.png')}></Image>
-          </View> */}
-          <Text style={styles.mainText}>
-            가볍게 뛰고 싶을 때, 지금 바로 시작해보세요!
-          </Text>
+          <View style={styles.imageContainer}>
+            <Image
+              style={{ width: 220, height: 48 }}
+              source={require('@/assets/images/typo-logo.png')}
+            />
+          </View>
+          <Text style={styles.subText}>가볍게 뛰고 싶을 때, 지금 바로 시작해보세요!</Text>
         </View>
         <Animated.View style={[styles.sliderContainer, animatedStyle]}>
           <Animated.Image
@@ -57,8 +58,15 @@ const LoginScreen: React.FC = () => {
             resizeMode="cover"
           />
         </Animated.View>
-        <View style={styles.button}>
-          <Image source={require('@/assets/images/kakao.png')}></Image>
+        <View style={styles.loginButtonContainer}>
+          {/* <Image
+            style={{ height: 60 }}
+            source={require('@/assets/images/tooltip.png')}
+          ></Image> */}
+          <View style={styles.kakaoButton}>
+            <Image source={require('@/assets/images/kakao-symbol.png')}></Image>
+            <Text style={styles.kakaoButtonText}>카카오톡으로 3초만에 시작하기</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -86,13 +94,7 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
   },
-  button: {
-    position: 'absolute',
-    bottom: 40,
-    left: '25%',
-    transform: [{ translateX: -50 }],
-    zIndex: 10,
-  },
+
   mainTextContainer: {
     position: 'absolute',
     top: '50%',
@@ -102,9 +104,49 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
+  imageContainer: {
+    marginBottom: 20,
+  },
   mainText: {
+    fontSize: 16,
     color: '#fff',
-    fontWeight: '700',
+    fontWeight: '400',
+    marginBottom: 10,
+  },
+  subText: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: '400',
+  },
+
+  loginButtonContainer: {
+    position: 'absolute',
+    bottom: 40,
+
+    zIndex: 10,
+
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  kakaoButton: {
+    backgroundColor: '#FEE500',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    width: '90%',
+  },
+  kakaoButtonText: {
+    fontSize: 16,
+    color: '#000000',
+    fontWeight: '500',
+    lineHeight: 22,
+    letterSpacing: -0.2,
   },
 });
 
