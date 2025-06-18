@@ -1,8 +1,8 @@
 import { Slot } from 'expo-router';
 import React from 'react';
 
-function PrivateLayout() {
+function NicknameLayout() {
   return <Slot />;
 }
 
-export default PrivateLayout;
+export default NicknameLayout;

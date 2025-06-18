@@ -30,7 +30,7 @@ export default function RootLayout() {
         <Stack.Protected guard={!isLoggedIn}>
           <Stack.Screen
             name="login"
-            options={{}}
+            options={{ headerShown: false, title: '로그인' }}
           />
         </Stack.Protected>
 
