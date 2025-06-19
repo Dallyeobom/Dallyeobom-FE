@@ -1,6 +1,8 @@
+import { base } from '@/styles/color';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import { Image } from 'react-native';
 import 'react-native-reanimated';
 
 export default function RootLayout() {
@@ -17,13 +19,16 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#4c1ef4',
+            backgroundColor: base.white,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
           },
           headerShown: false,
+          headerBackVisible: false,
+          headerShadowVisible: false,
+          headerTitle: () => <Image source={require('@/assets/images/back.png')} />,
         }}
       >
         {/* 로그인이 안되었을때 보이는 장면 */}
@@ -31,6 +36,10 @@ export default function RootLayout() {
           <Stack.Screen
             name="login"
             options={{ headerShown: false, title: '로그인' }}
+          />
+          <Stack.Screen
+            name="nickname"
+            options={{ headerShown: true, title: '테스트입니다' }}
           />
         </Stack.Protected>
 

@@ -1,3 +1,7 @@
+export const base = {
+  white: '#FFFFFF',
+  black: '#000000',
+};
 export const gray = {
   5: '#FDFDFD',
   10: '#F7F7F7',

@@ -74,7 +74,7 @@ const LoginScreen: React.FC = () => {
           </View>
           <View style={styles.kakaoButton}>
             <Image source={require('@/assets/images/kakao-symbol.png')}></Image>
-            <Pressable onPress={() => router.push('/')}>
+            <Pressable onPress={() => router.push('/nickname')}>
               <Text style={styles.kakaoButtonText}>카카오톡으로 3초만에 시작하기</Text>
             </Pressable>
           </View>
