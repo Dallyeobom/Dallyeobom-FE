@@ -1,6 +1,6 @@
 import { base, main } from '@/styles/color';
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
@@ -10,10 +10,35 @@ function Index() {
   const handleNicknameChange = (text: string) => {
     onChangeNickname(text);
   };
-  const handlePress = () => {};
+
+  const handlePress = () => {
+    if (nickname.length === 0) {
+      Alert.alert('닉네임을 한 글자이상  작성해주세요', 'My Alert Msg', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+      return;
+    }
+    Alert.alert('닉네임 중복 체크하는 API', 'My Alert Msg', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ]);
+  };
+
+  const handleDelete = () => {
+    onChangeNickname('');
+  };
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <View>
+      <View style={styles.subContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>반갑습니다!</Text>
           <Text style={styles.title}>어떻게 불러드릴까요?</Text>
@@ -24,19 +49,23 @@ function Index() {
             onChangeText={handleNicknameChange}
             value={nickname}
             placeholder="닉네임 입력"
-            keyboardType="numeric"
           />
           {nickname.length > 0 && (
-            <Image
+            <Pressable
               style={styles.image}
-              source={require('@/assets/images/close.png')}
-            />
+              onPress={handleDelete}
+            >
+              <Image source={require('@/assets/images/close.png')} />
+            </Pressable>
           )}
+        </View>
+        <View style={styles.nicknameLengthText}>
+          <Text>{nickname.length}/15</Text>
         </View>
       </View>
 
       <Pressable
-        onPress={() => {}}
+        onPress={handlePress}
         style={({ pressed }) => [
           styles.nicknameButton,
           {
@@ -56,7 +85,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: base.white,
+    borderWidth: 1,
+    display: 'flex',
     justifyContent: 'space-between',
+  },
+  subContainer: {
+    display: 'flex',
   },
   titleContainer: {
     marginBottom: 20,
@@ -81,6 +115,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     position: 'relative',
+    marginBottom: 10,
   },
 
   input: {
@@ -101,5 +136,8 @@ const styles = StyleSheet.create({
     height: 24,
     top: '30%',
     right: 10,
+  },
+  nicknameLengthText: {
+    alignSelf: 'flex-end',
   },
 });
