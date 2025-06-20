@@ -19,6 +19,8 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const LoginScreen: React.FC = () => {
+  const isAlreadySignUp = false;
+
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -39,6 +41,15 @@ const LoginScreen: React.FC = () => {
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
   }));
+
+  const handleLogin = () => {
+    if (isAlreadySignUp) {
+      // 계정이 있으면은 바로 카카로 로그인
+    } else {
+      // 계정이 없으면은 nickname 체크 한후, 카카오 로그인
+      router.push('/nickname');
+    }
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -74,7 +85,7 @@ const LoginScreen: React.FC = () => {
           </View>
           <View style={styles.kakaoButton}>
             <Image source={require('@/assets/images/kakao-symbol.png')}></Image>
-            <Pressable onPress={() => router.push('/nickname')}>
+            <Pressable onPress={handleLogin}>
               <Text style={styles.kakaoButtonText}>카카오톡으로 3초만에 시작하기</Text>
             </Pressable>
           </View>
