@@ -220,7 +220,7 @@ export default function LocationSettingModal({
 
     searchTimeoutRef.current = setTimeout(async () => {
       try {
-        const queries = [`${searchText}동 서울특별시`, `${searchText} 동 서울`];
+        const queries = [searchText + '동', searchText];
 
         const searchPromises = queries.map(async (query) => {
           const autocompleteUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&types=(regions)&language=ko&components=country:kr&key=${GOOGLE_MAPS_API_KEY}`;
