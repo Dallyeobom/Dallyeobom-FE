@@ -325,7 +325,7 @@ export default function LocationSettingModal({
   );
 
   const keyExtractor = useCallback(
-    (item: string, index: number): string => `location_${index}_${item.slice(-5)}`,
+    (item: string, index: number): string => `location_${item}_${index}`,
     [],
   );
 
