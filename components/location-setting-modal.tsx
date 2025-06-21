@@ -46,6 +46,7 @@ export default function LocationSettingModal({
   visible,
   onClose,
 }: LocationSettingModalProps) {
+  const NEARBY_SEARCH_RADIUS_DEGREES = 0.02; // ~2.2km
   const GOOGLE_MAPS_API_KEY = getGoogleMapsApiKey();
   const { setSelectedLocation } = useLocationStore();
 
@@ -110,7 +111,7 @@ export default function LocationSettingModal({
 
       const districts = new Set<string>();
 
-      const searchRadius = 0.02; // 약 2.2km
+      const searchRadius = NEARBY_SEARCH_RADIUS_DEGREES;
       const stepSize = 0.005; // 간격 약 550m
       const searchPoints: { lat: number; lng: number }[] = [];
 
