@@ -30,7 +30,12 @@ const getGoogleMapsApiKey = (): string => {
   const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
   if (!apiKey) {
     console.warn('Google Maps API key not found in config');
-    return __DEV__ ? 'development_key' : '';
+    if (__DEV__) {
+      return 'development_key';
+    }
+    throw new Error(
+      'EXPO_PUBLIC_GOOGLE_MAPS_API_KEY is not set in environment variables.',
+    );
   }
   return apiKey as string;
 };
