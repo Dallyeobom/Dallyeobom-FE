@@ -1,20 +1,17 @@
 import LocationSettingModal from '@/components/location-setting-modal';
+import { useLocationStore } from '@/stores/location-store';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 function Index() {
+  const { selectedLocation } = useLocationStore();
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState('');
-
-  const handleLocationSelect = (location: string) => {
-    setSelectedLocation(location);
-  };
 
   const getLocationDisplay = (location: string) => {
     if (!location) return '위치 설정';
     const parts = location.split(' ');
-    const dongPart = parts.find(part => part.includes('동'));
+    const dongPart = parts.find((part) => part.includes('동'));
 
     return dongPart ? `${dongPart} 근처` : `${location} 근처`;
   };
@@ -27,9 +24,7 @@ function Index() {
           onPress={() => setModalVisible(true)}
           activeOpacity={0.7}
         >
-          <Text style={styles.locationText}>
-            {getLocationDisplay(selectedLocation)}
-          </Text>
+          <Text style={styles.locationText}>{getLocationDisplay(selectedLocation)}</Text>
           <Ionicons
             name="chevron-down"
             size={25}
@@ -40,7 +35,6 @@ function Index() {
         <LocationSettingModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
-          onLocationSelect={handleLocationSelect}
         />
       </View>
     </View>
@@ -73,6 +67,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   chevronIcon: {
-    marginTop: 5
+    marginTop: 4,
   },
 });
