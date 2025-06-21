@@ -144,8 +144,8 @@ export default function LocationSettingModal({
         return distA - distB;
       });
 
-      const geocodePromises = searchPoints.slice(0, 25).map(async (point) => {
-        // 최대 25개 포인트
+      const geocodePromises = searchPoints.slice(0, 10).map(async (point) => {
+        // 최대 10개 포인트
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${point.lat},${point.lng}&language=ko&key=${GOOGLE_MAPS_API_KEY}`;
         const data = await callGoogleMapsApi(url);
 
