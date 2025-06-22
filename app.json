@@ -34,6 +34,23 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": ["https://devrepo.kakao.com/nexus/content/groups/public/"]
+          }
+        }
+      ],
+      [
+        "@react-native-kakao/core",
+        {
+          "nativeAppKey": "cc8bef820682b89305e2562d11971d99",
+          "android": {
+            "authCodeHandlerActivity": true
+          }
+        }
       ]
     ],
     "experiments": {

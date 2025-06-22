@@ -1,3 +1,4 @@
+import { login as KaKaoLogin } from '@react-native-kakao/user';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
@@ -17,7 +18,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 const LoginScreen: React.FC = () => {
   const isAlreadySignUp = false;
 
@@ -26,6 +26,28 @@ const LoginScreen: React.FC = () => {
   const router = useRouter();
 
   const translateX = useSharedValue(0);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  const handleLogin = async () => {
+    try {
+      console.log('카카로 로그인 시작');
+      const result = await KaKaoLogin();
+      console.log('Login result:', result);
+    } catch (e) {
+      console.log('카카오 로그인 에러:', e);
+    }
+
+    return;
+    // if (isAlreadySignUp) {
+    //   // 계정이 있으면은 바로 카카로 로그인
+    // } else {
+    //   // 계정이 없으면은 nickname 체크 한후, 카카오 로그인
+    //   router.push('/nickname');
+    // }
+  };
 
   useEffect(() => {
     translateX.value = withRepeat(
@@ -37,19 +59,6 @@ const LoginScreen: React.FC = () => {
     -1;
     true;
   }, [width]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  const handleLogin = () => {
-    if (isAlreadySignUp) {
-      // 계정이 있으면은 바로 카카로 로그인
-    } else {
-      // 계정이 없으면은 nickname 체크 한후, 카카오 로그인
-      router.push('/nickname');
-    }
-  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>

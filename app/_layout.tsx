@@ -1,7 +1,9 @@
 import { base } from '@/styles/color';
+import { initializeKakaoSDK } from '@react-native-kakao/core';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import { useEffect } from 'react';
 import { Image } from 'react-native';
 import 'react-native-reanimated';
 
@@ -10,10 +12,16 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  //
+  useEffect(() => {
+    console.log('Kakao SDK 초기화');
+    initializeKakaoSDK('cc8bef820682b89305e2562d11971d99');
+  }, []);
   if (!loaded) {
     return null;
   }
   const isLoggedIn = false;
+
   return (
     <ThemeProvider value={DefaultTheme}>
       <Stack
