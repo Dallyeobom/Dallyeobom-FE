@@ -1,5 +1,5 @@
 import { base } from '@/styles/color';
-import { initializeKakaoSDK } from '@react-native-kakao/core';
+import { getKeyHashAndroid, initializeKakaoSDK } from '@react-native-kakao/core';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -12,10 +12,26 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  //
-  useEffect(() => {
+  const kakaoInitFunc = async () => {
     console.log('Kakao SDK 초기화');
-    initializeKakaoSDK('cc8bef820682b89305e2562d11971d99');
+    await initializeKakaoSDK('cc8bef820682b89305e2562d11971d99', {
+      web: {
+        javascriptKey: '33dd7ebac045cbd7cfedcab10f892fb8',
+        restApiKey: 'a16d404b0cd5cd014e2124d498d0e096',
+      },
+    });
+  };
+
+  useEffect(() => {
+    kakaoInitFunc()
+      .then((data) => {
+        console.log('Kakao SDK 초기화 완료', data);
+      })
+      .then(() => {
+        getKeyHashAndroid().then((keyHash) => {
+          console.log('Android Key Hash:', keyHash);
+        });
+      });
   }, []);
   if (!loaded) {
     return null;
