@@ -1,2 +1,2 @@
-export const getLoginUrl = () => '/api/v1/auth/temporal/login';
-export const getSignUpUrl = () => '/api/v1/auth/temporal/create';
+export const getKaKaoSignUpUrl = () => '/api/v1/auth/user/kakao';
+export const getKaKaoLoginUrl = () => '/api/v1/auth/login/kakao';

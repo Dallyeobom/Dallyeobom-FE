@@ -1,13 +1,13 @@
-import type { LoginParams, LoginResponse, SignUpParams } from '@/types/auth';
+import type { KaKaoLoginParams, KaKaoSignUpParams } from '@/types/auth';
 import client from './client';
-import { getLoginUrl, getSignUpUrl } from './urls';
+import { getKaKaoLoginUrl, getKaKaoSignUpUrl } from './urls';
 
-export const login = async (params: LoginParams): Promise<LoginResponse> => {
-  const { data } = await client.post(getLoginUrl(), params);
+export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
+  const { data } = await client.post(getKaKaoSignUpUrl(), params);
   return data;
 };
 
-export const signup = async (params: SignUpParams): Promise<number> => {
-  const { status } = await client.post(getSignUpUrl(), params);
-  return status;
+export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {
+  const { data } = await client.post(getKaKaoLoginUrl(), params);
+  return data;
 };

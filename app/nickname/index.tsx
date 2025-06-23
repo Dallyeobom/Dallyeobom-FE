@@ -1,36 +1,47 @@
+import { useAuthStore } from '@/stores/auth-store';
 import { base, main } from '@/styles/color';
+import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 function Index() {
   const [nickname, onChangeNickname] = useState('');
+  const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
+  const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
 
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const handleNicknameChange = (text: string) => {
     onChangeNickname(text);
   };
 
-  const handlePress = () => {
-    if (nickname.length === 0) {
-      Alert.alert('닉네임을 한 글자이상  작성해주세요', 'My Alert Msg', [
+  const handlePress = async () => {
+    if (nickname.length < 2) {
+      Alert.alert('닉네임을 두글자 이상 작성해주세요', '', [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         { text: 'OK', onPress: () => console.log('OK Pressed') },
       ]);
       return;
     }
-    Alert.alert('닉네임 중복 체크하는 API', 'My Alert Msg', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ]);
+    // 카카오 회원가입 API
+    const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
+    if (!providerAccessToken) {
+      Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
+      router.push('/login');
+      return;
+    }
+    try {
+      const result = await kakaoSignUp(nickname, providerAccessToken);
+      if (result.accessToken && result.refreshToken) {
+        handleloggedIn();
+      }
+    } catch (error) {
+      throw error;
+    }
   };
 
   const handleDelete = () => {

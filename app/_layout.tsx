@@ -1,27 +1,40 @@
+import { useAuthStore } from '@/stores/auth-store';
 import { base } from '@/styles/color';
 import { getKeyHashAndroid, initializeKakaoSDK } from '@react-native-kakao/core';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import { useEffect } from 'react';
 import { Image } from 'react-native';
 import 'react-native-reanimated';
 
 export default function RootLayout() {
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
+
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
   const kakaoInitFunc = async () => {
-    console.log('Kakao SDK 초기화');
-    await initializeKakaoSDK('cc8bef820682b89305e2562d11971d99', {
+    return await initializeKakaoSDK(process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY ?? '', {
       web: {
-        javascriptKey: '33dd7ebac045cbd7cfedcab10f892fb8',
-        restApiKey: 'a16d404b0cd5cd014e2124d498d0e096',
+        javascriptKey: process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY ?? '',
+        restApiKey: process.env.EXPO_PUBLIC_KAKAO_REST_API_KEY ?? '',
       },
     });
   };
+  const getAccessTokenRefreshToken = async () => {
+    // await SecureStore.deleteItemAsync('accessToken');
+    // await SecureStore.deleteItemAsync('refreshToken');
+    const accessToken = await SecureStore.getItemAsync('accessToken');
+    const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
+    if (accessToken && refreshToken) {
+      handleloggedIn();
+    }
+  };
   useEffect(() => {
     kakaoInitFunc()
       .then((data) => {
@@ -33,10 +46,14 @@ export default function RootLayout() {
         });
       });
   }, []);
+
+  useEffect(() => {
+    getAccessTokenRefreshToken();
+  }, [loaded]);
+
   if (!loaded) {
     return null;
   }
-  const isLoggedIn = false;
 
   return (
     <ThemeProvider value={DefaultTheme}>
@@ -63,7 +80,7 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="nickname"
-            options={{ headerShown: true, title: '테스트입니다' }}
+            options={{ headerShown: true, title: '닉네임 설정' }}
           />
         </Stack.Protected>
 

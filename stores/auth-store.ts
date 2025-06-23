@@ -1,33 +1,61 @@
-import { LoginResponse } from '@/types/auth';
+import { KaKaoLoginResponse, KaKaoSignUpResponse } from '@/types/auth';
 import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 import * as authAPI from '../api/auth.service';
 
 interface AuthState {
-  userId: string | null;
-  signup: (nickname: string) => Promise<number>;
-  login: (userId: string, password: string) => Promise<LoginResponse>;
+  isLoggedIn: boolean;
+  handleloggedIn: () => void;
   logout: () => Promise<void>;
+  kakaoSignUp: (
+    nickName: string,
+    providerAccessToken: string,
+  ) => Promise<KaKaoSignUpResponse>;
+  kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  userId: null,
-  signup: async (nickname: string) => {
-    const result = await authAPI.signup({ nickname });
-    return result;
+  isLoggedIn: false,
+  handleloggedIn: () => {
+    set({ isLoggedIn: true });
   },
-  login: async (userId: string, password: string) => {
-    const { accessToken, refreshToken } = await authAPI.login({ userId, password });
+
+  logout: async () => {
+    await SecureStore.deleteItemAsync('accessToken');
+    set({ isLoggedIn: false });
+  },
+
+  // 카카오 회원가입
+  kakaoSignUp: async (nickName: string, providerAccessToken: string) => {
+    const { accessToken, refreshToken } = await authAPI.KaKaoSignup({
+      nickName,
+      providerAccessToken,
+    });
+    if (!accessToken || !refreshToken) {
+      throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
     await SecureStore.setItemAsync('accessToken', accessToken);
-    set({ userId });
+    await SecureStore.setItemAsync('refreshToken', refreshToken);
     return {
       accessToken,
       refreshToken,
     };
   },
-
-  logout: async () => {
-    await SecureStore.deleteItemAsync('accessToken');
-    set({ userId: null });
+  // 카카오 로그인
+  kakaoLogin: async (providerAccessToken: string) => {
+    const { accessToken, refreshToken, isNewUser } = await authAPI.KaKaoLogin({
+      providerAccessToken,
+    });
+    if (isNewUser) {
+      await SecureStore.setItemAsync('providerAccessToken', providerAccessToken);
+    } else {
+      await SecureStore.setItemAsync('accessToken', accessToken);
+      await SecureStore.setItemAsync('refreshToken', refreshToken);
+    }
+    return {
+      accessToken,
+      refreshToken,
+      isNewUser,
+    };
   },
 }));

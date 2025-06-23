@@ -1,4 +1,5 @@
-import { login as KaKaoLogin } from '@react-native-kakao/user';
+import { useAuthStore } from '@/stores/auth-store';
+import { login } from '@react-native-kakao/user';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
@@ -18,8 +19,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const LoginScreen: React.FC = () => {
-  const isAlreadySignUp = false;
+  const KaKaoLogin = useAuthStore((state) => state.kakaoLogin);
+  const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
 
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -33,20 +36,19 @@ const LoginScreen: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      console.log('카카로 로그인 시작');
-      const result = await KaKaoLogin();
-      console.log('Login result:', result);
+      const kakaoLoginResult = await login();
+      if (!kakaoLoginResult.accessToken) {
+        throw new Error('카카오 로그인에 실패했습니다. 다시 시도해주세요.');
+      }
+      const result = await KaKaoLogin(kakaoLoginResult.accessToken);
+      if (result.isNewUser) {
+        router.push('/nickname');
+      } else {
+        handleloggedIn();
+      }
     } catch (e) {
-      console.log('카카오 로그인 에러:', e);
+      throw e;
     }
-
-    return;
-    // if (isAlreadySignUp) {
-    //   // 계정이 있으면은 바로 카카로 로그인
-    // } else {
-    //   // 계정이 없으면은 nickname 체크 한후, 카카오 로그인
-    //   router.push('/nickname');
-    // }
   };
 
   useEffect(() => {
