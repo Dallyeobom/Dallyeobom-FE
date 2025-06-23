@@ -1,8 +1,21 @@
-import appConfig from '@/app.json';
 import RootLayout from '@/app/_layout';
 import { useAuthStore } from '@/stores/auth-store';
+import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { Alert, AppRegistry, Pressable, StyleSheet, Text, View } from 'react-native';
+
+interface ExpoConfig {
+  expo?: {
+    name?: string;
+  };
+  extra?: {
+    googleMapsApiKey?: string;
+  };
+}
+
+const config = Constants.expoConfig as ExpoConfig;
+const appName = config?.expo?.name || 'dallyeobom-app';
+
 async function enableMocking() {
   if (!__DEV__) {
     return;
@@ -13,8 +26,9 @@ async function enableMocking() {
 }
 
 enableMocking().then(() => {
-  AppRegistry.registerComponent(appConfig.expo.name, () => RootLayout);
+  AppRegistry.registerComponent(appName, () => RootLayout);
 });
+
 export default function HomeScreen() {
   const { userId, logout } = useAuthStore();
   const router = useRouter();
