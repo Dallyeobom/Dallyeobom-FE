@@ -31,7 +31,7 @@ function Index() {
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
     if (!providerAccessToken) {
       Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
-      router.push('/login');
+      router.replace('/login');
       return;
     }
     try {
@@ -77,7 +77,7 @@ function Index() {
 
       <Pressable
         onPress={handlePress}
-        style={({ pressed }) => [
+        style={() => [
           styles.nicknameButton,
           {
             backgroundColor: nickname.length > 0 ? main[80] : main[10],

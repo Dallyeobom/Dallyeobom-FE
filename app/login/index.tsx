@@ -3,6 +3,7 @@ import { login } from '@react-native-kakao/user';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
+  Alert,
   Image,
   Pressable,
   StyleSheet,
@@ -38,7 +39,8 @@ const LoginScreen: React.FC = () => {
     try {
       const kakaoLoginResult = await login();
       if (!kakaoLoginResult.accessToken) {
-        throw new Error('카카오 로그인에 실패했습니다. 다시 시도해주세요.');
+        Alert.alert('로그인 실패', '카카오 로그인에 실패했습니다. 다시 시도해주세요.');
+        return;
       }
       const result = await KaKaoLogin(kakaoLoginResult.accessToken);
       if (result.isNewUser) {
@@ -47,7 +49,7 @@ const LoginScreen: React.FC = () => {
         handleloggedIn();
       }
     } catch (e) {
-      throw e;
+      Alert.alert('로그인 실패', '카카오 로그인에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
