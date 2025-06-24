@@ -1,13 +1,16 @@
 import { Stack } from 'expo-router';
+import React from 'react';
 
-export default function LoginLayout() {
+function NicknameLayout() {
   return (
     <Stack
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="login" />
+      <Stack.Screen name="nickname" />
     </Stack>
   );
 }
+
+export default NicknameLayout;
