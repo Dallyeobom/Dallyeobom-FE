@@ -18,14 +18,6 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  // const kakaoInitFunc = async () => {
-  //   return await initializeKakaoSDK(process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY ?? '', {
-  //     web: {
-  //       javascriptKey: process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY ?? '',
-  //       restApiKey: process.env.EXPO_PUBLIC_KAKAO_REST_API_KEY ?? '',
-  //     },
-  //   });
-  // };
   const getAccessTokenRefreshToken = async () => {
     // await SecureStore.deleteItemAsync('accessToken');
     // await SecureStore.deleteItemAsync('refreshToken');
