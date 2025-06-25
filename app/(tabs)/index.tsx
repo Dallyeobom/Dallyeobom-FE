@@ -1,37 +1,26 @@
 import LocationSettingModal from '@/components/location-setting-modal';
+import LocationSettingText from '@/components/location-setting-text';
 import { useLocationStore } from '@/stores/location-store';
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
+  const insets = useSafeAreaInsets();
+
   const { selectedLocation } = useLocationStore();
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const getLocationDisplay = (location: string) => {
-    if (!location) return '위치 설정';
-    const parts = location.split(' ');
-    const dongPart = parts.find((part) => part.includes('동'));
-
-    return dongPart ? `${dongPart} 근처` : `${location} 근처`;
-  };
+  const [modalVisible, setModalVisible] = useState(true);
 
   return (
-    <View style={styles.container}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity
-          style={styles.locationButton}
-          onPress={() => setModalVisible(true)}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.locationText}>{getLocationDisplay(selectedLocation)}</Text>
-          <Ionicons
-            name="chevron-down"
-            size={25}
-            color="#9CA3AF"
-            style={styles.chevronIcon}
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.subContainer}>
+        {!modalVisible && (
+          <LocationSettingText
+            selectedLocation={selectedLocation}
+            setModalVisible={setModalVisible}
           />
-        </TouchableOpacity>
+        )}
+
         <LocationSettingModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
@@ -48,7 +37,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#153555',
+  },
+
+  subContainer: {
+    flex: 1,
+    backgroundColor: '#552f15',
+    width: '100%',
   },
   locationButton: {
     flexDirection: 'row',

@@ -28,6 +28,7 @@ interface ListRenderItemProps {
 
 const getGoogleMapsApiKey = (): string => {
   const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
+
   if (!apiKey) {
     console.warn('Google Maps API key not found in config');
     if (__DEV__) {

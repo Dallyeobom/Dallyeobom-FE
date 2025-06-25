@@ -27,6 +27,11 @@ function Index() {
       ]);
       return;
     }
+
+    // 닉네임 중복 API 호출
+    // 닉네임 중복이 있을경우 => Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+    // 닉네임 중복이 없는경우 => 아래 로직 실행
+
     // 카카오 회원가입 API
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
     if (!providerAccessToken) {
@@ -37,10 +42,11 @@ function Index() {
     try {
       const result = await kakaoSignUp(nickname, providerAccessToken);
       if (result.accessToken && result.refreshToken) {
+        // 성공시, 위치 기반 설정 페이지로 이동
         handleloggedIn();
       }
     } catch (error) {
-      throw error;
+      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
