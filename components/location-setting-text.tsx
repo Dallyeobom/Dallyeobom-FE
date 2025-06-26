@@ -1,3 +1,4 @@
+import { base } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
@@ -45,11 +46,10 @@ const styles = StyleSheet.create({
   locationButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
+    backgroundColor: base['white'],
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderRadius: 12,
+    // borderRadius: 12,
     minWidth: 180,
   },
   locationText: {
