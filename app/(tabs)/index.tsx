@@ -1,5 +1,9 @@
-import LocationSettingModal from '@/components/location-setting-modal';
-import LocationSettingText from '@/components/location-setting-text';
+import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
+import PopularCourseItem from '@/components/item/popular-course-item';
+import VerticalList from '@/components/list/verical-list';
+import LocationSettingModal from '@/components/modal/location-setting-modal';
+import LocationSettingText from '@/components/text/location-setting-text';
+import { nearByRunnerData, popularCourseData } from '@/mocks/data';
 import { useLocationStore } from '@/stores/location-store';
 import { base } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
@@ -42,20 +46,24 @@ function Index() {
                     color="#9CA3AF"
                   />
                 </Pressable>
-                {/* 근처 러너들이 달리는 코스  swipe 형식으로 */}
+                <VerticalList
+                  isHorizontal={true}
+                  data={nearByRunnerData}
+                  renderItem={NearByRunnerCourseItem}
+                />
               </View>
 
-              {/* 인기코스 */}
               <View style={styles.section}>
-                {/* 인기코스 텍스트 */}
                 <View style={styles.titleBarContainer}>
                   <View style={styles.titleBar}>
                     <Text style={styles.title}>인기코스</Text>
                     <Image source={require('@/assets/images/thumbs-up.png')} />
                   </View>
                 </View>
-                {/* 이미지 */}
-                <View>{/* <FlatList></FlatList> */}</View>
+                <VerticalList
+                  data={popularCourseData}
+                  renderItem={PopularCourseItem}
+                />
               </View>
             </View>
           </View>
@@ -88,13 +96,14 @@ const styles = StyleSheet.create({
   },
   section: {
     display: 'flex',
+    padding: 8,
   },
   titleBarContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 8,
+    marginBottom: 8,
   },
   titleBar: {
     flexDirection: 'row',
@@ -105,4 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+
+  verticalListContainer: {},
 });
