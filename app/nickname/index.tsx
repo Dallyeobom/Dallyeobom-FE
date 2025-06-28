@@ -8,6 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 function Index() {
   const [nickname, onChangeNickname] = useState('');
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
+  const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
+
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
 
   const router = useRouter();
@@ -28,9 +30,16 @@ function Index() {
       return;
     }
 
-    // 닉네임 중복 API 호출
-    // 닉네임 중복이 있을경우 => Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
-    // 닉네임 중복이 없는경우 => 아래 로직 실행
+    try {
+      const result = await doubleCheckNickname(nickname);
+      if (result) {
+        Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+        return;
+      }
+    } catch (error) {
+      Alert.alert('닉네임 검증에 실패했습니다. 다시 검증해주세요');
+      return;
+    }
 
     // 카카오 회원가입 API
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');

@@ -1,4 +1,8 @@
-import { KaKaoLoginResponse, KaKaoSignUpResponse } from '@/types/auth';
+import {
+  KaKaoLoginResponse,
+  KaKaoSignUpResponse,
+  NicknameCheckResponse,
+} from '@/types/auth';
 import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 import * as authAPI from '../api/auth.service';
@@ -12,6 +16,7 @@ interface AuthState {
     providerAccessToken: string,
   ) => Promise<KaKaoSignUpResponse>;
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
+  doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -57,5 +62,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       refreshToken,
       isNewUser,
     };
+  },
+
+  // nickname 중복체크
+  doubleCheckNickname: async (nickName: string) => {
+    const { isDuplicated } = await authAPI.DoubleCheckNickname({
+      nickName,
+    });
+    return { isDuplicated };
   },
 }));

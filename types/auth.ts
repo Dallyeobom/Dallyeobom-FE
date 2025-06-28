@@ -27,3 +27,15 @@ export const kakaoLoginResponseSchema = z.object({
 });
 
 export type KaKaoLoginResponse = z.infer<typeof kakaoLoginResponseSchema>;
+
+export const nicknameCheckSchema = z.object({
+  nickName: z.string(),
+});
+
+export type NicknameCheckSchemaParams = z.infer<typeof nicknameCheckSchema>;
+
+export const nicknameCheckResponseSchema = z.object({
+  isDuplicated: z.boolean(),
+});
+
+export type NicknameCheckResponse = z.infer<typeof nicknameCheckResponseSchema>;
