@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/auth-store';
+import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
@@ -10,6 +11,7 @@ function Index() {
   const [nickname, onChangeNickname] = useState('');
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
   const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
+  const { setModalVisible } = useModalStore();
 
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
 
@@ -41,7 +43,6 @@ function Index() {
 
     // 카카오 회원가입 API
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
-    console.log('provier', providerAccessToken);
 
     if (!providerAccessToken) {
       Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
@@ -50,12 +51,12 @@ function Index() {
     }
     try {
       const result = await kakaoSignUp(nickname, providerAccessToken);
-      console.log('백엔드 카카오 회원가입 결과 =====>>>', result);
       if (result.accessToken && result.refreshToken) {
         Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
           {
             text: '확인',
             onPress: () => {
+              setModalVisible(true);
               handleloggedIn();
               router.replace('/(tabs)');
             },

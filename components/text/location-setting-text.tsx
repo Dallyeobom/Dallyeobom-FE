@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 interface LocationSettingModalProps {
   selectedLocation: string;
-  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalVisible: (visible: boolean) => void;
 }
 
 export default function LocationSettingText({
