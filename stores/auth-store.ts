@@ -52,8 +52,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       providerAccessToken,
     });
     if (isNewUser) {
+      //  new User면은 providerAccess만 저장 어차피 accessToken과 refreshToken signup api에서 받을것이기 때문에
       await SecureStore.setItemAsync('providerAccessToken', providerAccessToken);
     } else {
+      // newUser가 아닐때는 accessToken관 refreshToken 업데이뚜
       await SecureStore.setItemAsync('accessToken', accessToken);
       await SecureStore.setItemAsync('refreshToken', refreshToken);
     }
@@ -65,9 +67,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   // nickname 중복체크
-  doubleCheckNickname: async (nickName: string) => {
+  doubleCheckNickname: async (nickname: string) => {
     const { isDuplicated } = await authAPI.DoubleCheckNickname({
-      nickName,
+      nickname,
     });
     return { isDuplicated };
   },

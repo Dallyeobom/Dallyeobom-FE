@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 function Index() {
   const [nickname, onChangeNickname] = useState('');
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
@@ -21,18 +22,15 @@ function Index() {
   const handlePress = async () => {
     if (nickname.length < 2) {
       Alert.alert('닉네임을 두글자 이상 작성해주세요', '', [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
         { text: 'OK', onPress: () => console.log('OK Pressed') },
       ]);
       return;
     }
 
     try {
-      const result = await doubleCheckNickname(nickname);
-      if (result) {
+      const { isDuplicated } = await doubleCheckNickname(nickname);
+
+      if (isDuplicated) {
         Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
         return;
       }
@@ -43,6 +41,8 @@ function Index() {
 
     // 카카오 회원가입 API
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
+    console.log('provier', providerAccessToken);
+
     if (!providerAccessToken) {
       Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
       router.replace('/login');
@@ -50,9 +50,17 @@ function Index() {
     }
     try {
       const result = await kakaoSignUp(nickname, providerAccessToken);
+      console.log('백엔드 카카오 회원가입 결과 =====>>>', result);
       if (result.accessToken && result.refreshToken) {
-        // 성공시, 위치 기반 설정 페이지로 이동
-        handleloggedIn();
+        Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              handleloggedIn();
+              router.replace('/(tabs)');
+            },
+          },
+        ]);
       }
     } catch (error) {
       Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');

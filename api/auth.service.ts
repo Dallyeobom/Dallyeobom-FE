@@ -19,6 +19,11 @@ export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {
 export const DoubleCheckNickname = async (
   params: NicknameCheckSchemaParams,
 ): Promise<any> => {
-  const { data } = await client.post(getCheckNameUrl(), params);
-  return data;
+  const { data, status } = await client.get(getCheckNameUrl(), {
+    params: { nickname: params.nickname },
+  });
+  return {
+    isDuplicated: data.isDuplicated,
+    status,
+  };
 };

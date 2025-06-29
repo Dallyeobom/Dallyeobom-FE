@@ -29,7 +29,7 @@ export const kakaoLoginResponseSchema = z.object({
 export type KaKaoLoginResponse = z.infer<typeof kakaoLoginResponseSchema>;
 
 export const nicknameCheckSchema = z.object({
-  nickName: z.string(),
+  nickname: z.string(),
 });
 
 export type NicknameCheckSchemaParams = z.infer<typeof nicknameCheckSchema>;

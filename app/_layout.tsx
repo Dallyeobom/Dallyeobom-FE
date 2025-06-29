@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/auth-store';
-import { base } from '@/styles/color';
+import { useLocationStore } from '@/stores/location-store';
 import { kakaoInitFunc } from '@/utils/kakao';
 import { getKeyHashAndroid } from '@react-native-kakao/core';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
@@ -13,6 +13,7 @@ import 'react-native-reanimated';
 export default function RootLayout() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
+  const clearLocation = useLocationStore((state) => state.clearLocation);
 
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -21,6 +22,9 @@ export default function RootLayout() {
   const getAccessTokenRefreshToken = async () => {
     // await SecureStore.deleteItemAsync('accessToken');
     // await SecureStore.deleteItemAsync('refreshToken');
+    // await SecureStore.deleteItemAsync('providerAccessToken');
+    // await clearLocation();
+
     const accessToken = await SecureStore.getItemAsync('accessToken');
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
@@ -53,7 +57,8 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: base.white,
+            // backgroundColor: base.white,
+            backgroundColor: 'blue',
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
@@ -73,7 +78,8 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="nickname"
-            options={{ headerShown: true, title: '닉네임 설정' }}
+            // app/_layout.tsx 에서 정의한 헤더를 보여줄지의 여부
+            options={{ headerShown: false, title: '닉네임 설정' }}
           />
         </Stack.Protected>
 

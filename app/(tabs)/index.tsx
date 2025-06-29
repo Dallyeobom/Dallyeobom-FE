@@ -15,12 +15,16 @@ function Index() {
   const insets = useSafeAreaInsets();
 
   const { selectedLocation } = useLocationStore();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
+  console.log('모달이 보인다아아', modalVisible);
+  console.log('selectedLocation', selectedLocation);
+
+  // 혀
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.subContainer}>
-        {!modalVisible && selectedLocation ? (
+        {!modalVisible ? (
           <View style={styles.locationTextContainer}>
             <LocationSettingText
               selectedLocation={selectedLocation}
@@ -70,7 +74,10 @@ function Index() {
         ) : (
           <LocationSettingModal
             visible={modalVisible}
-            onClose={() => setModalVisible(false)}
+            onClose={() => {
+              console.log('모달을 닫눈다아아아');
+              setModalVisible(false);
+            }}
           />
         )}
       </View>

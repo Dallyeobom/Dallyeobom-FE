@@ -1,11 +1,37 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React from 'react';
+import { Image, TouchableOpacity } from 'react-native';
 
 function NicknameLayout() {
+  const router = useRouter();
   return (
     <Stack
       screenOptions={{
-        headerShown: false,
+        // NicknameLayout에서 정의한 헤더를 보여줄지의 여부
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: 'green',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+
+        headerBackVisible: false,
+        headerShadowVisible: false,
+        headerTitle: () => (
+          <TouchableOpacity
+            onPress={() => {
+              console.log('뒤로가기 눌러또');
+              router.replace('/login');
+            }}
+          >
+            <Image
+              source={require('@/assets/images/back.png')}
+              // style={{ width: 30, height: 30 }}
+            />
+          </TouchableOpacity>
+        ),
       }}
     >
       <Stack.Screen name="nickname" />

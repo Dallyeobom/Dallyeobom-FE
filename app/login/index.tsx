@@ -42,7 +42,9 @@ const LoginScreen: React.FC = () => {
         Alert.alert('로그인 실패', '카카오 로그인에 실패했습니다. 다시 시도해주세요.');
         return;
       }
+
       const result = await KaKaoLogin(kakaoLoginResult.accessToken);
+      console.log('백엔드 카카오 로그인 ===>>', result);
       if (result.isNewUser) {
         router.push('/nickname');
       } else {
