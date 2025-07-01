@@ -1,3 +1,4 @@
+import FloatingButton from '@/components/button/floating-button';
 import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
 import PopularCourseItem from '@/components/item/popular-course-item';
 import VerticalList from '@/components/list/verical-list';
@@ -9,11 +10,20 @@ import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
+  const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
   const insets = useSafeAreaInsets();
   const { selectedLocation } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
@@ -24,6 +34,15 @@ function Index() {
     }
   }, [selectedLocation]);
 
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const yOffset = event.nativeEvent.contentOffset.y;
+    if (yOffset === 0) {
+      setIsButtonTextVisible(true);
+    } else {
+      setIsButtonTextVisible(false);
+    }
+  };
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.subContainer}>
@@ -33,14 +52,7 @@ function Index() {
               selectedLocation={selectedLocation}
               setModalVisible={setModalVisible}
             />
-            <View
-              style={{
-                paddingLeft: 10,
-                paddingRight: 10,
-                height: '100%',
-                display: 'flex',
-              }}
-            >
+            <View style={styles.sectionContainer}>
               <View style={styles.section}>
                 <Pressable style={styles.titleBarContainer}>
                   <View style={styles.titleBar}>
@@ -70,9 +82,15 @@ function Index() {
                 <VerticalList
                   data={popularCourseData}
                   renderItem={PopularCourseItem}
+                  handleScroll={handleScroll}
                 />
               </View>
             </View>
+            <FloatingButton
+              buttonText={isButtonTextVisible ? '기록하기' : ''}
+              width={isButtonTextVisible ? 120 : 52}
+              height={52}
+            />
           </View>
         )}
 
@@ -104,7 +122,15 @@ const styles = StyleSheet.create({
   },
   locationTextContainer: {
     width: '100%',
+    position: 'relative',
   },
+  sectionContainer: {
+    height: '100%',
+    display: 'flex',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+
   section: {
     display: 'flex',
     padding: 8,
@@ -125,6 +151,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-
-  verticalListContainer: {},
 });

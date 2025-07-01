@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   courseImage: {
     width: '100%',
     height: 124,
+    borderRadius: 12,
   },
   profileImage: {
     width: 24,

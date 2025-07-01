@@ -14,7 +14,6 @@ function TabLayout() {
         tabBarInactiveTintColor: gray[30],
         tabBarStyle: {
           height: 60,
-          paddingBottom: 10,
           paddingTop: 10,
           backgroundColor: gray[5],
           borderTopWidth: 0,
