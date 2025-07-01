@@ -15,14 +15,18 @@ export const getCurrentLocation = async () => {
   if (selectedLocation.length === 0) {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('위치권한이 허락실패', '위치 권한을 허락해주세요', [
-        {
-          text: 'Open settings',
-          onPress: () => {
-            Linking.openSettings();
+      Alert.alert(
+        '위치 권한이 허용되지 않았습니다.',
+        '앱 설정에서 위치 권한을 허용해주세요.',
+        [
+          {
+            text: '설정 열기',
+            onPress: () => {
+              Linking.openSettings();
+            },
           },
-        },
-      ]);
+        ],
+      );
       return;
     }
 
