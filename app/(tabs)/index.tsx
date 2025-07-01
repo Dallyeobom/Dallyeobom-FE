@@ -18,8 +18,6 @@ function Index() {
   const { selectedLocation } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
 
-  console.log('선택한 지역', selectedLocation);
-
   useEffect(() => {
     if (selectedLocation.length === 0) {
       getCurrentLocation();
