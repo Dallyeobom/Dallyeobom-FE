@@ -1,4 +1,4 @@
-import callGoogleMapsApi from '@/hooks/use-google-map-api';
+import { useGoogleMapsApi } from '@/hooks/use-google-map-api';
 import { useLocationStore } from '@/stores/location-store';
 import { getGoogleMapsApiKey, getKoreanAddress } from '@/utils/google';
 import * as Location from 'expo-location';
@@ -8,6 +8,7 @@ const GOOGLE_MAPS_API_KEY = getGoogleMapsApiKey();
 
 export const getCurrentLocation = async () => {
   const { selectedLocation, setSelectedLocation } = useLocationStore();
+  const callGoogleMapsApi = useGoogleMapsApi();
 
   if (selectedLocation.length > 0) return;
 

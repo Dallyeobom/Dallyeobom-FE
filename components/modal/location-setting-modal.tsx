@@ -1,4 +1,4 @@
-import callGoogleMapsApi from '@/hooks/use-google-map-api';
+import { useGoogleMapsApi } from '@/hooks/use-google-map-api';
 import { useLocationStore } from '@/stores/location-store';
 import { getGoogleMapsApiKey } from '@/utils/google';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,27 +27,13 @@ interface ListRenderItemProps {
   index: number;
 }
 
-// const getGoogleMapsApiKey = (): string => {
-//   const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
-
-//   if (!apiKey) {
-//     console.warn('Google Maps API key not found in config');
-//     if (__DEV__) {
-//       return 'development_key';
-//     }
-//     throw new Error(
-//       'EXPO_PUBLIC_GOOGLE_MAPS_API_KEY is not set in environment variables.',
-//     );
-//   }
-//   return apiKey as string;
-// };
-
 const EMPTY_LOCATIONS: string[] = [];
 
 export default function LocationSettingModal({
   visible,
   onClose,
 }: LocationSettingModalProps) {
+  const callGoogleMapsApi = useGoogleMapsApi();
   const NEARBY_SEARCH_RADIUS_DEGREES = 0.02; // ~2.2km
   const GOOGLE_MAPS_API_KEY = getGoogleMapsApiKey();
   const { setSelectedLocation } = useLocationStore();

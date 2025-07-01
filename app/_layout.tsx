@@ -1,7 +1,7 @@
+import { usekakaoInit } from '@/hooks/use-kakao-init';
 import { useAuthStore } from '@/stores/auth-store';
 import { useLocationStore } from '@/stores/location-store';
-import { kakaoInitFunc } from '@/utils/kakao';
-import { getKeyHashAndroid } from '@react-native-kakao/core';
+import { base } from '@/styles/color';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -32,17 +32,8 @@ export default function RootLayout() {
       handleloggedIn();
     }
   };
-  useEffect(() => {
-    kakaoInitFunc()
-      .then((data) => {
-        console.log('Kakao SDK 초기화 완료', data);
-      })
-      .then(() => {
-        getKeyHashAndroid().then((keyHash) => {
-          console.log('Android Key Hash:', keyHash);
-        });
-      });
-  }, []);
+
+  usekakaoInit(); // kakao init
 
   useEffect(() => {
     getAccessTokenRefreshToken();
@@ -57,8 +48,7 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerStyle: {
-            // backgroundColor: base.white,
-            backgroundColor: 'blue',
+            backgroundColor: base.white,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
