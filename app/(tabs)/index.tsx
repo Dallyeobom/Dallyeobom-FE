@@ -3,60 +3,28 @@ import PopularCourseItem from '@/components/item/popular-course-item';
 import VerticalList from '@/components/list/verical-list';
 import LocationSettingModal from '@/components/modal/location-setting-modal';
 import LocationSettingText from '@/components/text/location-setting-text';
-import callGoogleMapsApi from '@/hooks/use-google-map-api';
+import { getCurrentLocation } from '@/hooks/use-current-location';
 import { nearByRunnerData, popularCourseData } from '@/mocks/data';
 import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base } from '@/styles/color';
-import { getGoogleMapsApiKey, getKoreanAddress } from '@/utils/google';
 import { Ionicons } from '@expo/vector-icons';
-import * as Location from 'expo-location';
-import React from 'react';
-import { Alert, Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
   const insets = useSafeAreaInsets();
-  const { selectedLocation, setSelectedLocation } = useLocationStore();
+  const { selectedLocation } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
 
-  console.log('모달이 보인다아아', modalVisible);
-  const GOOGLE_MAPS_API_KEY = getGoogleMapsApiKey();
+  console.log('선택한 지역', selectedLocation);
 
-  // 현재 위치를 가져오는 로케이션
-  const getCurrentLocation = async () => {
-    // console.log('모달을 닫눈다아아아');
-    // console.log('selectedLocation', selectedLocation);
-
-    // 현재 선택 된게 없을떄에만 자동으로 현재 위치를 가져온다.
-    if (!selectedLocation) {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('위치권한이 허락실패', '위치 권한을 허락해주세요', [
-          {
-            text: 'Open settings',
-            onPress: () => {
-              Linking.openSettings();
-            },
-          },
-        ]);
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude}, ${location.coords.longitude}&language=ko&key=${GOOGLE_MAPS_API_KEY}`;
-      const data = await callGoogleMapsApi(url);
-      const address_components = data.results[0].address_components;
-      const result = getKoreanAddress(address_components);
-      setSelectedLocation(result, {
-        lat: location.coords.latitude,
-        lng: location.coords.longitude,
-      });
+  useEffect(() => {
+    if (selectedLocation.length === 0) {
+      getCurrentLocation();
     }
-  };
+  }, [selectedLocation]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -109,11 +77,11 @@ function Index() {
             </View>
           </View>
         )}
+
         {modalVisible && (
           <LocationSettingModal
             visible={modalVisible}
             onClose={() => {
-              getCurrentLocation();
               setModalVisible(false);
             }}
           />

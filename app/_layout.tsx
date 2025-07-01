@@ -27,7 +27,6 @@ export default function RootLayout() {
 
     const accessToken = await SecureStore.getItemAsync('accessToken');
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
-    console.log('acc', accessToken);
 
     if (accessToken && refreshToken) {
       handleloggedIn();

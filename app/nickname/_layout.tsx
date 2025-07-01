@@ -9,9 +9,7 @@ function NicknameLayout() {
       screenOptions={{
         // NicknameLayout에서 정의한 헤더를 보여줄지의 여부
         headerShown: true,
-        headerStyle: {
-          backgroundColor: 'green',
-        },
+        headerStyle: {},
         headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: 'bold',
@@ -26,10 +24,7 @@ function NicknameLayout() {
               router.replace('/login');
             }}
           >
-            <Image
-              source={require('@/assets/images/back.png')}
-              // style={{ width: 30, height: 30 }}
-            />
+            <Image source={require('@/assets/images/back.png')} />
           </TouchableOpacity>
         ),
       }}
