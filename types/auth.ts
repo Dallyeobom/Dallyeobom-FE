@@ -1,22 +1,5 @@
 import { z } from 'zod';
 
-export interface LoginParams {
-  userId: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface SignUpParams {
-  nickname: string;
-}
-export interface SignUpResponse {
-  status: number;
-}
-
 export const kakaoSignUpParamsSchema = z.object({
   nickName: z.string(),
   providerAccessToken: z.string(),
@@ -44,3 +27,15 @@ export const kakaoLoginResponseSchema = z.object({
 });
 
 export type KaKaoLoginResponse = z.infer<typeof kakaoLoginResponseSchema>;
+
+export const nicknameCheckSchema = z.object({
+  nickname: z.string(),
+});
+
+export type NicknameCheckSchemaParams = z.infer<typeof nicknameCheckSchema>;
+
+export const nicknameCheckResponseSchema = z.object({
+  isDuplicated: z.boolean(),
+});
+
+export type NicknameCheckResponse = z.infer<typeof nicknameCheckResponseSchema>;

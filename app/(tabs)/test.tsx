@@ -30,7 +30,7 @@ enableMocking().then(() => {
 });
 
 export default function HomeScreen() {
-  const { userId, logout } = useAuthStore();
+  const { logout } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -48,7 +48,7 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Text>헤더 영역</Text>
       </View>
-      <Text>현재 사용자: {userId}</Text>
+      {/* // <Text>현재 사용자: {userId}</Text> */}
       <Pressable onPress={handleLogout}>
         <Text style={styles.logoutText}>로그아웃</Text>
       </Pressable>
@@ -64,7 +64,7 @@ export default function HomeScreen() {
       <View style={styles.button}>
         <Pressable
           onPress={() => {
-            router.push('/signup');
+            // router.push('/signup');
           }}
         >
           <Text style={styles.logoutText}>회원가입페이지로가기</Text>

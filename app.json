@@ -52,7 +52,8 @@
             "authCodeHandlerActivigithubty": true
           }
         }
-      ]
+      ],
+      ["expo-location", { "isAndroidForegroundServiceEnabled": true }]
     ],
     "experiments": {
       "typedRoutes": true

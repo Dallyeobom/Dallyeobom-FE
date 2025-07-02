@@ -1,6 +1,7 @@
+import { useGoogleMapsApi } from '@/hooks/use-google-map-api';
 import { useLocationStore } from '@/stores/location-store';
+import { getGoogleMapsApiKey } from '@/utils/google';
 import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
@@ -26,26 +27,13 @@ interface ListRenderItemProps {
   index: number;
 }
 
-const getGoogleMapsApiKey = (): string => {
-  const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
-  if (!apiKey) {
-    console.warn('Google Maps API key not found in config');
-    if (__DEV__) {
-      return 'development_key';
-    }
-    throw new Error(
-      'EXPO_PUBLIC_GOOGLE_MAPS_API_KEY is not set in environment variables.',
-    );
-  }
-  return apiKey as string;
-};
-
 const EMPTY_LOCATIONS: string[] = [];
 
 export default function LocationSettingModal({
   visible,
   onClose,
 }: LocationSettingModalProps) {
+  const callGoogleMapsApi = useGoogleMapsApi();
   const NEARBY_SEARCH_RADIUS_DEGREES = 0.02; // ~2.2km
   const GOOGLE_MAPS_API_KEY = getGoogleMapsApiKey();
   const { setSelectedLocation } = useLocationStore();
@@ -57,40 +45,6 @@ export default function LocationSettingModal({
 
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentLocationRef = useRef<{ lat: number; lng: number } | null>(null);
-
-  const callGoogleMapsApi = useCallback(async (url: string, timeout = 10000) => {
-    // 타임아웃 증가
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-    try {
-      const response = await fetch(url, {
-        signal: controller.signal,
-        headers: {
-          'Cache-Control': 'max-age=300', // 5분 캐시
-        },
-      });
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error: unknown) {
-      clearTimeout(timeoutId);
-      if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          console.warn('API 요청 타임아웃');
-        } else {
-          console.error('Google Maps API 호출 실패:', error.message);
-        }
-      } else {
-        console.error('Google Maps API 호출 실패:', error);
-      }
-      return null;
-    }
-  }, []);
 
   const loadCurrentLocationAndDistricts = useCallback(async (): Promise<void> => {
     try {

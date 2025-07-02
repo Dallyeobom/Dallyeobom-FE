@@ -1,41 +1,107 @@
-import LocationSettingModal from '@/components/location-setting-modal';
+import FloatingButton from '@/components/button/floating-button';
+import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
+import PopularCourseItem from '@/components/item/popular-course-item';
+import VerticalList from '@/components/list/verical-list';
+import LocationSettingModal from '@/components/modal/location-setting-modal';
+import LocationSettingText from '@/components/text/location-setting-text';
+import { getCurrentLocation } from '@/hooks/use-current-location';
+import { nearByRunnerData, popularCourseData } from '@/mocks/data';
 import { useLocationStore } from '@/stores/location-store';
+import { useModalStore } from '@/stores/modal-store';
+import { base } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
+  const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
+  const insets = useSafeAreaInsets();
   const { selectedLocation } = useLocationStore();
-  const [modalVisible, setModalVisible] = useState(false);
+  const { modalVisible, setModalVisible } = useModalStore();
 
-  const getLocationDisplay = (location: string) => {
-    if (!location) return '위치 설정';
-    const parts = location.split(' ');
-    const dongPart = parts.find((part) => part.includes('동'));
+  useEffect(() => {
+    if (selectedLocation.length === 0) {
+      getCurrentLocation();
+    }
+  }, [selectedLocation]);
 
-    return dongPart ? `${dongPart} 근처` : `${location} 근처`;
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const yOffset = event.nativeEvent.contentOffset.y;
+    if (yOffset === 0) {
+      setIsButtonTextVisible(true);
+    } else {
+      setIsButtonTextVisible(false);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity
-          style={styles.locationButton}
-          onPress={() => setModalVisible(true)}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.locationText}>{getLocationDisplay(selectedLocation)}</Text>
-          <Ionicons
-            name="chevron-down"
-            size={25}
-            color="#9CA3AF"
-            style={styles.chevronIcon}
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.subContainer}>
+        {selectedLocation && (
+          <View style={styles.locationTextContainer}>
+            <LocationSettingText
+              selectedLocation={selectedLocation}
+              setModalVisible={setModalVisible}
+            />
+            <View style={styles.sectionContainer}>
+              <View style={styles.section}>
+                <Pressable style={styles.titleBarContainer}>
+                  <View style={styles.titleBar}>
+                    <Text style={styles.title}>근처 러너들이 달리는 코스</Text>
+                    <Image source={require('@/assets/images/fire.png')} />
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={24}
+                    color="#9CA3AF"
+                  />
+                </Pressable>
+                <VerticalList
+                  isHorizontal={true}
+                  data={nearByRunnerData}
+                  renderItem={NearByRunnerCourseItem}
+                />
+              </View>
+
+              <View style={styles.section}>
+                <View style={styles.titleBarContainer}>
+                  <View style={styles.titleBar}>
+                    <Text style={styles.title}>인기코스</Text>
+                    <Image source={require('@/assets/images/thumbs-up.png')} />
+                  </View>
+                </View>
+                <VerticalList
+                  data={popularCourseData}
+                  renderItem={PopularCourseItem}
+                  handleScroll={handleScroll}
+                />
+              </View>
+            </View>
+            <FloatingButton
+              buttonText={isButtonTextVisible ? '기록하기' : ''}
+              width={isButtonTextVisible ? 120 : 52}
+              height={52}
+            />
+          </View>
+        )}
+
+        {modalVisible && (
+          <LocationSettingModal
+            visible={modalVisible}
+            onClose={() => {
+              setModalVisible(false);
+            }}
           />
-        </TouchableOpacity>
-        <LocationSettingModal
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-        />
+        )}
       </View>
     </View>
   );
@@ -48,25 +114,41 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: base['white'],
   },
-  locationButton: {
+  subContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  locationTextContainer: {
+    width: '100%',
+    position: 'relative',
+  },
+  sectionContainer: {
+    height: '100%',
+    display: 'flex',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+
+  section: {
+    display: 'flex',
+    padding: 8,
+  },
+  titleBarContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  titleBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderRadius: 12,
-    minWidth: 180,
+    columnGap: 6,
   },
-  locationText: {
-    color: '#1F2937',
-    fontSize: 18,
+  title: {
+    fontSize: 16,
     fontWeight: '600',
-    marginRight: 8,
-  },
-  chevronIcon: {
-    marginTop: 4,
   },
 });

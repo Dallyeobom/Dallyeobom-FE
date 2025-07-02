@@ -1,6 +1,10 @@
-import type { KaKaoLoginParams, KaKaoSignUpParams } from '@/types/auth';
+import type {
+  KaKaoLoginParams,
+  KaKaoSignUpParams,
+  NicknameCheckSchemaParams,
+} from '@/types/auth';
 import client from './client';
-import { getKaKaoLoginUrl, getKaKaoSignUpUrl } from './urls';
+import { getCheckNameUrl, getKaKaoLoginUrl, getKaKaoSignUpUrl } from './urls';
 
 export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
   const { data } = await client.post(getKaKaoSignUpUrl(), params);
@@ -10,4 +14,16 @@ export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
 export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {
   const { data } = await client.post(getKaKaoLoginUrl(), params);
   return data;
+};
+
+export const DoubleCheckNickname = async (
+  params: NicknameCheckSchemaParams,
+): Promise<any> => {
+  const { data, status } = await client.get(getCheckNameUrl(), {
+    params: { nickname: params.nickname },
+  });
+  return {
+    isDuplicated: data.isDuplicated,
+    status,
+  };
 };
