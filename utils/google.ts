@@ -1,4 +1,10 @@
 import Constants from 'expo-constants';
+
+interface AddressComponent {
+  long_name: string;
+  short_name: string;
+  types: string[];
+}
 export const getGoogleMapsApiKey = (): string => {
   const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
 
@@ -19,7 +25,7 @@ export const getKoreanAddress = (addressComponents: any) => {
   let district = '';
   let dong = '';
 
-  addressComponents.forEach((component: any) => {
+  addressComponents.forEach((component: AddressComponent[]) => {
     if (component.types.includes('administrative_area_level_1')) {
       city = component.long_name; // 시, 도..
     }
