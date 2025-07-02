@@ -19,8 +19,7 @@ function NicknameLayout() {
         headerShadowVisible: false,
         headerTitle: () => (
           <TouchableOpacity
-            onPress={() => {
-              console.log('뒤로가기 눌러또');
+            onPress={() => {  
               router.replace('/login');
             }}
           >
