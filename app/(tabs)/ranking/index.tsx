@@ -27,9 +27,9 @@ function Ranking() {
             isSelected={rankingStatus === 'weekly'}
           />
           <RankingButton
-            rankingStatus="montly"
+            rankingStatus="monthly"
             handleSelect={handleSelect}
-            isSelected={rankingStatus === 'montly'}
+            isSelected={rankingStatus === 'monthly'}
           />
 
           <RankingButton
@@ -45,7 +45,7 @@ function Ranking() {
             data={weeklyRunnerData}
             renderItem={RankingRunnerItem}
           />
-        ) : rankingStatus === 'montly' ? (
+        ) : rankingStatus === 'monthly' ? (
           <VerticalList
             data={monthlyRunnerData}
             renderItem={RankingRunnerItem}

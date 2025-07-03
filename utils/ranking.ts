@@ -6,8 +6,8 @@ export const convertRankingEnumFromKoreanToEng = (text: string) => {
     case 'weekly':
       rankingStatus = rankingEnum.enum.weekly;
       break;
-    case 'montly':
-      rankingStatus = rankingEnum.enum.montly;
+    case 'monthly':
+      rankingStatus = rankingEnum.enum.monthly;
       break;
     case 'yearly':
       rankingStatus = rankingEnum.enum.yearly;
@@ -25,7 +25,7 @@ export const convertRankingTextFromEngToKor = (text: string) => {
     case 'weekly':
       rankingText = '주간';
       break;
-    case 'montly':
+    case 'monthly':
       rankingText = '월간';
       break;
     case 'yearly':

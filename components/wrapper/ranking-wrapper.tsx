@@ -1,13 +1,6 @@
-interface RankingWrapperProps {}
-
-export default function withRankingGuard(WrappedComponent: any) {
-  return function RankingGuard(props: any) {
-    // 로오딩이나 보여주자..
-    // 데이터
-    return (
-      <>
-        <WrappedComponent />
-      </>
-    );
+export default function withRankingGuard<P>(WrappedComponent: React.FC<P>) {
+  return function RankingGuard(props: React.PropsWithChildren<P>) {
+    console.log('PROPS', props);
+    return <WrappedComponent {...props} />;
   };
 }
