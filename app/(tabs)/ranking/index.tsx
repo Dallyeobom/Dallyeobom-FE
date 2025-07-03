@@ -1,56 +1,89 @@
+import RankingButton from '@/components/button/ranking-button';
+import RankingRunnerItem from '@/components/item/ranking-runner-item';
+import VerticalList from '@/components/list/verical-list';
+import withRankingGuard from '@/components/wrapper/ranking-wrapper';
+import { monthlyRunnerData, weeklyRunnerData, yearlyRunnerData } from '@/mocks/data';
 import { base, gray } from '@/styles/color';
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { RankingEnum } from '@/types/enum';
+import { convertRankingEnumFromKoreanToEng } from '@/utils/ranking';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
+// Ranking
 function Ranking() {
-  // TODO: Wrrapper 혹은 HOC 를 사용하여 컴퍼넌트를 만들어보기
+  const [rankingStatus, setRankingStatus] = useState<RankingEnum>('weekly');
+  const handleSelect = (text: string) => {
+    const result = convertRankingEnumFromKoreanToEng(text);
+    setRankingStatus(result);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.menuContainer}>
-        <Pressable style={styles.menuButton}>
-          <Text style={styles.menu}>주간</Text>
-        </Pressable>
-        <Pressable style={styles.menuButton}>
-          <Text style={styles.menu}>월간</Text>
-        </Pressable>
-        <Pressable style={styles.menuButton}>
-          <Text style={styles.menu}>연간</Text>
-        </Pressable>
+        <View style={styles.submenuContainer}>
+          <RankingButton
+            rankingStatus="weekly"
+            handleSelect={handleSelect}
+            isSelected={rankingStatus === 'weekly'}
+          />
+          <RankingButton
+            rankingStatus="montly"
+            handleSelect={handleSelect}
+            isSelected={rankingStatus === 'montly'}
+          />
+
+          <RankingButton
+            rankingStatus="yearly"
+            handleSelect={handleSelect}
+            isSelected={rankingStatus === 'yearly'}
+          />
+        </View>
       </View>
-      {/* 컴퍼넌트에 따라 다라지는 데이터 */}
-      <Text>데이토</Text>
+      <View style={styles.dataContainer}>
+        {rankingStatus === 'weekly' ? (
+          <VerticalList
+            data={weeklyRunnerData}
+            renderItem={RankingRunnerItem}
+          />
+        ) : rankingStatus === 'montly' ? (
+          <VerticalList
+            data={monthlyRunnerData}
+            renderItem={RankingRunnerItem}
+          />
+        ) : (
+          <VerticalList
+            data={yearlyRunnerData}
+            renderItem={RankingRunnerItem}
+          />
+        )}
+      </View>
     </View>
   );
 }
 
-export default Ranking;
+export default withRankingGuard(Ranking);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     backgroundColor: base['white'],
   },
-
   menuContainer: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
     backgroundColor: base['white'],
     borderBottomColor: gray[15],
     borderBottomWidth: 1,
+    marginBottom: 16,
   },
-  menuButton: {
-    flex: 1,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingBottom: 16,
+  submenuContainer: {
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'row',
+    width: '94%',
   },
-
-  menu: {
-    fontSize: 16,
-    fontWeight: 600,
-    color: gray[30],
+  dataContainer: {
+    width: '94%',
+    alignSelf: 'center',
   },
 });
