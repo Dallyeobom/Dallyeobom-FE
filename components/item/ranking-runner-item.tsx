@@ -1,16 +1,10 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-export const RankingRunnerItem = ({
-  profileImage,
-  nickname,
-  distance,
-  rankingStatus,
-  rank,
-}: any) => (
+export const RankingRunnerItem = ({ profileImage, nickname, distance, rank }: any) => (
   <View style={styles.container}>
-    <View style={styles.rankContainer}>
+    {/* <View style={styles.rankContainer}>
       <Text style={styles.rank}>{rank}</Text>
-    </View>
+    </View> */}
     <View style={styles.profileContainer}>
       <Image
         source={{ uri: profileImage }}

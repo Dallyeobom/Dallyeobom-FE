@@ -19,43 +19,48 @@ function Ranking() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.menuContainer}>
-        <View style={styles.submenuContainer}>
-          <RankingButton
-            rankingStatus="weekly"
-            handleSelect={handleSelect}
-            isSelected={rankingStatus === 'weekly'}
-          />
-          <RankingButton
-            rankingStatus="monthly"
-            handleSelect={handleSelect}
-            isSelected={rankingStatus === 'monthly'}
-          />
+      <View>
+        <View style={styles.menuContainer}>
+          <View style={styles.submenuContainer}>
+            <RankingButton
+              rankingStatus="weekly"
+              handleSelect={handleSelect}
+              isSelected={rankingStatus === 'weekly'}
+            />
+            <RankingButton
+              rankingStatus="monthly"
+              handleSelect={handleSelect}
+              isSelected={rankingStatus === 'monthly'}
+            />
 
-          <RankingButton
-            rankingStatus="yearly"
-            handleSelect={handleSelect}
-            isSelected={rankingStatus === 'yearly'}
-          />
+            <RankingButton
+              rankingStatus="yearly"
+              handleSelect={handleSelect}
+              isSelected={rankingStatus === 'yearly'}
+            />
+          </View>
+        </View>
+        <View style={styles.dataContainer}>
+          {rankingStatus === 'weekly' ? (
+            <VerticalList
+              data={weeklyRunnerData}
+              renderItem={RankingRunnerItem}
+            />
+          ) : rankingStatus === 'monthly' ? (
+            <VerticalList
+              data={monthlyRunnerData}
+              renderItem={RankingRunnerItem}
+            />
+          ) : (
+            <VerticalList
+              data={yearlyRunnerData}
+              renderItem={RankingRunnerItem}
+            />
+          )}
         </View>
       </View>
-      <View style={styles.dataContainer}>
-        {rankingStatus === 'weekly' ? (
-          <VerticalList
-            data={weeklyRunnerData}
-            renderItem={RankingRunnerItem}
-          />
-        ) : rankingStatus === 'monthly' ? (
-          <VerticalList
-            data={monthlyRunnerData}
-            renderItem={RankingRunnerItem}
-          />
-        ) : (
-          <VerticalList
-            data={yearlyRunnerData}
-            renderItem={RankingRunnerItem}
-          />
-        )}
+      <View style={styles.bottomCard}>
+        <RankingRunnerItem />
       </View>
     </View>
   );
@@ -67,6 +72,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: base['white'],
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   menuContainer: {
     display: 'flex',
@@ -85,5 +92,11 @@ const styles = StyleSheet.create({
   dataContainer: {
     width: '94%',
     alignSelf: 'center',
+  },
+  bottomCard: {
+    height: 80,
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+    backgroundColor: 'blue',
   },
 });
