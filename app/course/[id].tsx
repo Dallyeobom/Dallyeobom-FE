@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rankNumberText: {
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: '700',
     color: '#121212',
   },
