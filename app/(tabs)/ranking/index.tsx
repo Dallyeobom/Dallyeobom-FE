@@ -11,14 +11,14 @@ import {
 } from '@/mocks/data';
 import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
-import { convertRankingEnumFromKoreanToEng } from '@/utils/ranking';
+import { mapRankingTextToEnum } from '@/utils/ranking';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 function Ranking() {
   const [rankingStatus, setRankingStatus] = useState<RankingEnum>('weekly');
   const handleSelect = (text: string) => {
-    const result = convertRankingEnumFromKoreanToEng(text);
+    const result = mapRankingTextToEnum(text);
     setRankingStatus(result);
   };
 

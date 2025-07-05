@@ -21,7 +21,7 @@ export const MyProfileItem = ({ data }: MyProfileItemProps) => (
       />
       <View>
         <Text style={styles.nickName}>{data.nickname}</Text>
-        <Text style={styles.disatance}>{data.distance}</Text>
+        <Text style={styles.distance}>{data.distance}</Text>
       </View>
     </View>
     <View style={styles.badge}>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   nickName: {
     color: gray[40],
   },
-  disatance: {
-    fontWeight: 700,
+  distance: {
+    fontWeight: '700',
   },
 });

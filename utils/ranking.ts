@@ -1,6 +1,6 @@
 import { rankingEnum } from '@/types/enum';
 
-export const convertRankingEnumFromKoreanToEng = (text: string) => {
+export const mapRankingTextToEnum = (text: string) => {
   let rankingStatus;
   switch (text) {
     case 'weekly':
