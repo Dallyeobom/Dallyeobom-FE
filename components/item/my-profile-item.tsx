@@ -1,8 +1,16 @@
 import { gray } from '@/styles/color';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
+type MyProfileItem = {
+  rank: number;
+  profileImage: string;
+  distance: string;
+  rankingStatus: string;
+  nickname: string;
+};
+
 interface MyProfileItemProps {
-  data: any;
+  data: MyProfileItem;
 }
 export const MyProfileItem = ({ data }: MyProfileItemProps) => (
   <View style={styles.container}>
