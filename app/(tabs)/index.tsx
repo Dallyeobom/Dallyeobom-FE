@@ -44,7 +44,6 @@ function Index() {
       setIsButtonTextVisible(false);
     }
   };
-  console.log('나는홈화면', selectedLocation);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>

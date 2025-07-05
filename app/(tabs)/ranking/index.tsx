@@ -75,19 +75,6 @@ function Ranking() {
 export default withRankingGuard(Ranking);
 
 const styles = StyleSheet.create({
-  blurContainer: {
-    flex: 1,
-    padding: 20,
-    margin: 16,
-    textAlign: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    borderRadius: 20,
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
   container: {
     flex: 1,
     backgroundColor: base['white'],
