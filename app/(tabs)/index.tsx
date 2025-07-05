@@ -4,7 +4,7 @@ import PopularCourseItem from '@/components/item/popular-course-item';
 import VerticalList from '@/components/list/verical-list';
 import LocationSettingModal from '@/components/modal/location-setting-modal';
 import LocationSettingText from '@/components/text/location-setting-text';
-import { getCurrentLocation } from '@/hooks/use-current-location';
+import { useCurrentLocation } from '@/hooks/use-current-location';
 import { nearByRunnerData, popularCourseData } from '@/mocks/data';
 import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
@@ -28,6 +28,8 @@ function Index() {
   const { selectedLocation } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
 
+  const getCurrentLocation = useCurrentLocation();
+
   useEffect(() => {
     if (selectedLocation.length === 0) {
       getCurrentLocation();
@@ -42,6 +44,7 @@ function Index() {
       setIsButtonTextVisible(false);
     }
   };
+  console.log('나는홈화면', selectedLocation);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
