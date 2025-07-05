@@ -59,7 +59,7 @@ export default function CourseDetailScreen() {
 
         Animated.spring(translateY, {
           toValue: finalPosition,
-          useNativeDriver: false,
+          useNativeDriver: true,
           tension: 100,
           friction: 8,
         }).start();
@@ -93,7 +93,7 @@ export default function CourseDetailScreen() {
 
     Animated.spring(translateY, {
       toValue: targetValue,
-      useNativeDriver: false,
+      useNativeDriver: true,
       tension: 100,
       friction: 8,
     }).start();
@@ -167,34 +167,26 @@ export default function CourseDetailScreen() {
 
   const renderRankIcon = (index: number) => {
     // 상위 랭킹 트로피 이미지로 등수 표기
-    if (index === 0) {
+    const trophyImages = [
+      require('@/assets/images/trophy-gold.png'),
+      require('@/assets/images/trophy-silver.png'),
+      require('@/assets/images/trophy-bronze.png'),
+    ];
+
+    if (index < trophyImages.length) {
       return (
         <Image
-          source={require('@/assets/images/trophy-gold.png')}
+          source={trophyImages[index]}
           style={styles.trophyIcon}
         />
-      );
-    } else if (index === 1) {
-      return (
-        <Image
-          source={require('@/assets/images/trophy-silver.png')}
-          style={styles.trophyIcon}
-        />
-      );
-    } else if (index === 2) {
-      return (
-        <Image
-          source={require('@/assets/images/trophy-bronze.png')}
-          style={styles.trophyIcon}
-        />
-      );
-    } else {
-      return (
-        <View style={styles.userRankNumber}>
-          <Text style={styles.rankNumberText}>{index + 1}</Text>
-        </View>
       );
     }
+
+    return (
+      <View style={styles.userRankNumber}>
+        <Text style={styles.rankNumberText}>{index + 1}</Text>
+      </View>
+    );
   };
 
   const renderCompletedUsers = () => (
@@ -227,7 +219,7 @@ export default function CourseDetailScreen() {
   );
 
   const renderPhotos = () => {
-    const photoSize = (width - 56) / 4; // 20px padding * 2 + 8px gap * 3 = 56px
+    const photoSize = (width - 64) / 4; // 20px padding * 2 + 8px gap * 3 = 64px
 
     return (
       <View style={styles.photosContainer}>
@@ -474,7 +466,7 @@ const styles = StyleSheet.create({
   rankNumberText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#121212',
+    color: gray[100],
   },
   userAvatar: {
     width: 40,
@@ -491,7 +483,7 @@ const styles = StyleSheet.create({
   },
   userTime: {
     fontSize: 15,
-    color: '#121212',
+    color: gray[100],
   },
   userTimeBold: {
     fontWeight: '700',
@@ -584,7 +576,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7028FF',
+    backgroundColor: main[80],
     borderRadius: 16,
     gap: 8,
   },
