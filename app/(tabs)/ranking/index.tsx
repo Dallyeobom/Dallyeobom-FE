@@ -1,15 +1,20 @@
 import RankingButton from '@/components/button/ranking-button';
+import MyProfileItem from '@/components/item/my-profile-item';
 import RankingRunnerItem from '@/components/item/ranking-runner-item';
 import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
-import { monthlyRunnerData, weeklyRunnerData, yearlyRunnerData } from '@/mocks/data';
+import {
+  monthlyRunnerData,
+  MyData,
+  weeklyRunnerData,
+  yearlyRunnerData,
+} from '@/mocks/data';
 import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
 import { convertRankingEnumFromKoreanToEng } from '@/utils/ranking';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-// Ranking
 function Ranking() {
   const [rankingStatus, setRankingStatus] = useState<RankingEnum>('weekly');
   const handleSelect = (text: string) => {
@@ -59,8 +64,9 @@ function Ranking() {
           )}
         </View>
       </View>
-      <View style={styles.bottomCard}>
-        <RankingRunnerItem />
+
+      <View style={styles.bottomCardWrapper}>
+        <MyProfileItem data={MyData} />
       </View>
     </View>
   );
@@ -69,6 +75,19 @@ function Ranking() {
 export default withRankingGuard(Ranking);
 
 const styles = StyleSheet.create({
+  blurContainer: {
+    flex: 1,
+    padding: 20,
+    margin: 16,
+    textAlign: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderRadius: 20,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
   container: {
     flex: 1,
     backgroundColor: base['white'],
@@ -93,10 +112,13 @@ const styles = StyleSheet.create({
     width: '94%',
     alignSelf: 'center',
   },
-  bottomCard: {
+  bottomCardWrapper: {
     height: 80,
-    borderTopLeftRadius: 14,
+    borderColor: gray[40],
+    paddingLeft: 10,
+    paddingRight: 10,
+    elevation: 2,
     borderTopRightRadius: 14,
-    backgroundColor: 'blue',
+    borderTopLeftRadius: 14,
   },
 });

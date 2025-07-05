@@ -1,10 +1,22 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-export const RankingRunnerItem = ({ profileImage, nickname, distance, rank }: any) => (
+interface RankingRunnerItesmProps {
+  profileImage: string;
+  nickname: string;
+  distance: string;
+  rank: number;
+}
+
+export const RankingRunnerItem = ({
+  profileImage,
+  nickname,
+  distance,
+  rank,
+}: RankingRunnerItesmProps) => (
   <View style={styles.container}>
-    {/* <View style={styles.rankContainer}>
+    <View style={styles.rankContainer}>
       <Text style={styles.rank}>{rank}</Text>
-    </View> */}
+    </View>
     <View style={styles.profileContainer}>
       <Image
         source={{ uri: profileImage }}
@@ -39,7 +51,6 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 30,
-    backgroundColor: 'blue',
   },
   rankContainer: {
     width: 22,

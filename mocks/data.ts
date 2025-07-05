@@ -1,3 +1,11 @@
+export const MyData = {
+  profileImage: 'https://randomuser.me/api/portraits/men/1.jpg',
+  nickname: 'test',
+  distance: '20 km',
+  rankingStatus: 'weekly',
+  rank: 1,
+};
+
 export const weeklyRunnerData = [
   {
     id: 1,

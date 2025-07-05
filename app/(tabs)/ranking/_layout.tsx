@@ -7,7 +7,6 @@ function Ranking() {
     <Stack
       screenOptions={{
         headerShown: true,
-        headerStyle: {},
         headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: 'bold',
