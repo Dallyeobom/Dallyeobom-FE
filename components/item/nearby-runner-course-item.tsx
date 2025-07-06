@@ -1,27 +1,40 @@
 import { NearByRunneCourseItemSchema } from '@/types/item';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export const NearByRunnerCourseItem = ({
+  id,
   imageUrl,
   profileImage,
   nickname,
   courseName,
-}: NearByRunneCourseItemSchema) => (
-  <View style={styles.container}>
-    <Image
-      source={{ uri: imageUrl }}
-      style={styles.courseImage}
-    />
-    <View style={styles.profileContainer}>
+}: NearByRunneCourseItemSchema) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push(`/course/${id}`);
+  };
+
+  return (
+    <Pressable
+      style={styles.container}
+      onPress={handlePress}
+    >
       <Image
-        source={{ uri: profileImage }}
-        style={styles.profileImage}
+        source={{ uri: imageUrl }}
+        style={styles.courseImage}
       />
-      <Text>{nickname}</Text>
-    </View>
-    <Text>{courseName}</Text>
-  </View>
-);
+      <View style={styles.profileContainer}>
+        <Image
+          source={{ uri: profileImage }}
+          style={styles.profileImage}
+        />
+        <Text style={styles.nickname}>{nickname}</Text>
+      </View>
+      <Text style={styles.courseName}>{courseName}</Text>
+    </Pressable>
+  );
+};
 
 export default NearByRunnerCourseItem;
 
@@ -36,6 +49,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     columnGap: 8,
+    alignItems: 'center',
   },
   courseImage: {
     width: '100%',
@@ -47,16 +61,13 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
   },
-  textContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  nickname: {
+    fontSize: 14,
+    color: '#666',
   },
-  text: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
+  courseName: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333',
   },
 });
