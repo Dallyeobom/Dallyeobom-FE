@@ -1,3 +1,30 @@
+export const agreementData = [
+  {
+    id: 1,
+    label: '약관 전체 동의',
+    required: false,
+    checked: true,
+  },
+  {
+    id: 2,
+    label: '달러봄 서비스 이용약관',
+    required: true,
+    checked: true,
+  },
+  {
+    id: 3,
+    label: '개인정보 수집 및 이용동의',
+    required: true,
+    checked: false,
+  },
+  {
+    id: 4,
+    label: '(선택) 혜택 정보 앱 푸시 알림 수신',
+    required: false,
+    checked: false,
+  },
+];
+
 export const MyData = {
   profileImage: 'https://randomuser.me/api/portraits/men/1.jpg',
   nickname: 'test',

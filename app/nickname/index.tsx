@@ -1,8 +1,9 @@
+import TermsAndConditionlist from '@/components/list/agreement-list';
+import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
 import { useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -41,31 +42,33 @@ function Index() {
       return;
     }
 
-    // 카카오 회원가입 API
-    const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
+    // 닉네임 중복 확인 성공 후 bottomModal띄우기
 
-    if (!providerAccessToken) {
-      Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
-      router.replace('/login');
-      return;
-    }
-    try {
-      const result = await kakaoSignUp(nickname, providerAccessToken);
-      if (result.accessToken && result.refreshToken) {
-        Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
-          {
-            text: '확인',
-            onPress: () => {
-              setModalVisible(true);
-              handleloggedIn();
-              router.replace('/(tabs)');
-            },
-          },
-        ]);
-      }
-    } catch (error) {
-      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-    }
+    // 카카오 회원가입 API
+    // const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
+
+    // if (!providerAccessToken) {
+    //   Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
+    //   router.replace('/login');
+    //   return;
+    // }
+    // try {
+    //   const result = await kakaoSignUp(nickname, providerAccessToken);
+    //   if (result.accessToken && result.refreshToken) {
+    //     Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
+    //       {
+    //         text: '확인',
+    //         onPress: () => {
+    //           setModalVisible(true);
+    //           handleloggedIn();
+    //           router.replace('/(tabs)');
+    //         },
+    //       },
+    //     ]);
+    //   }
+    // } catch (error) {
+    //   Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    // }
   };
 
   const handleDelete = () => {
@@ -110,6 +113,9 @@ function Index() {
       >
         <Text style={styles.buttonText}>가입하기</Text>
       </Pressable>
+      <BottomUpModal>
+        <TermsAndConditionlist />
+      </BottomUpModal>
     </View>
   );
 }
@@ -123,6 +129,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     display: 'flex',
     justifyContent: 'space-between',
+    position: 'relative',
   },
   subContainer: {
     display: 'flex',
