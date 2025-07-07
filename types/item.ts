@@ -25,6 +25,7 @@ export const termsAndConditionItemSchema = z.object({
   label: z.string(),
   required: z.boolean(),
   checked: z.boolean(),
+  key: z.string(),
 });
 
 export type TermsAndConditionItemSchema = z.infer<typeof termsAndConditionItemSchema>;

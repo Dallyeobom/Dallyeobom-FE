@@ -105,7 +105,7 @@ function Index() {
       <Pressable
         onPress={handlePress}
         style={() => [
-          styles.nicknameButton,
+          styles.button,
           {
             backgroundColor: nickname.length > 0 ? main[80] : main[10],
           },
@@ -140,15 +140,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  nicknameButton: {
-    height: 56,
-    borderRadius: 8,
+  text: {
+    fontSize: 16,
+  },
+  button: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-    fontSize: 16,
+    height: 56,
+    borderRadius: 8,
   },
   buttonText: {
     fontSize: 16,
