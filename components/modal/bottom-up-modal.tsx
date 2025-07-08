@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   modalContent: {
-    // height: '35%',
     width: '100%',
     borderTopRightRadius: 26,
     borderTopLeftRadius: 26,
     position: 'absolute',
     bottom: 0,
     backgroundColor: base['white'],
+    paddingTop: 10,
   },
 });

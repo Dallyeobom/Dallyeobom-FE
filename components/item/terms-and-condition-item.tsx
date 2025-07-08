@@ -1,5 +1,4 @@
 import PurPleCheckBox from '@/components/checkbox';
-import { useCheckBoxStore } from '@/stores/checkbox-store';
 import { TermsAndConditionItemSchema } from '@/types/item';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
@@ -9,26 +8,21 @@ function TermsAndConditionAgreement({
   label,
   required,
   checked,
-  key,
+  name,
+  onToggle,
 }: TermsAndConditionItemSchema) {
-  const { isAllKey } = useCheckBoxStore((state) => ({
-    isAllKey: state.isAllKey,
-  }));
-  const { isServiceKey } = useCheckBoxStore((state) => ({
-    isServiceKey: state.isServiceKey,
-  }));
-
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.checkboxContainer}>
           <PurPleCheckBox
-            id={key}
-            isCheck={true}
+            name={name}
+            isCheck={checked}
+            onToggle={onToggle}
           />
           <Text>{label}</Text>
         </View>
-        {key !== 'all' && (
+        {name !== 'all' && (
           <View>
             <Ionicons
               name="chevron-forward"

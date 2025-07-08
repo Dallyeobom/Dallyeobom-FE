@@ -1,32 +1,14 @@
-import { useCheckBoxStore } from '@/stores/checkbox-store';
 import React from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
 interface PurPleCheckBoxProps {
-  id: string;
+  name: string;
   isCheck: boolean;
+  onToggle: () => void;
 }
 
-function PurPleCheckBox({ id, isCheck }: PurPleCheckBoxProps) {
-  const { isAllKey, handleAllKey } = useCheckBoxStore((state) => ({
-    isAllKey: state.isAllKey,
-    handleAllKey: state.handleAllKey,
-  }));
-  const { isServiceKey, handleServiceKey } = useCheckBoxStore((state) => ({
-    isServiceKey: state.isServiceKey,
-    handleServiceKey: state.handleServiceKey,
-  }));
-
+function PurPleCheckBox({ name, isCheck, onToggle }: PurPleCheckBoxProps) {
   return (
-    <Pressable
-      onPress={() => {
-        if (id === 'all') {
-          handleAllKey(!isAllKey);
-        }
-        if (id === 'service') {
-          handleServiceKey(!isServiceKey);
-        }
-      }}
-    >
+    <Pressable onPress={onToggle}>
       <Image
         source={
           isCheck
