@@ -7,6 +7,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 function TermsAndConditionlist() {
   const [agreementData, setGreemenetData] = useState(termsAndConditionData);
+  const [isButtonActive, setIsButtonActive] = useState(false);
 
   const handlePress = () => {};
 
@@ -18,10 +19,13 @@ function TermsAndConditionlist() {
         if (targetItem) {
           const targetChecked = targetItem.checked;
           if (targetChecked) {
+            setIsButtonActive(false);
             return copyPrev.map((item) => {
               return { ...item, checked: false };
             });
           } else {
+            setIsButtonActive(true);
+
             return copyPrev.map((item) => {
               return { ...item, checked: true };
             });
@@ -40,6 +44,31 @@ function TermsAndConditionlist() {
           copyPrev[targetIndex] = newItem;
         }
 
+        const falseCheckItem = copyPrev.filter(
+          (item) => item.name !== 'all' && !item.checked,
+        );
+        const allItem = copyPrev.find((item) => item.name === 'all');
+        if (allItem) {
+          if (falseCheckItem.length > 0 && allItem.checked) {
+            const newAllItem = { ...allItem, checked: false };
+            const targetIndex = copyPrev.indexOf(allItem);
+            copyPrev[targetIndex] = newAllItem;
+          }
+          if (falseCheckItem.length === 0 && !allItem.checked) {
+            const newAllItem = { ...allItem, checked: true };
+            const targetIndex = copyPrev.indexOf(allItem);
+            copyPrev[targetIndex] = newAllItem;
+          }
+        }
+
+        const requiredItems = copyPrev.filter((item) => item.required && item.checked);
+        if (requiredItems.length === 2) {
+          setIsButtonActive(true);
+        }
+        if (requiredItems.length < 2) {
+          setIsButtonActive(false);
+        }
+
         return copyPrev;
       });
     }
@@ -48,7 +77,7 @@ function TermsAndConditionlist() {
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
-        {agreementData.map((item, index) => {
+        {agreementData.map((item) => {
           const { id, label, required, checked, name } = item;
           return (
             <TermsAndConditionAgreement
@@ -65,7 +94,7 @@ function TermsAndConditionlist() {
       </View>
       <Pressable
         onPress={handlePress}
-        style={styles.button}
+        style={[styles.button, { backgroundColor: isButtonActive ? main[80] : main[20] }]}
       >
         <Text style={styles.buttonText}>확인</Text>
       </Pressable>
