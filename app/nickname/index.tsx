@@ -1,22 +1,16 @@
 import TermsAndConditionlist from '@/components/list/agreement-list';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
-import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
-import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
   const [nickname, onChangeNickname] = useState('');
-  const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
+  const [isAgreementModal, setIsAgreementModal] = useState(false);
   const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
-  const { setModalVisible } = useModalStore();
 
-  const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
-
-  const router = useRouter();
   const insets = useSafeAreaInsets();
   const handleNicknameChange = (text: string) => {
     onChangeNickname(text);
@@ -41,8 +35,7 @@ function Index() {
       Alert.alert('닉네임 검증에 실패했습니다. 다시 검증해주세요');
       return;
     }
-
-    // 닉네임 중복 확인 성공 후 bottomModal띄우기
+    setIsAgreementModal(true);
 
     // 카카오 회원가입 API
     // const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
@@ -113,9 +106,15 @@ function Index() {
       >
         <Text style={styles.buttonText}>가입하기</Text>
       </Pressable>
-      <BottomUpModal>
-        <TermsAndConditionlist />
-      </BottomUpModal>
+
+      {isAgreementModal && (
+        <BottomUpModal>
+          <TermsAndConditionlist
+            nickname={nickname}
+            setIsAgreementModal={setIsAgreementModal}
+          />
+        </BottomUpModal>
+      )}
     </View>
   );
 }

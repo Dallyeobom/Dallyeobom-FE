@@ -1,15 +1,54 @@
 import TermsAndConditionAgreement from '@/components/item/terms-and-condition-item';
 import { termsAndConditionData } from '@/mocks/data';
-
+import { useAuthStore } from '@/stores/auth-store';
+import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
+import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
-function TermsAndConditionlist() {
+interface TermsAndConditionlist {
+  nickname: string;
+  setIsAgreementModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function TermsAndConditionlist({ nickname, setIsAgreementModal }: TermsAndConditionlist) {
   const [agreementData, setGreemenetData] = useState(termsAndConditionData);
   const [isButtonActive, setIsButtonActive] = useState(false);
 
-  const handlePress = () => {};
+  const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
+  const { setModalVisible } = useModalStore(); // 위치 모달 TODO: 추후에 이름 변경하기  무슨 모달인지 잘 X
+  const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
+
+  const router = useRouter();
+
+  const handlePress = async () => {
+    setIsAgreementModal(false);
+    const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
+    if (!providerAccessToken) {
+      Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
+      router.replace('/login');
+      return;
+    }
+    try {
+      const result = await kakaoSignUp(nickname, providerAccessToken);
+      if (result.accessToken && result.refreshToken) {
+        Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              setModalVisible(true);
+              handleloggedIn();
+              router.replace('/(tabs)');
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
 
   const handleToggle = (name: string) => {
     if (name === 'all') {
@@ -93,6 +132,7 @@ function TermsAndConditionlist() {
         })}
       </View>
       <Pressable
+        disabled={!isButtonActive && true}
         onPress={handlePress}
         style={[styles.button, { backgroundColor: isButtonActive ? main[80] : main[20] }]}
       >

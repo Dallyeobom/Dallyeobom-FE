@@ -20,10 +20,10 @@ export default function RootLayout() {
   });
 
   const getAccessTokenRefreshToken = async () => {
-    // await SecureStore.deleteItemAsync('accessToken');
-    // await SecureStore.deleteItemAsync('refreshToken');
-    // await SecureStore.deleteItemAsync('providerAccessToken');
-    // await clearLocation();
+    await SecureStore.deleteItemAsync('accessToken');
+    await SecureStore.deleteItemAsync('refreshToken');
+    await SecureStore.deleteItemAsync('providerAccessToken');
+    await clearLocation();
 
     const accessToken = await SecureStore.getItemAsync('accessToken');
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
