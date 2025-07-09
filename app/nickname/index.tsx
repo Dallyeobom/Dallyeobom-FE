@@ -71,7 +71,7 @@ function Index() {
 
       <Pressable
         onPress={handlePress}
-        style={() => [
+        style={[
           styles.button,
           {
             backgroundColor: nickname.length > 0 ? main[80] : main[10],
