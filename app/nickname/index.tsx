@@ -36,32 +36,6 @@ function Index() {
       return;
     }
     setIsAgreementModal(true);
-
-    // 카카오 회원가입 API
-    // const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
-
-    // if (!providerAccessToken) {
-    //   Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
-    //   router.replace('/login');
-    //   return;
-    // }
-    // try {
-    //   const result = await kakaoSignUp(nickname, providerAccessToken);
-    //   if (result.accessToken && result.refreshToken) {
-    //     Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
-    //       {
-    //         text: '확인',
-    //         onPress: () => {
-    //           setModalVisible(true);
-    //           handleloggedIn();
-    //           router.replace('/(tabs)');
-    //         },
-    //       },
-    //     ]);
-    //   }
-    // } catch (error) {
-    //   Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-    // }
   };
 
   const handleDelete = () => {
