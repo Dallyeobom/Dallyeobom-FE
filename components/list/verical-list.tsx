@@ -6,6 +6,7 @@ interface VerticalListProps<T> {
   renderItem: (item: T) => React.ReactElement;
   isHorizontal?: boolean;
   handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  keyExtractor?: (item: T, index: number) => string;
 }
 
 function VerticalList<T>({
@@ -13,6 +14,7 @@ function VerticalList<T>({
   renderItem,
   isHorizontal = false,
   handleScroll,
+  keyExtractor,
 }: VerticalListProps<T>) {
   return (
     <FlatList
@@ -22,12 +24,7 @@ function VerticalList<T>({
       showsHorizontalScrollIndicator={false}
       data={data}
       renderItem={({ item }) => renderItem(item)}
-      keyExtractor={(item, index) => {
-        // TODO: 아래 에러 확인 필요
-        // Property 'id' does not exist on type 'NonNullable<T>'.ts(2339)
-        // return item?.id?.toString() || index.toString();
-        return index.toString();
-      }}
+      keyExtractor={keyExtractor ?? ((_, index) => index.toString())}
     />
   );
 }

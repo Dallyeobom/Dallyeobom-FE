@@ -19,3 +19,14 @@ export const popularCourseItemSchema = z.object({
 });
 
 export type PopularCourseItemSchema = z.infer<typeof popularCourseItemSchema>;
+
+export const termsAndConditionItemSchema = z.object({
+  id: z.number(),
+  label: z.string(),
+  required: z.boolean(),
+  checked: z.boolean(),
+  name: z.string(),
+  onToggle: z.function(),
+});
+
+export type TermsAndConditionItemSchema = z.infer<typeof termsAndConditionItemSchema>;

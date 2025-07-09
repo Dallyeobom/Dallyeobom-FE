@@ -1,21 +1,16 @@
+import TermsAndConditionlist from '@/components/list/agreement-list';
+import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
-import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
-import { useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
   const [nickname, onChangeNickname] = useState('');
-  const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
+  const [isAgreementModal, setIsAgreementModal] = useState(false);
   const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
-  const { setModalVisible } = useModalStore();
 
-  const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
-
-  const router = useRouter();
   const insets = useSafeAreaInsets();
   const handleNicknameChange = (text: string) => {
     onChangeNickname(text);
@@ -40,32 +35,7 @@ function Index() {
       Alert.alert('닉네임 검증에 실패했습니다. 다시 검증해주세요');
       return;
     }
-
-    // 카카오 회원가입 API
-    const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
-
-    if (!providerAccessToken) {
-      Alert.alert('카카오 로그인 정보가 없습니다. 다시 로그인해주세요.');
-      router.replace('/login');
-      return;
-    }
-    try {
-      const result = await kakaoSignUp(nickname, providerAccessToken);
-      if (result.accessToken && result.refreshToken) {
-        Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
-          {
-            text: '확인',
-            onPress: () => {
-              setModalVisible(true);
-              handleloggedIn();
-              router.replace('/(tabs)');
-            },
-          },
-        ]);
-      }
-    } catch (error) {
-      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-    }
+    setIsAgreementModal(true);
   };
 
   const handleDelete = () => {
@@ -101,8 +71,8 @@ function Index() {
 
       <Pressable
         onPress={handlePress}
-        style={() => [
-          styles.nicknameButton,
+        style={[
+          styles.button,
           {
             backgroundColor: nickname.length > 0 ? main[80] : main[10],
           },
@@ -110,6 +80,15 @@ function Index() {
       >
         <Text style={styles.buttonText}>가입하기</Text>
       </Pressable>
+
+      {isAgreementModal && (
+        <BottomUpModal>
+          <TermsAndConditionlist
+            nickname={nickname}
+            setIsAgreementModal={setIsAgreementModal}
+          />
+        </BottomUpModal>
+      )}
     </View>
   );
 }
@@ -123,6 +102,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     display: 'flex',
     justifyContent: 'space-between',
+    position: 'relative',
   },
   subContainer: {
     display: 'flex',
@@ -133,15 +113,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  nicknameButton: {
-    height: 56,
-    borderRadius: 8,
+  text: {
+    fontSize: 16,
+  },
+  button: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-    fontSize: 16,
+    height: 56,
+    borderRadius: 8,
   },
   buttonText: {
     fontSize: 16,
