@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   button: {
-    borderColor: 'blue',
     borderWidth: 2,
     marginBottom: 2,
   },
