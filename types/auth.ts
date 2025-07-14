@@ -32,6 +32,7 @@ export const nicknameCheckSchema = z.object({
   nickname: z.string(),
 });
 
+// 닉네임 타입
 export type NicknameCheckSchemaParams = z.infer<typeof nicknameCheckSchema>;
 
 export const nicknameCheckResponseSchema = z.object({
@@ -39,3 +40,17 @@ export const nicknameCheckResponseSchema = z.object({
 });
 
 export type NicknameCheckResponse = z.infer<typeof nicknameCheckResponseSchema>;
+
+
+
+// 약관동의 타입
+const TypeEnum = z.enum(["SERVICE", "PRIVACY", "PUSH"])
+const AgreementSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  required: z.boolean(),
+  seq: z.number(),
+  type: TypeEnum
+})
+
+export type AgreementsSchema = z.infer<typeof AgreementSchema>;

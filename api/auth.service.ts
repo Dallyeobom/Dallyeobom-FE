@@ -4,7 +4,7 @@ import type {
   NicknameCheckSchemaParams,
 } from '@/types/auth';
 import client from './client';
-import { getCheckNameUrl, getKaKaoLoginUrl, getKaKaoSignUpUrl } from './urls';
+import { getCheckNameUrl, getKaKaoLoginUrl, getKaKaoSignUpUrl, getTermsUrl } from './urls';
 
 export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
   const { data } = await client.post(getKaKaoSignUpUrl(), params);
@@ -13,6 +13,11 @@ export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
 
 export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {
   const { data } = await client.post(getKaKaoLoginUrl(), params);
+  return data;
+};
+
+export const TermsList = async (): Promise<any> => {
+  const { data } = await client.get(getTermsUrl());
   return data;
 };
 

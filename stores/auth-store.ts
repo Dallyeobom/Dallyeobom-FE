@@ -1,7 +1,8 @@
 import {
+  AgreementsSchema,
   KaKaoLoginResponse,
   KaKaoSignUpResponse,
-  NicknameCheckResponse,
+  NicknameCheckResponse
 } from '@/types/auth';
 import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
@@ -17,6 +18,7 @@ interface AuthState {
   ) => Promise<KaKaoSignUpResponse>;
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
   doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
+  termsList:() => Promise<AgreementsSchema[]>
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -36,6 +38,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       nickName,
       providerAccessToken,
     });
+    console.log("test", accessToken, "re",  refreshToken)
     if (!accessToken || !refreshToken) {
       throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');
     }
@@ -73,4 +76,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
     return { isDuplicated };
   },
+
+  termsList: async () => {
+    const data = await authAPI.TermsList();
+    return data
+
+  },
+
+
 }));
