@@ -40,7 +40,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       nickName,
       providerAccessToken,
     });
-    console.log("test", accessToken, "re",  refreshToken)
     if (!accessToken || !refreshToken) {
       throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');
     }
@@ -79,11 +78,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     return { isDuplicated };
   },
 
+
+  // 이용약관 리스트 조회
   termsList: async () => {
     const data = await authAPI.TermsList();
     return data
-
   },
 
+  // 이용약관 디테일 조회
+  termsDetail: async (id: number) => {
+    const data = await authAPI.TermsDetail(id)
+    return data
+  }
 
 }));

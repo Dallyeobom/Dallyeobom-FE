@@ -4,11 +4,12 @@ import type {
   NicknameCheckSchemaParams,
 } from '@/types/auth';
 import client from './client';
-import { getCheckNameUrl, getKaKaoLoginUrl, getKaKaoSignUpUrl, getTermsUrl } from './urls';
+import { getCheckNameUrl, getKaKaoLoginUrl, getKaKaoSignUpUrl, getTermsDetailUrl, getTermsUrl } from './urls';
 
 export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
-  const { data } = await client.post(getKaKaoSignUpUrl(), params);
-  return data;
+  const result = await client.post(getKaKaoSignUpUrl(), params);
+  console.log("data ===>>>>>>>>", result)
+  return result.data;
 };
 
 export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {
@@ -16,10 +17,18 @@ export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {
   return data;
 };
 
+// 이용약관 리스트
 export const TermsList = async (): Promise<any> => {
   const { data } = await client.get(getTermsUrl());
   return data;
 };
+
+// 이용약관 상세 조회
+export const TermsDetail = async (id:number): Promise<any> => {
+  const { data } = await client.get(getTermsDetailUrl(id));
+  return data;
+};
+
 
 export const DoubleCheckNickname = async (
   params: NicknameCheckSchemaParams,
