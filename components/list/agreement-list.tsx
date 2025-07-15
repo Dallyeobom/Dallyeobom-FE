@@ -17,7 +17,6 @@ interface TermsAndConditionlist {
 
 function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditionData }: TermsAndConditionlist) {
   const [agreementData, setGreemenetData] = useState(processAgreementData(termsAndConditionData));
-  // const [termsData, setTermsData] = useState<AgreementsSchemaParams[]>( termsAndConditionCheckData)
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
@@ -33,7 +32,6 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
   const router = useRouter();
 
   const handlePress = async () => {
-    console.log("클릭")
     setIsAgreementModal(false);
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
     if (!providerAccessToken) {
@@ -43,11 +41,7 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
     }
 
    const termsData =  processTermsData(agreementData)
-   console.log("temrsData", termsData)
-
-
-
-
+   console.log("프론트에서 보내는 약관동의 데이터 형식", termsData,providerAccessToken)
 
     try {
       const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
@@ -143,14 +137,8 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
               key={id}
               id={id}
               name={name}
-              required={required}
               type={type}
               isCheck={isCheck}
-
-
-
-
-
               onToggle={() => handleToggle(type)}
             />
           );

@@ -47,9 +47,12 @@ function Index() {
     setIsAgreementModal(true);
   }
 
+
   const handleDelete = () => {
     onChangeNickname('');
   };
+
+console.log("agreeementmodal", isAgreementModal)
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={styles.subContainer}>

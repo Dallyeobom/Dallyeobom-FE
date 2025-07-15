@@ -3,17 +3,22 @@ import PurPleCheckBox from '@/components/checkbox';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+interface TermsAndConditionAgreementProps  {
+  id: number,
+  name:string,
+  type:string,
+  isCheck: boolean,
+  onToggle: ()=>void;
+}
+
 function TermsAndConditionAgreement({
   id,
   name,
-  required,
-
   type,
- onToggle,
- isCheck,
-
-
-}: any) {
+  isCheck,
+  onToggle,
+}: TermsAndConditionAgreementProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>

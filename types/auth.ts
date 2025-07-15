@@ -54,6 +54,9 @@ const AgreementSchema = z.object({
   type: z.string()
 })
 
+
+
+
 export type AgreementsSchema = z.infer<typeof AgreementSchema>;
 
 
@@ -68,13 +71,7 @@ const agreementSchemaParms = z.object({
 export type AgreementsSchemaParams = z.infer<typeof agreementSchemaParms>;
 
 
-const processAgreementSchema = z.object({
-  id: z.number(),
-  isCheck: z.boolean(),
-  name: z.string(),
-  required: z.boolean(),
-  seq: z.number(),
-  type:z.string()
-});
-
-export type ProcessAgreementSchema = z.infer<typeof processAgreementSchema >;
+const extendedAgreementSchema  = AgreementSchema.extend({
+  isCheck: z.boolean()
+})
+export type ExtendedAgreementSchema= z.infer<typeof extendedAgreementSchema  >;
