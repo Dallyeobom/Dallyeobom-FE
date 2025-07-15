@@ -1,14 +1,14 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
 interface PurPleCheckBoxProps {
-  name: string;
-  // isCheck: boolean;
-  // onToggle: () => void;
+  type: string;
+  isCheck: boolean;
+  onToggle: (e:string) => void;
 }
 
-function PurPleCheckBox({ name, isCheck, onToggle }: any) {
+function PurPleCheckBox({ type, isCheck, onToggle }: PurPleCheckBoxProps) {
   return (
-    <Pressable onPress={onToggle}>
+    <Pressable onPress={() => onToggle(type)}>
       <Image
         source={
           isCheck

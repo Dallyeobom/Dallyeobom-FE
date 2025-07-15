@@ -15,6 +15,8 @@ function Index() {
   const termsList = useAuthStore((state) => state.termsList);
 
 
+
+
   const insets = useSafeAreaInsets();
   const handleNicknameChange = (text: string) => {
     onChangeNickname(text);
@@ -89,7 +91,7 @@ function Index() {
       </Pressable>
 
       {isAgreementModal && (
-        <BottomUpModal>
+        <BottomUpModal close={()=> setIsAgreementModal(false)}>
           <TermsAndConditionlist
             nickname={nickname}
             setIsAgreementModal={setIsAgreementModal}

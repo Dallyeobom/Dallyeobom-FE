@@ -7,8 +7,10 @@ function TermsAndConditionAgreement({
   id,
   name,
   required,
-  seq,
+
   type,
+ onToggle,
+ isCheck,
 
 
 }: any) {
@@ -17,13 +19,13 @@ function TermsAndConditionAgreement({
       <View style={styles.container}>
         <View style={styles.checkboxContainer}>
           <PurPleCheckBox
-            name={name}
-            // isCheck={checked}
-            // onToggle={onToggle}
+            type={type}
+            isCheck={isCheck}
+            onToggle={onToggle}
           />
           <Text>{name}</Text>
         </View>
-        {name !== 'all' && (
+        {type !== 'all' && (
           <View>
             <Ionicons
               name="chevron-forward"

@@ -1,5 +1,6 @@
 import {
   AgreementsSchema,
+  AgreementsSchemaParams,
   KaKaoLoginResponse,
   KaKaoSignUpResponse,
   NicknameCheckResponse
@@ -15,6 +16,7 @@ interface AuthState {
   kakaoSignUp: (
     nickName: string,
     providerAccessToken: string,
+    terms: AgreementsSchemaParams[]
   ) => Promise<KaKaoSignUpResponse>;
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
   doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;

@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
 import { AgreementsSchema } from '@/types/auth';
+import { processAgreementData, processTermsData, } from '@/utils/signup';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
@@ -15,20 +16,24 @@ interface TermsAndConditionlist {
 }
 
 function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditionData }: TermsAndConditionlist) {
-  const [agreementData, setGreemenetData] = useState(termsAndConditionData);
+  const [agreementData, setGreemenetData] = useState(processAgreementData(termsAndConditionData));
+  // const [termsData, setTermsData] = useState<AgreementsSchemaParams[]>( termsAndConditionCheckData)
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
-  const { setModalVisible } = useModalStore(); // 위치 모달 TODO: 추후에 이름 변경하기  무슨 모달인지 잘 X
+  const { setModalVisible } = useModalStore(); // 위치 모달
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
 
-    console.log("agreeMentda", agreementData)
+
+
+
 
 
 
   const router = useRouter();
 
   const handlePress = async () => {
+    console.log("클릭")
     setIsAgreementModal(false);
     const providerAccessToken = await SecureStore.getItemAsync('providerAccessToken');
     if (!providerAccessToken) {
@@ -37,105 +42,116 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
       return;
     }
 
-    return
-    // try {
-    //   const result = await kakaoSignUp(nickname, providerAccessToken);
-    //   console.log("result", result)
-    //   if (result.accessToken && result.refreshToken) {
-    //     Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
-    //       {
-    //         text: '확인',
-    //         onPress: () => {
-    //           setModalVisible(true);
-    //           handleloggedIn();
-    //           router.replace('/(tabs)');
-    //         },
-    //       },
-    //     ]);
-    //   }
-    // } catch (error) {
-    //   console.log("error ===>>>>>", error)
-    //   Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-    // }
+   const termsData =  processTermsData(agreementData)
+   console.log("temrsData", termsData)
+
+
+
+
+
+    try {
+      const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
+      console.log("result", result)
+      if (result.accessToken && result.refreshToken) {
+        Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              setModalVisible(true);
+              handleloggedIn();
+              router.replace('/(tabs)');
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log("error ===>>>>>", error)
+      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
-  const handleToggle = (name: string) => {
-    // if (name === 'all') {
-    //   setGreemenetData((prev) => {
-    //     const copyPrev = [...prev];
-    //     const targetItem = copyPrev.find((item) => item.name == name);
-    //     if (targetItem) {
-    //       const targetChecked = targetItem.checked;
-    //       if (targetChecked) {
-    //         setIsButtonActive(false);
-    //         return copyPrev.map((item) => {
-    //           return { ...item, checked: false };
-    //         });
-    //       } else {
-    //         setIsButtonActive(true);
+  const handleToggle = (type: string) => {
+    if (type === 'all') {
+      setGreemenetData((prev) => {
+        const copyPrev = [...prev];
+        const targetItem = copyPrev.find((item) => item.type == type);
+        if (targetItem) {
+          const targetChecked = targetItem.isCheck
+          if (targetChecked) {
+            setIsButtonActive(false);
+            return copyPrev.map((item) => {
+              return { ...item, isCheck: false };
+            });
+          } else {
+            setIsButtonActive(true);
 
-    //         return copyPrev.map((item) => {
-    //           return { ...item, checked: true };
-    //         });
-    //       }
-    //     }
-    //     return copyPrev;
-    //   });
-    // } else {
-    //   setGreemenetData((prev) => {
-    //     const copyPrev = [...prev];
-    //     const targetItem = copyPrev.find((item) => item.name === name);
+            return copyPrev.map((item) => {
+              return { ...item, isCheck: true };
+            });
+          }
+        }
+        return copyPrev;
+      });
+    } else {
+      setGreemenetData((prev) => {
+        const copyPrev = [...prev];
+        const targetItem = copyPrev.find((item) => item.type === type);
 
-    //     if (targetItem) {
-    //       const newItem = { ...targetItem, checked: !targetItem.checked };
-    //       const targetIndex = copyPrev.indexOf(targetItem);
-    //       copyPrev[targetIndex] = newItem;
-    //     }
+        if (targetItem) {
+          const newItem = { ...targetItem, isCheck: !targetItem.isCheck };
+          const targetIndex = copyPrev.indexOf(targetItem);
+          copyPrev[targetIndex] = newItem;
+        }
 
-    //     const falseCheckItem = copyPrev.filter(
-    //       (item) => item.name !== 'all' && !item.checked,
-        // );
-    //     const allItem = copyPrev.find((item) => item.name === 'all');
-    //     if (allItem) {
-    //       if (falseCheckItem.length > 0 && allItem.checked) {
-    //         const newAllItem = { ...allItem, checked: false };
-    //         const targetIndex = copyPrev.indexOf(allItem);
-    //         copyPrev[targetIndex] = newAllItem;
-    //       }
-    //       if (falseCheckItem.length === 0 && !allItem.checked) {
-    //         const newAllItem = { ...allItem, checked: true };
-    //         const targetIndex = copyPrev.indexOf(allItem);
-    //         copyPrev[targetIndex] = newAllItem;
-    //       }
-    //     }
+        const falseCheckItem = copyPrev.filter(
+          (item) => item.type !== 'all' && !item.isCheck
+        );
+        const allItem = copyPrev.find((item) => item.type === 'all');
+        if (allItem) {
+          if (falseCheckItem.length > 0 && allItem.isCheck) {
+            const newAllItem = { ...allItem, isCheck: false };
+            const targetIndex = copyPrev.indexOf(allItem);
+            copyPrev[targetIndex] = newAllItem;
+          }
+          if (falseCheckItem.length === 0 && !allItem.isCheck) {
+            const newAllItem = { ...allItem, checked: true };
+            const targetIndex = copyPrev.indexOf(allItem);
+            copyPrev[targetIndex] = newAllItem;
+          }
+        }
 
-    //     const requiredItems = copyPrev.filter((item) => item.required && item.checked);
-    //     if (requiredItems.length === 2) {
-    //       setIsButtonActive(true);
-    //     }
-    //     if (requiredItems.length < 2) {
-    //       setIsButtonActive(false);
-    //     }
+        const requiredItems = copyPrev.filter((item) => item.required && item.isCheck);
+        if (requiredItems.length === 2) {
+          setIsButtonActive(true);
+        }
+        if (requiredItems.length < 2) {
+          setIsButtonActive(false);
+        }
 
-    //     return copyPrev;
-    //   });
-    // }
+        return copyPrev;
+      });
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
         {agreementData.map((item) => {
-          const { id, name, required, seq, type } = item;
+          const { id, name, required,  type, isCheck } = item;
           return (
             <TermsAndConditionAgreement 
               key={id}
               id={id}
               name={name}
               required={required}
+              type={type}
+              isCheck={isCheck}
 
 
-              onToggle={() => handleToggle(name)}
+
+
+
+              onToggle={() => handleToggle(type)}
             />
           );
         })}
