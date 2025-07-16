@@ -100,7 +100,7 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
             copyPrev[targetIndex] = newAllItem;
           }
           if (falseCheckItem.length === 0 && !allItem.isCheck) {
-            const newAllItem = { ...allItem, checked: true };
+            const newAllItem = { ...allItem, isCheck: true };
             const targetIndex = copyPrev.indexOf(allItem);
             copyPrev[targetIndex] = newAllItem;
           }
@@ -125,7 +125,7 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
         {agreementData.map((item) => {
           const { id, name, type, isCheck } = item;
           return (
-            <TermsAndConditionAgreement 
+            <TermsAndConditionAgreement
               key={id}
               id={id}
               name={name}

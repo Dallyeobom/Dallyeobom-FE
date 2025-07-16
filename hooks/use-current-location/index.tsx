@@ -2,18 +2,23 @@ import { useGoogleMapsApi } from '@/hooks/use-google-map-api';
 import { useLocationStore } from '@/stores/location-store';
 import { getGoogleMapsApiKey, getKoreanAddress } from '@/utils/google';
 import * as Location from 'expo-location';
+import { useState } from 'react';
 import { Alert, Linking } from 'react-native';
 
 const GOOGLE_MAPS_API_KEY = getGoogleMapsApiKey();
 
 export const useCurrentLocation = () => {
   const { selectedLocation, setSelectedLocation } = useLocationStore();
+  const [ isGetCurrentLocationLoading, setIsCurrentLocationLoading] = useState(false)
   const callGoogleMapsApi = useGoogleMapsApi();
 
   const getCurrentLocation = async () => {
     if (selectedLocation.length > 0) return;
 
-    if (selectedLocation.length === 0) {
+
+    try{
+
+        if (selectedLocation.length === 0) {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert(
@@ -31,6 +36,7 @@ export const useCurrentLocation = () => {
         return;
       }
 
+      setIsCurrentLocationLoading(true)
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
@@ -44,7 +50,19 @@ export const useCurrentLocation = () => {
         lng: location.coords.longitude,
       });
     }
+    }catch(error){
+      Alert.alert("위처 정보를 가져오는데  실패하였습니다.")
+
+    }finally {
+       setIsCurrentLocationLoading(false)
+
+
+    }
+
   };
 
-  return getCurrentLocation;
+  return {
+    getCurrentLocation,
+    isGetCurrentLocationLoading
+  }
 };

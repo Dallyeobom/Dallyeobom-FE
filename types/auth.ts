@@ -67,7 +67,7 @@ export const nicknameCheckResponseSchema = z.object({
 export type NicknameCheckResponse = z.infer<typeof nicknameCheckResponseSchema>;
 
 
-//  서버에서 제공하는 약관 정보 스키마 (읽기용)
+//  서버에서 제공하는 약관 정보 스키마
 const AgreementSchema = z.object({
   id: z.number(),
   name: z.string(),

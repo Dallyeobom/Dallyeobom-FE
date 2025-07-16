@@ -29,7 +29,7 @@ function Index() {
   const { selectedLocation } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
 
-  const getCurrentLocation = useCurrentLocation();
+  const {getCurrentLocation, isGetCurrentLocationLoading}= useCurrentLocation();
 
   useEffect(() => {
     if (selectedLocation.length === 0) {
@@ -108,7 +108,7 @@ function Index() {
             }}
           />
         )}
-        {selectedLocation.length === 0 && <LoadingSpinner />}
+        {isGetCurrentLocationLoading && <LoadingSpinner />}
       </View>
     </View>
   );
