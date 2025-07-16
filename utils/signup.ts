@@ -1,4 +1,4 @@
-import { AgreementsSchema, AgreementsSchemaParams, ProcessAgreementSchema, } from "@/types/auth";
+import { AgreementsSchema, AgreementsSchemaParams, ExtendedAgreementSchema, } from "@/types/auth";
 
 export const processAgreementData = (data: AgreementsSchema[]) =>   {
      const result = data.map((item )=> {
@@ -13,12 +13,10 @@ export const processAgreementData = (data: AgreementsSchema[]) =>   {
      return [{"id":1, "isCheck": false, "name": "약관 전체 동의", "required":false,
         "seq":0, "type": "all"
      }, ...result]
-}
-
-;
+};
 
 
-export const processTermsData = (data: ProcessAgreementSchema[]) => {
+export const processTermsData = (data: ExtendedAgreementSchema[]) => {
 
    return  data.reduce<AgreementsSchemaParams[]>((acc, item, index)=> {
             const {id, type, isCheck} = item;

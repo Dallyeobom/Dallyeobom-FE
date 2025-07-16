@@ -9,24 +9,19 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
-interface TermsAndConditionlist {
+interface TermsAndConditionlistProps {
   nickname: string;
   setIsAgreementModal: React.Dispatch<React.SetStateAction<boolean>>;
   termsAndConditionData: AgreementsSchema[]
 }
 
-function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditionData }: TermsAndConditionlist) {
+function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditionData }: TermsAndConditionlistProps) {
   const [agreementData, setGreemenetData] = useState(processAgreementData(termsAndConditionData));
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
   const { setModalVisible } = useModalStore(); // 위치 모달
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
-
-
-
-
-
 
 
   const router = useRouter();
@@ -41,11 +36,9 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
     }
 
    const termsData =  processTermsData(agreementData)
-   console.log("프론트에서 보내는 약관동의 데이터 형식", termsData,providerAccessToken)
 
     try {
       const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
-      console.log("result", result)
       if (result.accessToken && result.refreshToken) {
         Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
           {
@@ -59,7 +52,6 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
         ]);
       }
     } catch (error) {
-      console.log("error ===>>>>>", error)
       Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -68,7 +60,7 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
     if (type === 'all') {
       setGreemenetData((prev) => {
         const copyPrev = [...prev];
-        const targetItem = copyPrev.find((item) => item.type == type);
+        const targetItem = copyPrev.find((item) => item.type === type);
         if (targetItem) {
           const targetChecked = targetItem.isCheck
           if (targetChecked) {
@@ -131,7 +123,7 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditio
     <View style={styles.container}>
       <View style={styles.subContainer}>
         {agreementData.map((item) => {
-          const { id, name, required,  type, isCheck } = item;
+          const { id, name, type, isCheck } = item;
           return (
             <TermsAndConditionAgreement 
               key={id}

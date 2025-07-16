@@ -7,9 +7,8 @@ import client from './client';
 import { getCheckNameUrl, getKaKaoLoginUrl, getKaKaoSignUpUrl, getTermsDetailUrl, getTermsUrl } from './urls';
 
 export const KaKaoSignup = async (params: KaKaoSignUpParams): Promise<any> => {
-  const result = await client.post(getKaKaoSignUpUrl(), params);
-  console.log("data ===>>>>>>>>", result)
-  return result.data;
+  const {data} = await client.post(getKaKaoSignUpUrl(), params);
+  return data;
 };
 
 export const KaKaoLogin = async (params: KaKaoLoginParams): Promise<any> => {

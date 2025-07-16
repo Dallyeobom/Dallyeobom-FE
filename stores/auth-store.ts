@@ -35,10 +35,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   // 카카오 회원가입
-  kakaoSignUp: async (nickName: string, providerAccessToken: string) => {
+  kakaoSignUp: async (nickName: string, providerAccessToken: string, terms: AgreementsSchemaParams[]) => {
     const { accessToken, refreshToken } = await authAPI.KaKaoSignup({
       nickName,
       providerAccessToken,
+      terms
     });
     if (!accessToken || !refreshToken) {
       throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');

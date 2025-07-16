@@ -2,6 +2,7 @@ import FloatingButton from '@/components/button/floating-button';
 import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
 import PopularCourseItem from '@/components/item/popular-course-item';
 import VerticalList from '@/components/list/verical-list';
+import LoadingSpinner from '@/components/loading';
 import LocationSettingModal from '@/components/modal/location-setting-modal';
 import LocationSettingText from '@/components/text/location-setting-text';
 import { useCurrentLocation } from '@/hooks/use-current-location';
@@ -45,9 +46,12 @@ function Index() {
     }
   };
 
+
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.subContainer}>
+
         {selectedLocation && (
           <View style={styles.locationTextContainer}>
             <LocationSettingText
@@ -104,6 +108,7 @@ function Index() {
             }}
           />
         )}
+        {selectedLocation.length === 0 && <LoadingSpinner />}
       </View>
     </View>
   );
