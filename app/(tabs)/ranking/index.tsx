@@ -9,6 +9,7 @@ import {
   weeklyRunnerData,
   yearlyRunnerData,
 } from '@/mocks/data';
+import { useUserStore } from '@/stores/user-store';
 import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
 import { mapRankingTextToEnum } from '@/utils/ranking';
@@ -16,10 +17,13 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 function Ranking() {
-  const [rankingStatus, setRankingStatus] = useState<RankingEnum>('weekly');
-  const handleSelect = (text: string) => {
+  const userRanking = useUserStore((state) => state.userRanking);
+
+  const [rankingStatus, setRankingStatus] = useState<RankingEnum>('WEEKLY');
+  const handleSelect = async (text: string) => {
     const result = mapRankingTextToEnum(text);
     setRankingStatus(result);
+    const result2 = await userRanking(rankingStatus);
   };
 
   return (
@@ -28,30 +32,30 @@ function Ranking() {
         <View style={styles.menuContainer}>
           <View style={styles.submenuContainer}>
             <RankingButton
-              rankingStatus="weekly"
+              rankingStatus="WEEKLY"
               handleSelect={handleSelect}
-              isSelected={rankingStatus === 'weekly'}
+              isSelected={rankingStatus === 'WEEKLY'}
             />
             <RankingButton
-              rankingStatus="monthly"
+              rankingStatus="MONTHLY"
               handleSelect={handleSelect}
-              isSelected={rankingStatus === 'monthly'}
+              isSelected={rankingStatus === 'MONTHLY'}
             />
 
             <RankingButton
-              rankingStatus="yearly"
+              rankingStatus="YEARLY"
               handleSelect={handleSelect}
-              isSelected={rankingStatus === 'yearly'}
+              isSelected={rankingStatus === 'YEARLY'}
             />
           </View>
         </View>
         <View style={styles.dataContainer}>
-          {rankingStatus === 'weekly' ? (
+          {rankingStatus === 'WEEKLY' ? (
             <VerticalList
               data={weeklyRunnerData}
               renderItem={RankingRunnerItem}
             />
-          ) : rankingStatus === 'monthly' ? (
+          ) : rankingStatus === 'MONTHLY' ? (
             <VerticalList
               data={monthlyRunnerData}
               renderItem={RankingRunnerItem}
