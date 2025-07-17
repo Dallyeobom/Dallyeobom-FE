@@ -1,28 +1,36 @@
 import PurPleCheckBox from '@/components/checkbox';
-import { TermsAndConditionItemSchema } from '@/types/item';
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+interface TermsAndConditionAgreementProps  {
+  id: number,
+  name:string,
+  type:string,
+  isCheck: boolean,
+  onToggle: ()=>void;
+}
+
 function TermsAndConditionAgreement({
   id,
-  label,
-  required,
-  checked,
   name,
+  type,
+  isCheck,
   onToggle,
-}: TermsAndConditionItemSchema) {
+}: TermsAndConditionAgreementProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.checkboxContainer}>
           <PurPleCheckBox
-            name={name}
-            isCheck={checked}
+            type={type}
+            isCheck={isCheck}
             onToggle={onToggle}
           />
-          <Text>{label}</Text>
+          <Text>{name}</Text>
         </View>
-        {name !== 'all' && (
+        {type !== 'all' && (
           <View>
             <Ionicons
               name="chevron-forward"

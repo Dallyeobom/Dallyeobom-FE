@@ -1,25 +1,28 @@
 import TermsAndConditionAgreement from '@/components/item/terms-and-condition-item';
-import { termsAndConditionData } from '@/mocks/data';
 import { useAuthStore } from '@/stores/auth-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
+import { AgreementsSchema } from '@/types/auth';
+import { processAgreementData, processTermsData, } from '@/utils/signup';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
-interface TermsAndConditionlist {
+interface TermsAndConditionlistProps {
   nickname: string;
   setIsAgreementModal: React.Dispatch<React.SetStateAction<boolean>>;
+  termsAndConditionData: AgreementsSchema[]
 }
 
-function TermsAndConditionlist({ nickname, setIsAgreementModal }: TermsAndConditionlist) {
-  const [agreementData, setGreemenetData] = useState(termsAndConditionData);
+function TermsAndConditionlist({ nickname, setIsAgreementModal, termsAndConditionData }: TermsAndConditionlistProps) {
+  const [agreementData, setGreemenetData] = useState(processAgreementData(termsAndConditionData));
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   const kakaoSignUp = useAuthStore((state) => state.kakaoSignUp);
-  const { setModalVisible } = useModalStore(); // 위치 모달 TODO: 추후에 이름 변경하기  무슨 모달인지 잘 X
+  const { setModalVisible } = useModalStore(); // 위치 모달
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
+
 
   const router = useRouter();
 
@@ -31,8 +34,11 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal }: TermsAndCondit
       router.replace('/login');
       return;
     }
+
+   const termsData =  processTermsData(agreementData)
+
     try {
-      const result = await kakaoSignUp(nickname, providerAccessToken);
+      const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
       if (result.accessToken && result.refreshToken) {
         Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
           {
@@ -50,23 +56,23 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal }: TermsAndCondit
     }
   };
 
-  const handleToggle = (name: string) => {
-    if (name === 'all') {
+  const handleToggle = (type: string) => {
+    if (type === 'all') {
       setGreemenetData((prev) => {
         const copyPrev = [...prev];
-        const targetItem = copyPrev.find((item) => item.name == name);
+        const targetItem = copyPrev.find((item) => item.type === type);
         if (targetItem) {
-          const targetChecked = targetItem.checked;
+          const targetChecked = targetItem.isCheck
           if (targetChecked) {
             setIsButtonActive(false);
             return copyPrev.map((item) => {
-              return { ...item, checked: false };
+              return { ...item, isCheck: false };
             });
           } else {
             setIsButtonActive(true);
 
             return copyPrev.map((item) => {
-              return { ...item, checked: true };
+              return { ...item, isCheck: true };
             });
           }
         }
@@ -75,32 +81,32 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal }: TermsAndCondit
     } else {
       setGreemenetData((prev) => {
         const copyPrev = [...prev];
-        const targetItem = copyPrev.find((item) => item.name === name);
+        const targetItem = copyPrev.find((item) => item.type === type);
 
         if (targetItem) {
-          const newItem = { ...targetItem, checked: !targetItem.checked };
+          const newItem = { ...targetItem, isCheck: !targetItem.isCheck };
           const targetIndex = copyPrev.indexOf(targetItem);
           copyPrev[targetIndex] = newItem;
         }
 
         const falseCheckItem = copyPrev.filter(
-          (item) => item.name !== 'all' && !item.checked,
+          (item) => item.type !== 'all' && !item.isCheck
         );
-        const allItem = copyPrev.find((item) => item.name === 'all');
+        const allItem = copyPrev.find((item) => item.type === 'all');
         if (allItem) {
-          if (falseCheckItem.length > 0 && allItem.checked) {
-            const newAllItem = { ...allItem, checked: false };
+          if (falseCheckItem.length > 0 && allItem.isCheck) {
+            const newAllItem = { ...allItem, isCheck: false };
             const targetIndex = copyPrev.indexOf(allItem);
             copyPrev[targetIndex] = newAllItem;
           }
-          if (falseCheckItem.length === 0 && !allItem.checked) {
-            const newAllItem = { ...allItem, checked: true };
+          if (falseCheckItem.length === 0 && !allItem.isCheck) {
+            const newAllItem = { ...allItem, isCheck: true };
             const targetIndex = copyPrev.indexOf(allItem);
             copyPrev[targetIndex] = newAllItem;
           }
         }
 
-        const requiredItems = copyPrev.filter((item) => item.required && item.checked);
+        const requiredItems = copyPrev.filter((item) => item.required && item.isCheck);
         if (requiredItems.length === 2) {
           setIsButtonActive(true);
         }
@@ -117,16 +123,15 @@ function TermsAndConditionlist({ nickname, setIsAgreementModal }: TermsAndCondit
     <View style={styles.container}>
       <View style={styles.subContainer}>
         {agreementData.map((item) => {
-          const { id, label, required, checked, name } = item;
+          const { id, name, type, isCheck } = item;
           return (
             <TermsAndConditionAgreement
               key={id}
               id={id}
-              label={label}
-              required={required}
-              checked={checked}
               name={name}
-              onToggle={() => handleToggle(name)}
+              type={type}
+              isCheck={isCheck}
+              onToggle={() => handleToggle(type)}
             />
           );
         })}

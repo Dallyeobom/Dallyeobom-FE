@@ -1,44 +1,41 @@
 import { base } from '@/styles/color';
 import React from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
-interface BottomUpModalProps {
+interface Props {
   children: React.ReactNode;
+  close: () => void;
 }
 
-function BottomUpModal({ children }: BottomUpModalProps) {
+export default function BottomUpModal({ children, close }: Props) {
   return (
     <Modal
       animationType="slide"
-      onRequestClose={() => {
-        console.log('크로즈');
-      }}
-      transparent={true}
+      transparent
       visible={true}
+      onRequestClose={close}
     >
-      <View style={styles.modalWrapper}>
-        <View style={styles.modalContent}>{children}</View>
+      <Pressable style={styles.backdrop} onPress={close} />
+
+      <View style={styles.modalContent}>
+        {children}
       </View>
     </Modal>
   );
 }
 
-export default BottomUpModal;
-
 const styles = StyleSheet.create({
-  modalWrapper: {
-    backgroundColor: 'rgba(134, 134, 134, 0.5)',
-    position: 'relative',
-    width: '100%',
-    height: '100%',
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    width: '100%',
-    borderTopRightRadius: 26,
-    borderTopLeftRadius: 26,
     position: 'absolute',
     bottom: 0,
-    backgroundColor: base['white'],
+    width: '100%',
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+    backgroundColor: base.white,
     paddingTop: 10,
   },
 });

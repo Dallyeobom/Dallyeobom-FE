@@ -2,6 +2,7 @@ import TermsAndConditionlist from '@/components/list/agreement-list';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
 import { base, main } from '@/styles/color';
+import { AgreementsSchema } from '@/types/auth';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,7 +10,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 function Index() {
   const [nickname, onChangeNickname] = useState('');
   const [isAgreementModal, setIsAgreementModal] = useState(false);
+  const [termsAndConditionData, setTermsAndConditionData] = useState<AgreementsSchema[]>([])
   const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
+  const termsList = useAuthStore((state) => state.termsList);
+
+
+
 
   const insets = useSafeAreaInsets();
   const handleNicknameChange = (text: string) => {
@@ -35,12 +41,17 @@ function Index() {
       Alert.alert('닉네임 검증에 실패했습니다. 다시 검증해주세요');
       return;
     }
+
+    const result = await termsList()
+    setTermsAndConditionData(result)
     setIsAgreementModal(true);
-  };
+  }
+
 
   const handleDelete = () => {
     onChangeNickname('');
   };
+
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={styles.subContainer}>
@@ -82,10 +93,11 @@ function Index() {
       </Pressable>
 
       {isAgreementModal && (
-        <BottomUpModal>
+        <BottomUpModal close={()=> setIsAgreementModal(false)}>
           <TermsAndConditionlist
             nickname={nickname}
             setIsAgreementModal={setIsAgreementModal}
+            termsAndConditionData={termsAndConditionData}
           />
         </BottomUpModal>
       )}
