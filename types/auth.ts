@@ -86,11 +86,17 @@ const RankingDataListSchema = z.object({
   userId: z.number(),
 });
 
+const currentUserRankSchema = z.object({
+  rank: z.number(),
+  runningLength: z.number(),
+  completeCourseCount: z.number(),
+});
 // 전체 응답 스키마
 export const RankingDataSchema = z.object({
-  currentUserRank: z.number().nullable(),
+  currentUserRank: currentUserRankSchema.nullable(),
   list: z.array(RankingDataListSchema),
 });
 
 export type RankingData = z.infer<typeof RankingDataSchema>;
 export type RankingDataList = z.infer<typeof RankingDataListSchema>;
+export type CurrentUserRank = z.infer<typeof currentUserRankSchema>;

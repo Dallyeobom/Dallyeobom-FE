@@ -1,3 +1,4 @@
+import { renderRankIcon } from '@/components/item/rank-icon';
 import { base, gray, main } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -165,29 +166,29 @@ export default function CourseDetailScreen() {
     </View>
   );
 
-  const renderRankIcon = (index: number) => {
-    // 상위 랭킹 트로피 이미지로 등수 표기
-    const trophyImages = [
-      require('@/assets/images/trophy-gold.png'),
-      require('@/assets/images/trophy-silver.png'),
-      require('@/assets/images/trophy-bronze.png'),
-    ];
+  // const renderRankIcon = (index: number) => {
+  //   // 상위 랭킹 트로피 이미지로 등수 표기
+  //   const trophyImages = [
+  //     require('@/assets/images/trophy-gold.png'),
+  //     require('@/assets/images/trophy-silver.png'),
+  //     require('@/assets/images/trophy-bronze.png'),
+  //   ];
 
-    if (index < trophyImages.length) {
-      return (
-        <Image
-          source={trophyImages[index]}
-          style={styles.trophyIcon}
-        />
-      );
-    }
+  //   if (index < trophyImages.length) {
+  //     return (
+  //       <Image
+  //         source={trophyImages[index]}
+  //         style={styles.trophyIcon}
+  //       />
+  //     );
+  //   }
 
-    return (
-      <View style={styles.userRankNumber}>
-        <Text style={styles.rankNumberText}>{index + 1}</Text>
-      </View>
-    );
-  };
+  //   return (
+  //     <View style={styles.userRankNumber}>
+  //       <Text style={styles.rankNumberText}>{index + 1}</Text>
+  //     </View>
+  //   );
+  // };
 
   const renderCompletedUsers = () => (
     <View style={styles.completedUsersContainer}>

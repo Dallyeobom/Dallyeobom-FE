@@ -1,4 +1,6 @@
+import { gray } from '@/styles/color';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { renderRankIcon } from './rank-icon';
 
 interface RankingRunnerItemsProps {
   userId: number;
@@ -6,6 +8,7 @@ interface RankingRunnerItemsProps {
   profileImage?: string;
   completeCourseCount: number;
   runningLength: number;
+  index: number;
 }
 
 export const RankingRunnerItem = ({
@@ -14,19 +17,21 @@ export const RankingRunnerItem = ({
   runningLength,
   profileImage,
   completeCourseCount,
+  index,
 }: RankingRunnerItemsProps) => (
   <View style={styles.container}>
-    <View style={styles.rankContainer}>
-      {/* <Text style={styles.rank}>{rank}</Text> */}
+    <View>
+      <Text>{renderRankIcon(index)}</Text>
     </View>
     <View style={styles.profileContainer}>
+      {/* TODO: 추후에 데이터 프로필 이미지 url 속성이 추가 된다면 넣을예정 */}
       <Image
-        source={{ uri: profileImage }}
+        source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
         style={styles.profileImage}
       />
       <View>
         <Text style={styles.nickName}>{nickname}</Text>
-        <Text>{runningLength}KM</Text>
+        <Text style={styles.runningLength}>{runningLength} km</Text>
       </View>
     </View>
   </View>
@@ -54,15 +59,15 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 30,
   },
-  rankContainer: {
-    width: 22,
-    height: 20,
-  },
+
   rank: {
     fontWeight: 700,
     textAlign: 'center',
   },
   nickName: {
     fontWeight: 700,
+  },
+  runningLength: {
+    color: gray[40],
   },
 });

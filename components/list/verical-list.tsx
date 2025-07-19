@@ -3,7 +3,7 @@ import { FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
 
 interface VerticalListProps<T> {
   data: T[];
-  renderItem: (item: T) => React.ReactElement;
+  renderItem: (item: T & { index: number }) => React.ReactElement;
   isHorizontal?: boolean;
   handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   keyExtractor?: (item: T, index: number) => string;
@@ -23,7 +23,7 @@ function VerticalList<T>({
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       data={data}
-      renderItem={({ item }) => renderItem(item)}
+      renderItem={({ item, index }) => renderItem({ ...item, index })}
       keyExtractor={keyExtractor ?? ((_, index) => index.toString())}
     />
   );

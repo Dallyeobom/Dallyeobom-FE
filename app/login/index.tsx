@@ -44,7 +44,6 @@ const LoginScreen: React.FC = () => {
       }
 
       const result = await KaKaoLogin(kakaoLoginResult.accessToken);
-      console.log('로그인 결과2222222222222', result);
       if (result.isNewUser) {
         router.push('/nickname');
       } else {

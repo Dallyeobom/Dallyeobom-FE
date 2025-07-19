@@ -14,7 +14,7 @@ export const mapRankingTextToEnum = (text: string) => {
       break;
 
     default:
-      rankingStatus = rankingEnum.enum.YEARLY;
+      rankingStatus = rankingEnum.enum.WEEKLY;
   }
   return rankingStatus;
 };
