@@ -1,21 +1,23 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-interface RankingRunnerItesmProps {
-  profileImage: string;
+interface RankingRunnerItemsProps {
+  userId: number;
   nickname: string;
-  distance: string;
-  rank: number;
+  profileImage?: string;
+  completeCourseCount: number;
+  runningLength: number;
 }
 
 export const RankingRunnerItem = ({
-  profileImage,
+  userId,
   nickname,
-  distance,
-  rank,
-}: RankingRunnerItesmProps) => (
+  runningLength,
+  profileImage,
+  completeCourseCount,
+}: RankingRunnerItemsProps) => (
   <View style={styles.container}>
     <View style={styles.rankContainer}>
-      <Text style={styles.rank}>{rank}</Text>
+      {/* <Text style={styles.rank}>{rank}</Text> */}
     </View>
     <View style={styles.profileContainer}>
       <Image
@@ -24,7 +26,7 @@ export const RankingRunnerItem = ({
       />
       <View>
         <Text style={styles.nickName}>{nickname}</Text>
-        <Text>{distance}</Text>
+        <Text>{runningLength}KM</Text>
       </View>
     </View>
   </View>

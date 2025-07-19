@@ -1,30 +1,45 @@
 import RankingButton from '@/components/button/ranking-button';
-import MyProfileItem from '@/components/item/my-profile-item';
 import RankingRunnerItem from '@/components/item/ranking-runner-item';
 import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
-import {
-  monthlyRunnerData,
-  MyData,
-  weeklyRunnerData,
-  yearlyRunnerData,
-} from '@/mocks/data';
 import { useUserStore } from '@/stores/user-store';
 import { base, gray } from '@/styles/color';
+import { RankingDataList } from '@/types/auth';
 import { RankingEnum } from '@/types/enum';
 import { mapRankingTextToEnum } from '@/utils/ranking';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 function Ranking() {
   const userRanking = useUserStore((state) => state.userRanking);
 
   const [rankingStatus, setRankingStatus] = useState<RankingEnum>('WEEKLY');
+  const [rankingList, setRankingList] = useState<RankingDataList[] | []>([]);
   const handleSelect = async (text: string) => {
+    console.log('typed을 바꾸자', rankingStatus);
     const result = mapRankingTextToEnum(text);
     setRankingStatus(result);
-    const result2 = await userRanking(rankingStatus);
+    const result2 = await userRanking(rankingStatus); // currentUserRank, list
+
+    if (!result2) {
+      setRankingList([]);
+      return;
+    }
+    setRankingList(result2.list);
   };
+  console.log('rankingList', rankingList, 'rankingStatus', rankingStatus);
+
+  useEffect(() => {
+    (async () => {
+      const result2 = await userRanking(rankingStatus);
+
+      if (!result2) {
+        setRankingList([]);
+        return;
+      }
+      setRankingList(result2.list);
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -50,28 +65,16 @@ function Ranking() {
           </View>
         </View>
         <View style={styles.dataContainer}>
-          {rankingStatus === 'WEEKLY' ? (
-            <VerticalList
-              data={weeklyRunnerData}
-              renderItem={RankingRunnerItem}
-            />
-          ) : rankingStatus === 'MONTHLY' ? (
-            <VerticalList
-              data={monthlyRunnerData}
-              renderItem={RankingRunnerItem}
-            />
-          ) : (
-            <VerticalList
-              data={yearlyRunnerData}
-              renderItem={RankingRunnerItem}
-            />
-          )}
+          <VerticalList
+            data={rankingList}
+            renderItem={RankingRunnerItem}
+          />
         </View>
       </View>
-
+      {/* .
       <View style={styles.bottomCardWrapper}>
         <MyProfileItem data={MyData} />
-      </View>
+      </View> */}
     </View>
   );
 }

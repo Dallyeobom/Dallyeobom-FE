@@ -1,8 +1,14 @@
 import { base } from '@/styles/color';
-import React from 'react';
+import * as SecureStore from 'expo-secure-store';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
+  useEffect(() => {
+    (async () => {
+      await SecureStore.deleteItemAsync('accessToken');
+    })();
+  }, []);
   return (
     <View style={styles.container}>
       <Text>프로필</Text>
