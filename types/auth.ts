@@ -78,6 +78,17 @@ const extendedAgreementSchema = AgreementSchema.extend({
 
 export type ExtendedAgreementSchema = z.infer<typeof extendedAgreementSchema>;
 
+export const AgreementDetailResponseSchema = z.object({
+  id: z.number(),
+  type: z.string(),
+  name: z.string(),
+  conditions: z.string(),
+  revisionDate: z.string(),
+  required: z.boolean(),
+});
+
+export type AgreementDetailResponse = z.infer<typeof AgreementDetailResponseSchema>;
+
 // accessToken 재발급 응답 스키마
 const accessTokenReissueResponseSchema = z.object({
   accessToken: z.number(),

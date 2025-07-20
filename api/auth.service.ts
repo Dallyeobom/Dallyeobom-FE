@@ -1,10 +1,12 @@
 import type {
   AccessTokenReissueResponse,
+  AgreementDetailResponse,
   AgreementsSchema,
   KaKaoLoginParams,
   KaKaoLoginResponse,
   KaKaoSignUpParams,
   KaKaoSignUpResponse,
+  NicknameCheckResponse,
   NicknameCheckSchemaParams,
 } from '@/types/auth';
 import client from './client';
@@ -38,7 +40,8 @@ export const TermsList = async (): Promise<AgreementsSchema[]> => {
 };
 
 // 이용약관 상세 조회
-export const TermsDetail = async (id: number): Promise<any> => {
+
+export const TermsDetail = async (id: number): Promise<AgreementDetailResponse> => {
   const { data } = await client.get(getTermsDetailUrl(id));
   return data;
 };
@@ -46,13 +49,12 @@ export const TermsDetail = async (id: number): Promise<any> => {
 // 닉네임 중복 체크
 export const DoubleCheckNickname = async (
   params: NicknameCheckSchemaParams,
-): Promise<any> => {
-  const { data, status } = await client.get(getCheckNameUrl(), {
+): Promise<NicknameCheckResponse> => {
+  const { data } = await client.get(getCheckNameUrl(), {
     params: { nickname: params.nickname },
   });
   return {
     isDuplicated: data.isDuplicated,
-    status,
   };
 };
 
