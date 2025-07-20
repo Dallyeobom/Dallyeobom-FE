@@ -14,11 +14,11 @@ const currentUserRankSchema = z.object({
   completeCourseCount: z.number(),
 });
 // 전체 응답 스키마
-export const RankingDataSchema = z.object({
+export const RankingDataResponseSchema = z.object({
   currentUserRank: currentUserRankSchema.nullable(),
   list: z.array(RankingDataListSchema),
 });
 
-export type RankingData = z.infer<typeof RankingDataSchema>;
+export type RankingDataResponse = z.infer<typeof RankingDataResponseSchema>;
 export type RankingDataList = z.infer<typeof RankingDataListSchema>;
 export type CurrentUserRank = z.infer<typeof currentUserRankSchema>;
