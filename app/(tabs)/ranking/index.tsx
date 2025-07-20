@@ -5,8 +5,8 @@ import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
 import { useUserStore } from '@/stores/user-store';
 import { base, gray } from '@/styles/color';
-import { CurrentUserRank, RankingDataList } from '@/types/auth';
 import { RankingEnum } from '@/types/enum';
+import { CurrentUserRank, RankingDataList } from '@/types/user';
 import { mapRankingTextToEnum } from '@/utils/ranking';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -21,30 +21,26 @@ function Ranking() {
     runningLength: 19,
     completeCourseCount: 5,
   });
-  const handleSelect = async (text: string) => {
-    const rankingStatusResult = mapRankingTextToEnum(text);
 
-    const result = await userRanking(text); // currentUserRank, list
+  const fetchRankingData = async (status: string) => {
+    const result = await userRanking(status);
     if (!result) {
       setRankingList([]);
       return;
     }
 
-    setRankingStatus(rankingStatusResult);
     setRankingList(result.list);
+  };
+  const handleSelect = async (text: string) => {
+    const rankingStatusResult = mapRankingTextToEnum(text);
+    setRankingStatus(rankingStatusResult);
+    await fetchRankingData(text);
+
     // setCurrentUserRanking(result.currentUserRank);
   };
 
   useEffect(() => {
-    (async () => {
-      const result2 = await userRanking(rankingStatus);
-
-      if (!result2) {
-        setRankingList([]);
-        return;
-      }
-      setRankingList(result2.list);
-    })();
+    fetchRankingData(rankingStatus);
   }, []);
 
   return (

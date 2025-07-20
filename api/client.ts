@@ -25,7 +25,7 @@ client.interceptors.response.use(
   async (error) => {
     const { logout } = useAuthStore.getState();
 
-    const statusCode = error.response.status;
+    const statusCode = error.response?.status;
     const accessToken = await SecureStore.getItemAsync('accessToken');
 
     const refreshToken = await SecureStore.getItemAsync('refreshToken');

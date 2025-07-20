@@ -1,4 +1,5 @@
 import type {
+  AccessTokenReissueResponse,
   AgreementsSchema,
   KaKaoLoginParams,
   KaKaoLoginResponse,
@@ -56,7 +57,9 @@ export const DoubleCheckNickname = async (
 };
 
 // 엑세스 토큰 재발급
-export const GetAccessToken = async (refreshToken: string): Promise<any> => {
+export const GetAccessToken = async (
+  refreshToken: string,
+): Promise<AccessTokenReissueResponse> => {
   const { data } = await client.get(getAccessTokenUrl(), {
     params: { token: refreshToken },
   });

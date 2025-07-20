@@ -20,9 +20,7 @@ export const RankingRunnerItem = ({
   index,
 }: RankingRunnerItemsProps) => (
   <View style={styles.container}>
-    <View>
-      <Text>{renderRankIcon(index)}</Text>
-    </View>
+    <View>{renderRankIcon(index)}</View>
     <View style={styles.profileContainer}>
       {/* TODO: 추후에 데이터 프로필 이미지 url 속성이 추가 된다면 넣을예정 */}
       <Image

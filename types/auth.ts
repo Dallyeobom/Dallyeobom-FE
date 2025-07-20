@@ -78,25 +78,10 @@ const extendedAgreementSchema = AgreementSchema.extend({
 
 export type ExtendedAgreementSchema = z.infer<typeof extendedAgreementSchema>;
 
-// 사용자 데이터 리스트 스키마
-const RankingDataListSchema = z.object({
-  completeCourseCount: z.number(),
-  nickname: z.string(),
-  runningLength: z.number(),
-  userId: z.number(),
+// accessToken 재발급 응답 스키마
+const accessTokenReissueResponseSchema = z.object({
+  accessToken: z.number(),
+  refreshToken: z.number(),
 });
 
-const currentUserRankSchema = z.object({
-  rank: z.number(),
-  runningLength: z.number(),
-  completeCourseCount: z.number(),
-});
-// 전체 응답 스키마
-export const RankingDataSchema = z.object({
-  currentUserRank: currentUserRankSchema.nullable(),
-  list: z.array(RankingDataListSchema),
-});
-
-export type RankingData = z.infer<typeof RankingDataSchema>;
-export type RankingDataList = z.infer<typeof RankingDataListSchema>;
-export type CurrentUserRank = z.infer<typeof currentUserRankSchema>;
+export type AccessTokenReissueResponse = z.infer<typeof accessTokenReissueResponseSchema>;
