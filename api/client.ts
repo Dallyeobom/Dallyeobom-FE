@@ -1,9 +1,18 @@
 import { navigateReplaceTo } from '@/components/router';
 import { useAuthStore } from '@/stores/auth-store';
+import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
-import { client } from '.';
 import { getAccessTokenUrl } from './urls';
+
+export const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_BASE_URL ?? 'https://jayden-bin.cc';
+
+const client = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  adapter: 'fetch',
+});
 
 client.interceptors.request.use(
   async (config) => {
