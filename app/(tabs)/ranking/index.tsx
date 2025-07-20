@@ -16,11 +16,7 @@ function Ranking() {
 
   const [rankingStatus, setRankingStatus] = useState<RankingEnum>('WEEKLY');
   const [rankingList, setRankingList] = useState<RankingDataList[] | []>([]);
-  const [currentUserRanking, setCurrentUserRanking] = useState<CurrentUserRank | null>({
-    rank: 1,
-    runningLength: 19,
-    completeCourseCount: 5,
-  });
+  const [currentUserRanking, setCurrentUserRanking] = useState<CurrentUserRank | null>();
 
   const fetchRankingData = async (status: string) => {
     const result = await userRanking(status);
@@ -30,13 +26,13 @@ function Ranking() {
     }
 
     setRankingList(result.list);
+    setCurrentUserRanking(result.currentUserRank);
   };
   const handleSelect = async (text: string) => {
     const rankingStatusResult = mapRankingTextToEnum(text);
     setRankingStatus(rankingStatusResult);
-    await fetchRankingData(text);
 
-    // setCurrentUserRanking(result.currentUserRank);
+    await fetchRankingData(text);
   };
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import { router } from 'expo-router';
 
 export const navigateReplaceTo = async (path: any) => {
-  try {
-    setTimeout(() => {
+  setTimeout(() => {
+    try {
       router.replace(path);
-    }, 0);
-  } catch (e) {
-    console.error('라우팅 실패:', e);
-  }
+    } catch (e) {
+      console.error('라우팅 실패:', e);
+    }
+  }, 0);
 };
