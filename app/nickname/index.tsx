@@ -10,12 +10,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 function Index() {
   const [nickname, onChangeNickname] = useState('');
   const [isAgreementModal, setIsAgreementModal] = useState(false);
-  const [termsAndConditionData, setTermsAndConditionData] = useState<AgreementsSchema[]>([])
+  const [termsAndConditionData, setTermsAndConditionData] = useState<AgreementsSchema[]>(
+    [],
+  );
   const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
   const termsList = useAuthStore((state) => state.termsList);
-
-
-
 
   const insets = useSafeAreaInsets();
   const handleNicknameChange = (text: string) => {
@@ -42,11 +41,10 @@ function Index() {
       return;
     }
 
-    const result = await termsList()
-    setTermsAndConditionData(result)
+    const result = await termsList();
+    setTermsAndConditionData(result);
     setIsAgreementModal(true);
-  }
-
+  };
 
   const handleDelete = () => {
     onChangeNickname('');
@@ -93,7 +91,7 @@ function Index() {
       </Pressable>
 
       {isAgreementModal && (
-        <BottomUpModal close={()=> setIsAgreementModal(false)}>
+        <BottomUpModal close={() => setIsAgreementModal(false)}>
           <TermsAndConditionlist
             nickname={nickname}
             setIsAgreementModal={setIsAgreementModal}

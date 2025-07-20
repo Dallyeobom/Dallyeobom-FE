@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-
 // 카카오 로그인 요청 파라미터
 
 export const kakaoLoginParamsSchema = z.object({
@@ -8,7 +7,6 @@ export const kakaoLoginParamsSchema = z.object({
 });
 
 export type KaKaoLoginParams = z.infer<typeof kakaoLoginParamsSchema>;
-
 
 // 카카오 회원가입 요청 파라미터
 
@@ -28,7 +26,6 @@ export const kakaoSignUpParamsSchema = z.object({
 
 export type KaKaoSignUpParams = z.infer<typeof kakaoSignUpParamsSchema>;
 
-
 //  카카오 로그인 응답
 
 export const kakaoLoginResponseSchema = z.object({
@@ -39,7 +36,6 @@ export const kakaoLoginResponseSchema = z.object({
 
 export type KaKaoLoginResponse = z.infer<typeof kakaoLoginResponseSchema>;
 
-
 //  카카오 회원가입 응답
 
 export const kakaoSignUpResponseSchema = z.object({
@@ -48,9 +44,6 @@ export const kakaoSignUpResponseSchema = z.object({
 });
 
 export type KaKaoSignUpResponse = z.infer<typeof kakaoSignUpResponseSchema>;
-
-
-
 
 // 닉네임 중복 확인 요청
 export const nicknameCheckSchema = z.object({
@@ -61,11 +54,10 @@ export type NicknameCheckSchemaParams = z.infer<typeof nicknameCheckSchema>;
 
 // 닉네임 중복 확인 응답
 export const nicknameCheckResponseSchema = z.object({
-  isDuplicated: z.boolean(),   // 중복 여부
+  isDuplicated: z.boolean(), // 중복 여부
 });
 
 export type NicknameCheckResponse = z.infer<typeof nicknameCheckResponseSchema>;
-
 
 //  서버에서 제공하는 약관 정보 스키마
 const AgreementSchema = z.object({
@@ -78,11 +70,29 @@ const AgreementSchema = z.object({
 
 export type AgreementsSchema = z.infer<typeof AgreementSchema>;
 
-
-//  UI 렌더링 등을 위한 확장된 약관 스키마
+//  확장된 약관 스키마
 
 const extendedAgreementSchema = AgreementSchema.extend({
   isCheck: z.boolean(),
 });
 
 export type ExtendedAgreementSchema = z.infer<typeof extendedAgreementSchema>;
+
+export const AgreementDetailResponseSchema = z.object({
+  id: z.number(),
+  type: z.string(),
+  name: z.string(),
+  conditions: z.string(),
+  revisionDate: z.string(),
+  required: z.boolean(),
+});
+
+export type AgreementDetailResponse = z.infer<typeof AgreementDetailResponseSchema>;
+
+// accessToken 재발급 응답 스키마
+const accessTokenReissueResponseSchema = z.object({
+  accessToken: z.number(),
+  refreshToken: z.number(),
+});
+
+export type AccessTokenReissueResponse = z.infer<typeof accessTokenReissueResponseSchema>;

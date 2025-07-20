@@ -14,18 +14,13 @@ export default function RootLayout() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
   const clearLocation = useLocationStore((state) => state.clearLocation);
-
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
   const getAccessTokenRefreshToken = async () => {
-    // await SecureStore.deleteItemAsync('accessToken');
-    // await SecureStore.deleteItemAsync('refreshToken');
-    // await SecureStore.deleteItemAsync('providerAccessToken');
-    // await clearLocation();
-
     const accessToken = await SecureStore.getItemAsync('accessToken');
+
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
     if (accessToken && refreshToken) {
@@ -33,8 +28,7 @@ export default function RootLayout() {
     }
   };
 
-  usekakaoInit(); // kakao init
-
+  usekakaoInit();
   useEffect(() => {
     getAccessTokenRefreshToken();
   }, [loaded]);

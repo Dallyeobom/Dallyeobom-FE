@@ -1,110 +1,18 @@
-
-
 export const termsAndConditionCheckData = [
-    {
-      "id": 1,
-      "termsType": "SERVICE",
-      "agreed": true
-    },
-    {
-      "id": 2,
-      "termsType": "PRIVACY",
-      "agreed": true
-    },
-    {
-      "id": 3,
-      "termsType": "PUSH",
-      "agreed": false
-    }
-  ];
-
-
-export const MyData = {
-  profileImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-  nickname: 'test',
-  distance: '20 km',
-  rankingStatus: 'weekly',
-  rank: 1,
-};
-
-export const weeklyRunnerData = [
   {
     id: 1,
-    profileImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-    nickname: '런너지니',
-    distance: '15.2 km',
-    rankingStatus: 'weekly',
-    rank: 1,
+    termsType: 'SERVICE',
+    agreed: true,
   },
   {
     id: 2,
-    profileImage: 'https://randomuser.me/api/portraits/women/2.jpg',
-    nickname: '빨간머리러너',
-    distance: '13.7 km',
-    rankingStatus: 'weekly',
-    rank: 2,
+    termsType: 'PRIVACY',
+    agreed: true,
   },
   {
     id: 3,
-    profileImage: 'https://randomuser.me/api/portraits/men/3.jpg',
-    nickname: '러너킹',
-    distance: '10.5 km',
-    rankingStatus: 'weekly',
-    rank: 3,
-  },
-];
-
-export const monthlyRunnerData = [
-  {
-    id: 4,
-    profileImage: 'https://randomuser.me/api/portraits/men/4.jpg',
-    nickname: '산타러너',
-    distance: '52.8 km',
-    rankingStatus: 'monthly',
-    rank: 1,
-  },
-  {
-    id: 5,
-    profileImage: 'https://randomuser.me/api/portraits/women/5.jpg',
-    nickname: '밤하늘주자',
-    distance: '48.2 km',
-    rankingStatus: 'monthly',
-    rank: 2,
-  },
-  {
-    id: 6,
-    profileImage: 'https://randomuser.me/api/portraits/men/6.jpg',
-    nickname: '해피러너',
-    distance: '45.0 km',
-    rankingStatus: 'monthly',
-    rank: 3,
-  },
-];
-
-export const yearlyRunnerData = [
-  {
-    id: 7,
-    profileImage: 'https://randomuser.me/api/portraits/men/7.jpg',
-    nickname: '러너킹',
-    distance: '320.5 km',
-    rankingStatus: 'yearly',
-    rank: 1,
-  },
-  {
-    id: 8,
-    profileImage: 'https://randomuser.me/api/portraits/women/8.jpg',
-    nickname: '산타러너',
-    distance: '295.3 km',
-    rankingStatus: 'yearly',
-    rank: 2,
-  },
-  {
-    id: 9,
-    profileImage: 'https://randomuser.me/api/portraits/men/9.jpg',
-    nickname: '달빛러너',
-    distance: '260.0 km',
-    rankingStatus: 'yearly',
-    rank: 3,
+    termsType: 'PUSH',
+    agreed: false,
   },
 ];
 

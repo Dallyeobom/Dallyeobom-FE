@@ -3,18 +3,18 @@ import { rankingEnum } from '@/types/enum';
 export const mapRankingTextToEnum = (text: string) => {
   let rankingStatus;
   switch (text) {
-    case 'weekly':
-      rankingStatus = rankingEnum.enum.weekly;
+    case 'WEEKLY':
+      rankingStatus = rankingEnum.enum.WEEKLY;
       break;
-    case 'monthly':
-      rankingStatus = rankingEnum.enum.monthly;
+    case 'MONTHLY':
+      rankingStatus = rankingEnum.enum.MONTHLY;
       break;
-    case 'yearly':
-      rankingStatus = rankingEnum.enum.yearly;
+    case 'YEARLY':
+      rankingStatus = rankingEnum.enum.YEARLY;
       break;
 
     default:
-      rankingStatus = rankingEnum.enum.weekly;
+      rankingStatus = rankingEnum.enum.WEEKLY;
   }
   return rankingStatus;
 };
@@ -22,13 +22,13 @@ export const mapRankingTextToEnum = (text: string) => {
 export const convertRankingTextFromEngToKor = (text: string) => {
   let rankingText;
   switch (text) {
-    case 'weekly':
+    case 'WEEKLY':
       rankingText = '주간';
       break;
-    case 'monthly':
+    case 'MONTHLY':
       rankingText = '월간';
       break;
-    case 'yearly':
+    case 'YEARLY':
       rankingText = '연간';
       break;
     default:

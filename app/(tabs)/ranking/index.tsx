@@ -3,24 +3,41 @@ import MyProfileItem from '@/components/item/my-profile-item';
 import RankingRunnerItem from '@/components/item/ranking-runner-item';
 import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
-import {
-  monthlyRunnerData,
-  MyData,
-  weeklyRunnerData,
-  yearlyRunnerData,
-} from '@/mocks/data';
+import { useUserStore } from '@/stores/user-store';
 import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
+import { CurrentUserRank, RankingDataList } from '@/types/user';
 import { mapRankingTextToEnum } from '@/utils/ranking';
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 function Ranking() {
-  const [rankingStatus, setRankingStatus] = useState<RankingEnum>('weekly');
-  const handleSelect = (text: string) => {
-    const result = mapRankingTextToEnum(text);
-    setRankingStatus(result);
+  const userRanking = useUserStore((state) => state.userRanking);
+
+  const [rankingStatus, setRankingStatus] = useState<RankingEnum>('WEEKLY');
+  const [rankingList, setRankingList] = useState<RankingDataList[] | []>([]);
+  const [currentUserRanking, setCurrentUserRanking] = useState<CurrentUserRank | null>();
+
+  const fetchRankingData = async (status: string) => {
+    const result = await userRanking(status);
+    if (!result) {
+      setRankingList([]);
+      return;
+    }
+
+    setRankingList(result.list);
+    setCurrentUserRanking(result.currentUserRank);
   };
+  const handleSelect = async (text: string) => {
+    const rankingStatusResult = mapRankingTextToEnum(text);
+    setRankingStatus(rankingStatusResult);
+
+    await fetchRankingData(text);
+  };
+
+  useEffect(() => {
+    fetchRankingData(rankingStatus);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -28,45 +45,37 @@ function Ranking() {
         <View style={styles.menuContainer}>
           <View style={styles.submenuContainer}>
             <RankingButton
-              rankingStatus="weekly"
+              rankingStatus="WEEKLY"
               handleSelect={handleSelect}
-              isSelected={rankingStatus === 'weekly'}
+              isSelected={rankingStatus === 'WEEKLY'}
             />
             <RankingButton
-              rankingStatus="monthly"
+              rankingStatus="MONTHLY"
               handleSelect={handleSelect}
-              isSelected={rankingStatus === 'monthly'}
+              isSelected={rankingStatus === 'MONTHLY'}
             />
-
             <RankingButton
-              rankingStatus="yearly"
+              rankingStatus="YEARLY"
               handleSelect={handleSelect}
-              isSelected={rankingStatus === 'yearly'}
+              isSelected={rankingStatus === 'YEARLY'}
             />
           </View>
         </View>
         <View style={styles.dataContainer}>
-          {rankingStatus === 'weekly' ? (
-            <VerticalList
-              data={weeklyRunnerData}
-              renderItem={RankingRunnerItem}
-            />
-          ) : rankingStatus === 'monthly' ? (
-            <VerticalList
-              data={monthlyRunnerData}
-              renderItem={RankingRunnerItem}
-            />
-          ) : (
-            <VerticalList
-              data={yearlyRunnerData}
-              renderItem={RankingRunnerItem}
-            />
-          )}
+          <VerticalList
+            data={rankingList}
+            renderItem={RankingRunnerItem}
+          />
         </View>
       </View>
 
       <View style={styles.bottomCardWrapper}>
-        <MyProfileItem data={MyData} />
+        {currentUserRanking ? (
+          <MyProfileItem data={currentUserRanking} />
+        ) : (
+          // TODO: 추후에 UI나오면은 넣을 예정
+          <Text>기록이없습니다.</Text>
+        )}
       </View>
     </View>
   );

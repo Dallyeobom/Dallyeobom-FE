@@ -1,27 +1,25 @@
 import { gray } from '@/styles/color';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-type MyProfileItem = {
+interface RankingRunnerItemsProps {
   rank: number;
-  profileImage: string;
-  distance: string;
-  rankingStatus: string;
-  nickname: string;
-};
+  runningLength: number;
+  completeCourseCount: number;
+}
 
 interface MyProfileItemProps {
-  data: MyProfileItem;
+  data: RankingRunnerItemsProps;
 }
 export const MyProfileItem = ({ data }: MyProfileItemProps) => (
   <View style={styles.container}>
     <View style={styles.profileContainer}>
       <Image
-        source={{ uri: data.profileImage }}
+        source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
         style={styles.profileImage}
       />
       <View>
-        <Text style={styles.nickName}>{data.nickname}</Text>
-        <Text style={styles.distance}>{data.distance}</Text>
+        <Text style={styles.nickName}>TEST</Text>
+        <Text style={styles.distance}>{data.runningLength}KM</Text>
       </View>
     </View>
     <View style={styles.badge}>
