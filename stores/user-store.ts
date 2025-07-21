@@ -1,9 +1,15 @@
-import { RankingData } from '@/types/user';
+import { NearUserCourses, RankingDataResponse } from '@/types/user';
 import { create } from 'zustand';
 import * as userAPI from '../api/user.service';
 
 interface UserState {
-  userRanking: (type: string) => Promise<RankingData>;
+  userRanking: (type: string) => Promise<RankingDataResponse>;
+  nearRunnerCourses: (
+    latitude: number,
+    longitude: number,
+    radius: number,
+    maxCount: number,
+  ) => Promise<NearUserCourses>;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -15,10 +21,24 @@ export const useUserStore = create<UserState>((set) => ({
         list: [],
       };
     }
-    const { currentUserRank, list } = await userAPI.UserRanking(type);
+    const { currentUserRank, list } = response;
     return {
       currentUserRank,
       list,
     };
+  },
+  nearRunnerCourses: async (
+    latitude: number,
+    longitude: number,
+    radius: number,
+    maxCount: number,
+  ) => {
+    const response = await userAPI.NearRunnerCourses(
+      latitude,
+      longitude,
+      radius,
+      maxCount,
+    );
+    return response;
   },
 }));

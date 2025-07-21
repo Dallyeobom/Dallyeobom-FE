@@ -2,7 +2,7 @@ import { kakaoInitFunc } from '@/utils/kakao';
 import { getKeyHashAndroid } from '@react-native-kakao/core';
 import { useEffect } from 'react';
 
-export const usekakaoInit = () => {
+export const useKaKaoInit = () => {
   useEffect(() => {
     kakaoInitFunc()
       .then((data) => {

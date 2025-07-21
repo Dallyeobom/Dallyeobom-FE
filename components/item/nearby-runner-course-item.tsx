@@ -1,14 +1,13 @@
-import { NearByRunneCourseItemSchema } from '@/types/item';
+import { NearUserCourses } from '@/types/user';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export const NearByRunnerCourseItem = ({
   id,
-  imageUrl,
-  profileImage,
-  nickname,
-  courseName,
-}: NearByRunneCourseItemSchema) => {
+  name,
+  courseImage,
+  user,
+}: NearUserCourses) => {
   const router = useRouter();
 
   const handlePress = () => {
@@ -21,17 +20,18 @@ export const NearByRunnerCourseItem = ({
       onPress={handlePress}
     >
       <Image
-        source={{ uri: imageUrl }}
+        source={{ uri: courseImage }}
         style={styles.courseImage}
       />
       <View style={styles.profileContainer}>
+        {/* TODO: 추후 프로필 이미지가 들어오면은 넣어주기*/}
         <Image
-          source={{ uri: profileImage }}
+          source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
           style={styles.profileImage}
         />
-        <Text style={styles.nickname}>{nickname}</Text>
+        <Text style={styles.nickname}>{user.nickname}</Text>
       </View>
-      <Text style={styles.courseName}>{courseName}</Text>
+      <Text style={styles.courseName}>{name}</Text>
     </Pressable>
   );
 };

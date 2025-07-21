@@ -19,6 +19,19 @@ export const RankingDataResponseSchema = z.object({
   list: z.array(RankingDataListSchema),
 });
 
+export const UserSchema = z.object({
+  id: z.number(),
+  nickname: z.string(),
+});
+
+export const NearUserCoursesSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  courseImage: z.string().url(),
+  user: UserSchema,
+});
+
 export type RankingDataResponse = z.infer<typeof RankingDataResponseSchema>;
 export type RankingDataList = z.infer<typeof RankingDataListSchema>;
 export type CurrentUserRank = z.infer<typeof currentUserRankSchema>;
+export type NearUserCourses = z.infer<typeof NearUserCoursesSchema>;

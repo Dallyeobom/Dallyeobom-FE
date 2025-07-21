@@ -6,9 +6,10 @@ import LoadingSpinner from '@/components/loading';
 import LocationSettingModal from '@/components/modal/location-setting-modal';
 import LocationSettingText from '@/components/text/location-setting-text';
 import { useCurrentLocation } from '@/hooks/use-current-location';
-import { nearByRunnerData, popularCourseData } from '@/mocks/data';
+import { popularCourseData } from '@/mocks/data';
 import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
+import { useUserStore } from '@/stores/user-store';
 import { base } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
@@ -24,19 +25,25 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
+  const nearRunnerCourses = useUserStore((state) => state.nearRunnerCourses);
+
+  const [nearByRunnerData, setNearByRunnderData] = useState([]);
+
   const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
   const insets = useSafeAreaInsets();
-  const { selectedLocation } = useLocationStore();
+  const { selectedLocation, selectedCoords } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
 
-  const {getCurrentLocation, isGetCurrentLocationLoading}= useCurrentLocation();
+  const { getCurrentLocation, isGetCurrentLocationLoading } = useCurrentLocation();
+
+  //  LOG  selectedCoords {"lat": 37.489887, "lng": 126.9905874}
+  console.log('selectedCoords', selectedCoords);
 
   useEffect(() => {
     if (selectedLocation.length === 0) {
       getCurrentLocation();
     }
   }, [selectedLocation]);
-
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
     if (yOffset === 0) {
@@ -46,12 +53,9 @@ function Index() {
     }
   };
 
-
-
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.subContainer}>
-
         {selectedLocation && (
           <View style={styles.locationTextContainer}>
             <LocationSettingText
