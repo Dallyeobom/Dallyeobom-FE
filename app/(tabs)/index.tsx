@@ -11,6 +11,7 @@ import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { useUserStore } from '@/stores/user-store';
 import { base } from '@/styles/color';
+import { NearUserCourses } from '@/types/user';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
@@ -27,7 +28,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 function Index() {
   const nearRunnerCourses = useUserStore((state) => state.nearRunnerCourses);
 
-  const [nearByRunnerData, setNearByRunnderData] = useState([]);
+  const [nearByRunnerData, setNearByRunnderData] = useState<NearUserCourses[]>([]);
 
   const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
   const insets = useSafeAreaInsets();
@@ -36,14 +37,6 @@ function Index() {
 
   const { getCurrentLocation, isGetCurrentLocationLoading } = useCurrentLocation();
 
-  //  LOG  selectedCoords {"lat": 37.489887, "lng": 126.9905874}
-  console.log('selectedCoords', selectedCoords);
-
-  useEffect(() => {
-    if (selectedLocation.length === 0) {
-      getCurrentLocation();
-    }
-  }, [selectedLocation]);
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = event.nativeEvent.contentOffset.y;
     if (yOffset === 0) {
@@ -52,6 +45,22 @@ function Index() {
       setIsButtonTextVisible(false);
     }
   };
+
+  const handleFetchNearRunner = async () => {
+    if (!selectedCoords?.lat || !selectedCoords.lng) return;
+    const response = await nearRunnerCourses(selectedCoords?.lat, selectedCoords?.lng);
+    setNearByRunnderData(response);
+  };
+
+  useEffect(() => {
+    if (selectedLocation.length === 0) {
+      getCurrentLocation();
+    }
+  }, [selectedLocation]);
+
+  useEffect(() => {
+    handleFetchNearRunner();
+  }, []);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -75,11 +84,17 @@ function Index() {
                     color="#9CA3AF"
                   />
                 </Pressable>
-                <VerticalList
-                  isHorizontal={true}
-                  data={nearByRunnerData}
-                  renderItem={NearByRunnerCourseItem}
-                />
+
+                {nearByRunnerData.length > 0 ? (
+                  <VerticalList
+                    isHorizontal={true}
+                    data={nearByRunnerData}
+                    renderItem={NearByRunnerCourseItem}
+                  />
+                ) : (
+                  // TODO: 근처 러너들이 데이터가 없을때 나오는 UI가 생기면 넣을예정
+                  <Text>데이터가없습니다</Text>
+                )}
               </View>
 
               <View style={styles.section}>

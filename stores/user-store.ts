@@ -7,9 +7,9 @@ interface UserState {
   nearRunnerCourses: (
     latitude: number,
     longitude: number,
-    radius: number,
-    maxCount: number,
-  ) => Promise<NearUserCourses>;
+    radius?: number,
+    maxCount?: number,
+  ) => Promise<NearUserCourses[]>;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -30,8 +30,8 @@ export const useUserStore = create<UserState>((set) => ({
   nearRunnerCourses: async (
     latitude: number,
     longitude: number,
-    radius: number,
-    maxCount: number,
+    radius?: number,
+    maxCount?: number,
   ) => {
     const response = await userAPI.NearRunnerCourses(
       latitude,

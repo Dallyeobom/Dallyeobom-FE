@@ -22,7 +22,6 @@ export const NearRunnerCourses = async (
     const { data } = await client.get(
       getNearRunnerCourseUrl(latitude, longitude, radius, maxCount),
     );
-    console.log('data ===>>>>>>', data);
     return data;
   } catch (error) {
     return null;
