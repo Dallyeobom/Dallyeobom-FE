@@ -28,7 +28,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 function Index() {
   const nearRunnerCourses = useUserStore((state) => state.nearRunnerCourses);
 
-  const [nearByRunnerData, setNearByRunnderData] = useState<NearUserCourses[]>([]);
+  const [nearByRunnerData, setNearByRunnerData] = useState<NearUserCourses[]>([]);
 
   const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
   const insets = useSafeAreaInsets();
@@ -49,7 +49,7 @@ function Index() {
   const handleFetchNearRunner = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     const response = await nearRunnerCourses(selectedCoords?.lat, selectedCoords?.lng);
-    setNearByRunnderData(response);
+    setNearByRunnerData(response);
   };
 
   useEffect(() => {
