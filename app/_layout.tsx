@@ -1,4 +1,4 @@
-import { usekakaoInit } from '@/hooks/use-kakao-init';
+import { useKaKaoInit } from '@/hooks/use-kakao-init';
 import { useAuthStore } from '@/stores/auth-store';
 import { useLocationStore } from '@/stores/location-store';
 import { base } from '@/styles/color';
@@ -28,7 +28,7 @@ export default function RootLayout() {
     }
   };
 
-  usekakaoInit();
+  useKaKaoInit();
   useEffect(() => {
     getAccessTokenRefreshToken();
   }, [loaded]);
