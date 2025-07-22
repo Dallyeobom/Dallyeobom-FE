@@ -39,6 +39,9 @@ export const useUserStore = create<UserState>((set) => ({
       radius,
       maxCount,
     );
+    if(!response) {
+      return null
+    }
     return response;
   },
 }));
