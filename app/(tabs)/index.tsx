@@ -121,6 +121,7 @@ function Index() {
                     handleScroll={handleScroll}
                   />
                 ) : (
+                  // TODO: 근처 러너들이 데이터가 없을때 나오는 UI가 생기면 넣을예정 xs
                   <Text>데이터가없습니다</Text>
                 )}
               </View>
