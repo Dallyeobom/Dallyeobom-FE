@@ -1,4 +1,8 @@
-import { NearUserCourses, RankingDataResponse } from '@/types/user';
+import {
+  NearUserCoursesResponse,
+  PopularCoursesResponse,
+  RankingDataResponse,
+} from '@/types/user';
 import { create } from 'zustand';
 import * as userAPI from '../api/user.service';
 
@@ -9,7 +13,14 @@ interface UserState {
     longitude: number,
     radius?: number,
     maxCount?: number,
-  ) => Promise<NearUserCourses[]>;
+  ) => Promise<NearUserCoursesResponse[]>;
+
+  popularCourses: (
+    latitude: number,
+    longitude: number,
+    radius?: number,
+    maxCount?: number,
+  ) => Promise<PopularCoursesResponse[]>;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -39,8 +50,21 @@ export const useUserStore = create<UserState>((set) => ({
       radius,
       maxCount,
     );
-    if(!response) {
-      return null
+    if (!response) {
+      return null;
+    }
+    return response;
+  },
+
+  popularCourses: async (
+    latitude: number,
+    longitude: number,
+    radius?: number,
+    maxCount?: number,
+  ) => {
+    const response = await userAPI.PopularCourses(latitude, longitude, radius, maxCount);
+    if (!response) {
+      return null;
     }
     return response;
   },

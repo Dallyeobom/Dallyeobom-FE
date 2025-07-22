@@ -21,3 +21,19 @@ export const getNearRunnerCourseUrl = (
 
   return `/api/v1/course/nearby/running?${params.toString()}`;
 };
+
+export const getPopularCourseUrl = (
+  latitude: number,
+  longitude: number,
+  radius: number = 1000,
+  maxCount: number = 10,
+): string => {
+  const params = new URLSearchParams({
+    latitude: latitude.toString(),
+    longitude: longitude.toString(),
+    radius: radius.toString(),
+    maxCount: maxCount.toString(),
+  });
+
+  return `/api/v1/course/nearby?${params.toString()}`;
+};

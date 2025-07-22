@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-
 const RankingDataListSchema = z.object({
   completeCourseCount: z.number(),
   nickname: z.string(),
@@ -13,7 +12,6 @@ const currentUserRankSchema = z.object({
   runningLength: z.number(),
   completeCourseCount: z.number(),
 });
-
 
 // 랭킹 리스트 API 응답 타입
 export const RankingDataResponseSchema = z.object({
@@ -33,7 +31,16 @@ export const NearUserCoursesResponseSchema = z.object({
   user: UserSchema,
 });
 
+export const PopularCourseResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  location: z.string().url(),
+  overViewImageUrl: z.string(),
+  length: z.number(),
+});
+
 export type RankingDataResponse = z.infer<typeof RankingDataResponseSchema>;
 export type RankingDataList = z.infer<typeof RankingDataListSchema>;
 export type CurrentUserRank = z.infer<typeof currentUserRankSchema>;
-export type NearUserCourses = z.infer<typeof NearUserCoursesResponseSchema>;
+export type NearUserCoursesResponse = z.infer<typeof NearUserCoursesResponseSchema>;
+export type PopularCoursesResponse = z.infer<typeof PopularCourseResponseSchema>;
