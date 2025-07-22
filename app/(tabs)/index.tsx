@@ -60,7 +60,7 @@ function Index() {
 
   useEffect(() => {
     handleFetchNearRunner();
-  }, []);
+  }, [selectedCoords.lat, selectedCoords.lng]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
