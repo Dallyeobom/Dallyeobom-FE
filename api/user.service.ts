@@ -7,7 +7,7 @@ export const UserRanking = async (type: string): Promise<RankingDataResponse | n
     const { data } = await client.get(getUserRankingUrl(type));
     return data;
   } catch (error) {
-    console.error('API 요청 중 에러 발생:', error);
+    console.error('랭킹 API 요청 중 에러 발생:', error);
     return null;
   }
 };
@@ -24,6 +24,8 @@ export const NearRunnerCourses = async (
     );
     return data;
   } catch (error) {
+   console.error('근처 유저들의 코스 API 요청 중 에러 발생:', error);
+
     return null;
   }
 };
