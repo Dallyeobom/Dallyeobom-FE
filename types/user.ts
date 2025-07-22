@@ -35,7 +35,7 @@ export const PopularCourseResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
   location: z.string().url(),
-  overViewImageUrl: z.string(),
+  overViewImageUrl: z.string().url(),
   length: z.number(),
 });
 

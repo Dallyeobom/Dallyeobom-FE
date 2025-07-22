@@ -1,4 +1,8 @@
-import { RankingDataResponse } from '@/types/user';
+import {
+  NearUserCoursesResponse,
+  PopularCoursesResponse,
+  RankingDataResponse,
+} from '@/types/user';
 import client from './client';
 import { getNearRunnerCourseUrl, getPopularCourseUrl, getUserRankingUrl } from './urls';
 
@@ -17,7 +21,7 @@ export const NearRunnerCourses = async (
   longitude: number,
   radius?: number,
   maxCount?: number,
-) => {
+): Promise<NearUserCoursesResponse | null> => {
   try {
     const { data } = await client.get(
       getNearRunnerCourseUrl(latitude, longitude, radius, maxCount),
@@ -35,7 +39,7 @@ export const PopularCourses = async (
   longitude: number,
   radius?: number,
   maxCount?: number,
-) => {
+): Promise<PopularCoursesResponse | null> => {
   try {
     const { data } = await client.get(
       getPopularCourseUrl(latitude, longitude, radius, maxCount),

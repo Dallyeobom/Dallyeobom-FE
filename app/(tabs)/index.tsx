@@ -52,13 +52,13 @@ function Index() {
   const handleFetchNearRunner = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     const response = await nearRunnerCourses(selectedCoords?.lat, selectedCoords?.lng);
-    setNearByRunnerData(response);
+    setNearByRunnerData(response ?? []);
   };
 
-  const handleFetchCourseRunner = async () => {
+  const handleFetchPopularCourses = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     const response = await popularCourses(selectedCoords?.lat, selectedCoords?.lng);
-    setPopularCoursesData(response);
+    setPopularCoursesData(response ?? []);
   };
 
   useEffect(() => {
@@ -69,7 +69,7 @@ function Index() {
 
   useEffect(() => {
     handleFetchNearRunner();
-    handleFetchCourseRunner();
+    handleFetchPopularCourses();
   }, [selectedCoords?.lat, selectedCoords?.lng]);
 
   return (

@@ -30,7 +30,7 @@ export const PopularCourseItem = ({
             <Text style={styles.difficulty}>등산 난이도</Text>
             <Text style={styles.courseName}>{name}</Text>
           </View>
-          <Text style={styles.distance}>{length}</Text>
+          <Text style={styles.distance}>{`${length}km`}</Text>
         </View>
         <Image source={require('@/assets/images/heart.png')} />
       </View>
