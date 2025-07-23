@@ -2,7 +2,7 @@ import RankingTitleText from '@/components/text/ranking-title-text';
 import { Stack } from 'expo-router';
 import React from 'react';
 
-function RankingLayout() {
+function ProfileLayout() {
   return (
     <Stack
       screenOptions={{
@@ -17,9 +17,9 @@ function RankingLayout() {
         headerTitle: () => <RankingTitleText />,
       }}
     >
-      <Stack.Screen name="ranking" />
+      <Stack.Screen name="profile" />
     </Stack>
   );
 }
 
-export default RankingLayout;
+export default ProfileLayout;

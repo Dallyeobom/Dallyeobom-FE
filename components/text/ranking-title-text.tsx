@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 function RankingTitleText() {
-  return <Text style={styles.text}>랭킹</Text>;
+  return <Text style={styles.text}>내 정보</Text>;
 }
 
 export default RankingTitleText;
