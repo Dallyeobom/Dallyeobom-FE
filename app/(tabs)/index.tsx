@@ -6,12 +6,11 @@ import LoadingSpinner from '@/components/loading';
 import LocationSettingModal from '@/components/modal/location-setting-modal';
 import LocationSettingText from '@/components/text/location-setting-text';
 import { useCurrentLocation } from '@/hooks/use-current-location';
-import { popularCourseData } from '@/mocks/data';
 import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { useUserStore } from '@/stores/user-store';
 import { base } from '@/styles/color';
-import { NearUserCourses } from '@/types/user';
+import { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/user';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
@@ -27,8 +26,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
   const nearRunnerCourses = useUserStore((state) => state.nearRunnerCourses);
+  const popularCourses = useUserStore((state) => state.popularCourses);
 
-  const [nearByRunnerData, setNearByRunnerData] = useState<NearUserCourses[]>([]);
+  const [nearByRunnerData, setNearByRunnerData] = useState<NearUserCoursesResponse[]>([]);
+  const [popularCoursesData, setPopularCoursesData] = useState<PopularCoursesResponse[]>(
+    [],
+  );
 
   const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
   const insets = useSafeAreaInsets();
@@ -49,7 +52,13 @@ function Index() {
   const handleFetchNearRunner = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     const response = await nearRunnerCourses(selectedCoords?.lat, selectedCoords?.lng);
-    setNearByRunnerData(response);
+    setNearByRunnerData(response ?? []);
+  };
+
+  const handleFetchPopularCourses = async () => {
+    if (!selectedCoords?.lat || !selectedCoords.lng) return;
+    const response = await popularCourses(selectedCoords?.lat, selectedCoords?.lng);
+    setPopularCoursesData(response ?? []);
   };
 
   useEffect(() => {
@@ -60,6 +69,7 @@ function Index() {
 
   useEffect(() => {
     handleFetchNearRunner();
+    handleFetchPopularCourses();
   }, [selectedCoords?.lat, selectedCoords?.lng]);
 
   return (
@@ -104,11 +114,16 @@ function Index() {
                     <Image source={require('@/assets/images/thumbs-up.png')} />
                   </View>
                 </View>
-                <VerticalList
-                  data={popularCourseData}
-                  renderItem={PopularCourseItem}
-                  handleScroll={handleScroll}
-                />
+                {popularCoursesData.length > 0 ? (
+                  <VerticalList
+                    data={popularCoursesData}
+                    renderItem={PopularCourseItem}
+                    handleScroll={handleScroll}
+                  />
+                ) : (
+                  // TODO: 근처 러너들이 데이터가 없을때 나오는 UI가 생기면 넣을예정
+                  <Text>데이터가없습니다</Text>
+                )}
               </View>
             </View>
             <FloatingButton

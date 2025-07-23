@@ -1,14 +1,14 @@
-import { PopularCourseItemSchema } from '@/types/item';
+import { PopularCoursesResponse } from '@/types/user';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export const PopularCourseItem = ({
   id,
-  courseName,
-  difficulty,
-  distance,
-  imageUrl,
-}: PopularCourseItemSchema) => {
+  name,
+  location,
+  overViewImageUrl,
+  length,
+}: PopularCoursesResponse) => {
   const router = useRouter();
 
   const handlePress = () => {
@@ -21,16 +21,16 @@ export const PopularCourseItem = ({
       onPress={handlePress}
     >
       <Image
-        source={{ uri: imageUrl }}
+        source={{ uri: overViewImageUrl }}
         style={styles.image}
       />
       <View style={styles.textContainer}>
         <View style={styles.text}>
           <View>
-            <Text style={styles.difficulty}>{difficulty}</Text>
-            <Text style={styles.courseName}>{courseName}</Text>
+            <Text style={styles.difficulty}>등산 난이도</Text>
+            <Text style={styles.courseName}>{name}</Text>
           </View>
-          <Text style={styles.distance}>{distance}</Text>
+          <Text style={styles.distance}>{`${length}km`}</Text>
         </View>
         <Image source={require('@/assets/images/heart.png')} />
       </View>
