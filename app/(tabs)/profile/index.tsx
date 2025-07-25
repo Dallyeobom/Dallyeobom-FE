@@ -1,24 +1,31 @@
 import { base, gray } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
+  const router = useRouter();
+  const handleRunningCourses = () => {
+    router.push('/(tabs)/profile/running-courses');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.pictureSection}>
         <View style={styles.profileImageContainer}>
           <Image
             source={require('@/assets/images/mode.png')}
-            // style={{ width: '100%', height: '100%' }}
-            // resizeMode="cover"
+            style={{ width: '100%', height: '100%' }}
+            resizeMode="cover"
           />
-          <Image
-            source={require('@/assets/images/camera.png')}
-            width={32}
-            height={32}
-            style={{ zIndex: 10 }}
-          />
+          <View style={styles.cameraImageContainer}>
+            <Image
+              source={require('@/assets/images/camera.png')}
+              width={32}
+              height={32}
+            />
+          </View>
         </View>
         <View style={styles.nameContainer}>
           <Text style={styles.nameText}>윤지수</Text>
@@ -31,7 +38,10 @@ function Profile() {
       </View>
       <View style={styles.gap} />
       <View style={styles.section}>
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handleRunningCourses}
+        >
           <View style={styles.titleBar}>
             <Text style={styles.title}>내가 달린 코스</Text>
           </View>
@@ -116,6 +126,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     rowGap: 22,
     padding: 10,
+    paddingTop: 28,
   },
   gap: {
     height: 12,
@@ -127,6 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'green',
   },
   titleBar: {
     flexDirection: 'row',
@@ -143,14 +155,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     rowGap: 20,
   },
+
   profileImageContainer: {
     width: 100,
     height: 100,
     overflow: 'hidden',
     borderRadius: 33,
-
     position: 'relative',
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: '#9CA3AF',
   },
 
@@ -164,5 +176,12 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 18,
     fontWeight: 600,
+  },
+
+  cameraImageContainer: {
+    position: 'absolute',
+    zIndex: 10,
+    bottom: 0,
+    right: 0,
   },
 });
