@@ -60,6 +60,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const { accessToken, refreshToken, isNewUser } = await authAPI.KaKaoLogin({
       providerAccessToken,
     });
+    console.log('acccess', accessToken);
     if (isNewUser) {
       //  new User면은 providerAccess만 저장 어차피 accessToken과 refreshToken signup api에서 받을것이기 때문에
       await SecureStore.setItemAsync('providerAccessToken', providerAccessToken);
