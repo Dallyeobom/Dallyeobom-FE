@@ -37,3 +37,5 @@ export const getPopularCourseUrl = (
 
   return `/api/v1/course/nearby?${params.toString()}`;
 };
+
+export const getMyInfo = () => '/api/v1/auth/user';

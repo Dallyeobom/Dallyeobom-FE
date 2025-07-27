@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 40,
-    columnGap: 6,
+    columnGap: 4,
   },
 
   nameText: {

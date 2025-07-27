@@ -3,7 +3,7 @@ import {
   AgreementsSchemaParams,
   KaKaoLoginResponse,
   KaKaoSignUpResponse,
-  NicknameCheckResponse
+  NicknameCheckResponse,
 } from '@/types/auth';
 import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
@@ -16,11 +16,13 @@ interface AuthState {
   kakaoSignUp: (
     nickName: string,
     providerAccessToken: string,
-    terms: AgreementsSchemaParams[]
+    terms: AgreementsSchemaParams[],
   ) => Promise<KaKaoSignUpResponse>;
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
   doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
-  termsList:() => Promise<AgreementsSchema[]>
+  termsList: () => Promise<AgreementsSchema[]>;
+
+  myInfo: () => Promise<any>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -35,11 +37,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   // 카카오 회원가입
-  kakaoSignUp: async (nickName: string, providerAccessToken: string, terms: AgreementsSchemaParams[]) => {
+  kakaoSignUp: async (
+    nickName: string,
+    providerAccessToken: string,
+    terms: AgreementsSchemaParams[],
+  ) => {
     const { accessToken, refreshToken } = await authAPI.KaKaoSignup({
       nickName,
       providerAccessToken,
-      terms
+      terms,
     });
     if (!accessToken || !refreshToken) {
       throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -79,17 +85,21 @@ export const useAuthStore = create<AuthState>((set) => ({
     return { isDuplicated };
   },
 
-
   // 이용약관 리스트 조회
   termsList: async () => {
     const data = await authAPI.TermsList();
-    return data
+    return data;
   },
 
   // 이용약관 디테일 조회
   termsDetail: async (id: number) => {
-    const data = await authAPI.TermsDetail(id)
-    return data
-  }
+    const data = await authAPI.TermsDetail(id);
+    return data;
+  },
 
+  // 내 정보가 가져오기
+  myInfo: async () => {
+    const data = await authAPI.GetUserInfo();
+    console.log('data', data);
+  },
 }));
