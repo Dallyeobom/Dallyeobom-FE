@@ -2,7 +2,7 @@ import RankingTitleText from '@/components/text/ranking-title-text';
 import { Stack } from 'expo-router';
 import React from 'react';
 
-function Ranking() {
+function RankingLayout() {
   return (
     <Stack
       screenOptions={{
@@ -22,4 +22,4 @@ function Ranking() {
   );
 }
 
-export default Ranking;
+export default RankingLayout;

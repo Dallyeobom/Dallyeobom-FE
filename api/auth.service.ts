@@ -1,5 +1,4 @@
 import type {
-  AccessTokenReissueResponse,
   AgreementDetailResponse,
   AgreementsSchema,
   KaKaoLoginParams,
@@ -11,7 +10,6 @@ import type {
 } from '@/types/auth';
 import client from './client';
 import {
-  getAccessTokenUrl,
   getCheckNameUrl,
   getKaKaoLoginUrl,
   getKaKaoSignUpUrl,
@@ -56,14 +54,4 @@ export const DoubleCheckNickname = async (
   return {
     isDuplicated: data.isDuplicated,
   };
-};
-
-// 엑세스 토큰 재발급
-export const GetAccessToken = async (
-  refreshToken: string,
-): Promise<AccessTokenReissueResponse> => {
-  const { data } = await client.get(getAccessTokenUrl(), {
-    params: { token: refreshToken },
-  });
-  return data;
 };

@@ -1,15 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-function RankingTitleText() {
-  return <Text style={styles.text}>랭킹</Text>;
+function ProfileTitleText() {
+  return <Text style={styles.text}>프로필</Text>;
 }
 
-export default RankingTitleText;
+export default ProfileTitleText;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
   },
 });
