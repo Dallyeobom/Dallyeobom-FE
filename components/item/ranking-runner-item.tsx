@@ -11,30 +11,31 @@ interface RankingRunnerItemsProps {
   index: number;
 }
 
-export const RankingRunnerItem = ({
+function RankingRunnerItem({
   userId,
   nickname,
   runningLength,
   profileImage,
   completeCourseCount,
   index,
-}: RankingRunnerItemsProps) => (
-  <View style={styles.container}>
-    <View>{renderRankIcon(index)}</View>
-    <View style={styles.profileContainer}>
-      {/* TODO: 추후에 데이터 프로필 이미지 url 속성이 추가 된다면 넣을예정 */}
-      <Image
-        source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
-        style={styles.profileImage}
-      />
-      <View>
-        <Text style={styles.nickName}>{nickname}</Text>
-        <Text style={styles.runningLength}>{runningLength} km</Text>
+}: RankingRunnerItemsProps) {
+  return (
+    <View style={styles.container}>
+      <View>{renderRankIcon(index)}</View>
+      <View style={styles.profileContainer}>
+        {/* TODO: 추후에 데이터 프로필 이미지 url 속성이 추가 된다면 넣을예정 */}
+        <Image
+          source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+          style={styles.profileImage}
+        />
+        <View>
+          <Text style={styles.nickName}>{nickname}</Text>
+          <Text style={styles.runningLength}>{runningLength} km</Text>
+        </View>
       </View>
     </View>
-  </View>
-);
-
+  );
+}
 export default RankingRunnerItem;
 
 const styles = StyleSheet.create({
