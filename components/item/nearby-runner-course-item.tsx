@@ -1,13 +1,13 @@
-import { NearUserCoursesResponse } from '@/types/user';
+import { NearUserCoursesResponse } from '@/types/course';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-export const NearByRunnerCourseItem = ({
+function NearByRunnerCourseItem({
   id,
   name,
   courseImage,
   user,
-}: NearUserCoursesResponse) => {
+}: NearUserCoursesResponse) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -34,7 +34,7 @@ export const NearByRunnerCourseItem = ({
       <Text style={styles.courseName}>{name}</Text>
     </Pressable>
   );
-};
+}
 
 export default NearByRunnerCourseItem;
 

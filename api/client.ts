@@ -1,9 +1,9 @@
+import { getAccessTokenUrl } from '@/api/auth/urls';
 import { navigateReplaceTo } from '@/components/router';
 import { useAuthStore } from '@/stores/auth-store';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
-import { getAccessTokenUrl } from './urls';
 
 export const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_BASE_URL ?? 'https://jayden-bin.cc';

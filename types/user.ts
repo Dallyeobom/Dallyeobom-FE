@@ -24,23 +24,6 @@ export const UserSchema = z.object({
   nickname: z.string(),
 });
 
-export const NearUserCoursesResponseSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  courseImage: z.string().url(),
-  user: UserSchema,
-});
-
-export const PopularCourseResponseSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  location: z.string().url(),
-  overViewImageUrl: z.string().url(),
-  length: z.number(),
-});
-
 export type RankingDataResponse = z.infer<typeof RankingDataResponseSchema>;
 export type RankingDataList = z.infer<typeof RankingDataListSchema>;
 export type CurrentUserRank = z.infer<typeof currentUserRankSchema>;
-export type NearUserCoursesResponse = z.infer<typeof NearUserCoursesResponseSchema>;
-export type PopularCoursesResponse = z.infer<typeof PopularCourseResponseSchema>;
