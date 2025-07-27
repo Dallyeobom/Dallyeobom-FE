@@ -1,64 +1,63 @@
+import { userRanking } from '@/api/user/user.service';
 import RankingButton from '@/components/button/ranking-button';
 import MyProfileItem from '@/components/item/my-profile-item';
 import RankingRunnerItem from '@/components/item/ranking-runner-item';
 import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
-import { useUserStore } from '@/stores/user-store';
 import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
 import { CurrentUserRank, RankingDataList } from '@/types/user';
 import { mapRankingTextToEnum } from '@/utils/ranking';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+const RANKING_OPTIONS: RankingEnum[] = ['WEEKLY', 'MONTHLY', 'YEARLY'];
+
 function Ranking() {
-  const userRanking = useUserStore((state) => state.userRanking);
-
   const [rankingStatus, setRankingStatus] = useState<RankingEnum>('WEEKLY');
-  const [rankingList, setRankingList] = useState<RankingDataList[] | []>([]);
-  const [currentUserRanking, setCurrentUserRanking] = useState<CurrentUserRank | null>();
+  const [rankingList, setRankingList] = useState<RankingDataList[]>([]);
+  const [currentUserRanking, setCurrentUserRanking] = useState<CurrentUserRank | null>(
+    null,
+  );
 
-  const fetchRankingData = async (status: string) => {
+  const fetchRankingData = useCallback(async (status: string) => {
     const result = await userRanking(status);
     if (!result) {
       setRankingList([]);
+      setCurrentUserRanking(null);
       return;
     }
 
     setRankingList(result.list);
     setCurrentUserRanking(result.currentUserRank);
-  };
-  const handleSelect = async (text: string) => {
-    const rankingStatusResult = mapRankingTextToEnum(text);
-    setRankingStatus(rankingStatusResult);
+  }, []);
 
-    await fetchRankingData(text);
-  };
+  const handleSelect = useCallback(
+    async (text: string) => {
+      const rankingStatusResult = mapRankingTextToEnum(text);
+      setRankingStatus(rankingStatusResult);
+      await fetchRankingData(text);
+    },
+    [fetchRankingData],
+  );
 
   useEffect(() => {
     fetchRankingData(rankingStatus);
-  }, []);
+  }, [fetchRankingData, rankingStatus]);
 
   return (
     <View style={styles.container}>
       <View>
         <View style={styles.menuContainer}>
           <View style={styles.submenuContainer}>
-            <RankingButton
-              rankingStatus="WEEKLY"
-              handleSelect={handleSelect}
-              isSelected={rankingStatus === 'WEEKLY'}
-            />
-            <RankingButton
-              rankingStatus="MONTHLY"
-              handleSelect={handleSelect}
-              isSelected={rankingStatus === 'MONTHLY'}
-            />
-            <RankingButton
-              rankingStatus="YEARLY"
-              handleSelect={handleSelect}
-              isSelected={rankingStatus === 'YEARLY'}
-            />
+            {RANKING_OPTIONS.map((option) => (
+              <RankingButton
+                key={option}
+                rankingStatus={option}
+                handleSelect={handleSelect}
+                isSelected={rankingStatus === option}
+              />
+            ))}
           </View>
         </View>
         <View style={styles.dataContainer}>

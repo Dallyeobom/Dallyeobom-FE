@@ -10,23 +10,25 @@ interface RankingRunnerItemsProps {
 interface MyProfileItemProps {
   data: RankingRunnerItemsProps;
 }
-export const MyProfileItem = ({ data }: MyProfileItemProps) => (
-  <View style={styles.container}>
-    <View style={styles.profileContainer}>
-      <Image
-        source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
-        style={styles.profileImage}
-      />
-      <View>
-        <Text style={styles.nickName}>TEST</Text>
-        <Text style={styles.distance}>{data.runningLength}KM</Text>
+function MyProfileItem({ data }: MyProfileItemProps) {
+  return (
+    <View style={styles.container}>
+      <View style={styles.profileContainer}>
+        <Image
+          source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+          style={styles.profileImage}
+        />
+        <View>
+          <Text style={styles.nickName}>TEST</Text>
+          <Text style={styles.distance}>{data.runningLength}KM</Text>
+        </View>
+      </View>
+      <View style={styles.badge}>
+        <Text style={styles.rank}>{data.rank}등</Text>
       </View>
     </View>
-    <View style={styles.badge}>
-      <Text style={styles.rank}>{data.rank}등</Text>
-    </View>
-  </View>
-);
+  );
+}
 export default MyProfileItem;
 
 const styles = StyleSheet.create({

@@ -1,4 +1,5 @@
-import {
+// api/auth/auth.service.ts - 수정된 버전
+import type {
   AgreementDetailResponse,
   AgreementsSchema,
   KaKaoLoginParams,
@@ -8,7 +9,8 @@ import {
   NicknameCheckResponse,
   NicknameCheckSchemaParams,
 } from '@/types/auth';
-import client from './client';
+import axios from 'axios';
+import { API_BASE_URL } from '../client';
 import {
   getCheckNameUrl,
   getKaKaoLoginUrl,
@@ -18,30 +20,36 @@ import {
   getTermsUrl,
 } from './urls';
 
+// 인증 전용 클라이언트
+const authClient = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  adapter: 'fetch',
+});
+
 export const KaKaoSignup = async (
   params: KaKaoSignUpParams,
 ): Promise<KaKaoSignUpResponse> => {
-  const { data } = await client.post(getKaKaoSignUpUrl(), params);
+  const { data } = await authClient.post(getKaKaoSignUpUrl(), params);
   return data;
 };
 
 export const KaKaoLogin = async (
   params: KaKaoLoginParams,
 ): Promise<KaKaoLoginResponse> => {
-  const { data } = await client.post(getKaKaoLoginUrl(), params);
+  const { data } = await authClient.post(getKaKaoLoginUrl(), params);
   return data;
 };
 
 // 이용약관 리스트
 export const TermsList = async (): Promise<AgreementsSchema[]> => {
-  const { data } = await client.get(getTermsUrl());
+  const { data } = await authClient.get(getTermsUrl());
   return data;
 };
 
 // 이용약관 상세 조회
-
 export const TermsDetail = async (id: number): Promise<AgreementDetailResponse> => {
-  const { data } = await client.get(getTermsDetailUrl(id));
+  const { data } = await authClient.get(getTermsDetailUrl(id));
   return data;
 };
 
@@ -49,7 +57,7 @@ export const TermsDetail = async (id: number): Promise<AgreementDetailResponse> 
 export const DoubleCheckNickname = async (
   params: NicknameCheckSchemaParams,
 ): Promise<NicknameCheckResponse> => {
-  const { data } = await client.get(getCheckNameUrl(), {
+  const { data } = await authClient.get(getCheckNameUrl(), {
     params: { nickname: params.nickname },
   });
   return {

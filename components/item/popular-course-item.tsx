@@ -1,14 +1,13 @@
-import { PopularCoursesResponse } from '@/types/user';
+import { PopularCoursesResponse } from '@/types/course';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-export const PopularCourseItem = ({
+function PopularCourseItem({
   id,
   name,
-  location,
   overViewImageUrl,
   length,
-}: PopularCoursesResponse) => {
+}: PopularCoursesResponse) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -36,7 +35,7 @@ export const PopularCourseItem = ({
       </View>
     </Pressable>
   );
-};
+}
 
 export default PopularCourseItem;
 

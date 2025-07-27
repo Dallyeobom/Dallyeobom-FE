@@ -1,3 +1,4 @@
+import { nearRunnerCourses, popularCourses } from '@/api/course/course.service';
 import FloatingButton from '@/components/button/floating-button';
 import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
 import NoDataItem from '@/components/item/no-data-item';
@@ -9,9 +10,8 @@ import LocationSettingText from '@/components/text/location-setting-text';
 import { useCurrentLocation } from '@/hooks/use-current-location';
 import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
-import { useUserStore } from '@/stores/user-store';
 import { base, gray } from '@/styles/color';
-import { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/user';
+import type { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/course';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
@@ -26,9 +26,6 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
-  const nearRunnerCourses = useUserStore((state) => state.nearRunnerCourses);
-  const popularCourses = useUserStore((state) => state.popularCourses);
-
   const [nearByRunnerData, setNearByRunnerData] = useState<NearUserCoursesResponse[]>([]);
   const [popularCoursesData, setPopularCoursesData] = useState<PopularCoursesResponse[]>(
     [],
@@ -52,13 +49,24 @@ function Index() {
 
   const handleFetchNearRunner = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
-    const response = await nearRunnerCourses(selectedCoords?.lat, selectedCoords?.lng);
+    const { lat: latitude, lng: longitude } = selectedCoords;
+    const params = {
+      latitude,
+      longitude,
+    };
+    const response = await nearRunnerCourses(params);
     setNearByRunnerData(response ?? []);
   };
 
   const handleFetchPopularCourses = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
-    const response = await popularCourses(selectedCoords?.lat, selectedCoords?.lng);
+    // const { lat: latitude, lng: longitude } = selectedCoords;
+    // TODO: 데이터 확인에 필요한 임시 고정 값
+    const params = {
+      latitude: 37.5665,
+      longitude: 126.978,
+    };
+    const response = await popularCourses(params);
     setPopularCoursesData(response ?? []);
   };
 
@@ -66,11 +74,12 @@ function Index() {
     if (selectedLocation.length === 0) {
       getCurrentLocation();
     }
-  }, [selectedLocation]);
+  }, [getCurrentLocation, selectedLocation]);
 
   useEffect(() => {
     handleFetchNearRunner();
     handleFetchPopularCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCoords?.lat, selectedCoords?.lng]);
 
   return (

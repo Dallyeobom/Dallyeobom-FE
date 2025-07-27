@@ -1,3 +1,4 @@
+import * as authAPI from '@/api/auth/auth.service';
 import {
   AgreementsSchema,
   AgreementsSchemaParams,
@@ -7,7 +8,6 @@ import {
 } from '@/types/auth';
 import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
-import * as authAPI from '../api/auth.service';
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -21,8 +21,6 @@ interface AuthState {
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
   doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
   termsList: () => Promise<AgreementsSchema[]>;
-
-  myInfo: () => Promise<any>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -95,11 +93,5 @@ export const useAuthStore = create<AuthState>((set) => ({
   termsDetail: async (id: number) => {
     const data = await authAPI.TermsDetail(id);
     return data;
-  },
-
-  // 내 정보가 가져오기
-  myInfo: async () => {
-    const data = await authAPI.GetUserInfo();
-    console.log('data', data);
   },
 }));

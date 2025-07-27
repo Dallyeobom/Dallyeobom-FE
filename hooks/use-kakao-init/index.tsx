@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 export const useKaKaoInit = () => {
   useEffect(() => {
     kakaoInitFunc()
-      .then((data) => {
-        console.log('Kakao SDK 초기화 완료', data);
+      .then((_) => {
+        console.log('Kakao SDK 초기화 완료');
       })
       .then(() => {
-        getKeyHashAndroid().then((keyHash) => {
-          console.log('Android Key Hash:', keyHash);
+        getKeyHashAndroid().then((_) => {
+          console.log('Android Key Hash:');
         });
       });
   }, []);
