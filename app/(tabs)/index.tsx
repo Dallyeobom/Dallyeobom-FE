@@ -1,5 +1,6 @@
 import FloatingButton from '@/components/button/floating-button';
 import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
+import NoDataItem from '@/components/item/no-data-item';
 import PopularCourseItem from '@/components/item/popular-course-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
@@ -9,7 +10,7 @@ import { useCurrentLocation } from '@/hooks/use-current-location';
 import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { useUserStore } from '@/stores/user-store';
-import { base } from '@/styles/color';
+import { base, gray } from '@/styles/color';
 import { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/user';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
@@ -102,8 +103,15 @@ function Index() {
                     renderItem={NearByRunnerCourseItem}
                   />
                 ) : (
-                  // TODO: 근처 러너들이 데이터가 없을때 나오는 UI가 생기면 넣을예정
-                  <Text>데이터가없습니다</Text>
+                  <View style={styles.noDataNearRunnerCourseContainer}>
+                    <NoDataItem />
+                    <View style={styles.noDataTextContainer}>
+                      <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
+                      <Text style={styles.noDataText}>
+                        근처 러너들을 확인할 수 있어요.
+                      </Text>
+                    </View>
+                  </View>
                 )}
               </View>
 
@@ -122,7 +130,13 @@ function Index() {
                   />
                 ) : (
                   // TODO: 근처 러너들이 데이터가 없을때 나오는 UI가 생기면 넣을예정
-                  <Text>데이터가없습니다</Text>
+                  <View style={styles.noDataPopularCourseContainer}>
+                    <NoDataItem />
+                    <View style={styles.noDataTextContainer}>
+                      <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
+                      <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+                    </View>
+                  </View>
                 )}
               </View>
             </View>
@@ -191,5 +205,29 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
+  },
+
+  noDataNearRunnerCourseContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    rowGap: 8,
+    marginTop: '20%',
+    marginBottom: '20%',
+  },
+
+  noDataPopularCourseContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    rowGap: 8,
+    marginTop: '34%',
+    marginBottom: '20%',
+  },
+  noDataTextContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: gray[30],
+    fontSize: 16,
   },
 });
