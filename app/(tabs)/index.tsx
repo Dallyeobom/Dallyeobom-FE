@@ -103,7 +103,12 @@ function Index() {
                     renderItem={NearByRunnerCourseItem}
                   />
                 ) : (
-                  <View style={styles.noDataNearRunnerCourseContainer}>
+                  <View
+                    style={[
+                      styles.noDataNearRunnerCourseContainer,
+                      { marginTop: '20%', marginBottom: '20%' },
+                    ]}
+                  >
                     <NoDataItem />
                     <View style={styles.noDataTextContainer}>
                       <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
@@ -129,8 +134,15 @@ function Index() {
                     handleScroll={handleScroll}
                   />
                 ) : (
-                  // TODO: 근처 러너들이 데이터가 없을때 나오는 UI가 생기면 넣을예정
-                  <View style={styles.noDataPopularCourseContainer}>
+                  <View
+                    style={[
+                      styles.noDataPopularCourseContainer,
+                      {
+                        marginTop: '34%',
+                        marginBottom: '20%',
+                      },
+                    ]}
+                  >
                     <NoDataItem />
                     <View style={styles.noDataTextContainer}>
                       <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
@@ -211,16 +223,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     rowGap: 8,
-    marginTop: '20%',
-    marginBottom: '20%',
   },
 
   noDataPopularCourseContainer: {
     display: 'flex',
     alignItems: 'center',
     rowGap: 8,
-    marginTop: '34%',
-    marginBottom: '20%',
   },
   noDataTextContainer: {
     display: 'flex',

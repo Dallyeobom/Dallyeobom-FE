@@ -22,8 +22,7 @@ function Profile() {
           <View style={styles.cameraImageContainer}>
             <Image
               source={require('@/assets/images/camera.png')}
-              width={32}
-              height={32}
+              style={styles.cameraImage}
             />
           </View>
         </View>
@@ -31,8 +30,7 @@ function Profile() {
           <Text style={styles.nameText}>윤지수</Text>
           <Image
             source={require('@/assets/images/mode.png')}
-            width={24}
-            height={24}
+            style={styles.modeImage}
           />
         </View>
       </View>
@@ -174,7 +172,7 @@ const styles = StyleSheet.create({
 
   nameText: {
     fontSize: 18,
-    fontWeight: 600,
+    fontWeight: '600',
   },
 
   cameraImageContainer: {
@@ -182,5 +180,13 @@ const styles = StyleSheet.create({
     zIndex: 10,
     bottom: 0,
     right: 0,
+  },
+  cameraImage: {
+    width: 32,
+    height: 32,
+  },
+  modeImage: {
+    width: 24,
+    height: 24,
   },
 });

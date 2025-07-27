@@ -13,10 +13,6 @@ function NoDataItem() {
 export default NoDataItem;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'blue',
-    display: 'flex',
-  },
   image: {
     width: 36,
     height: 36,

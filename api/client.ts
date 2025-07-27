@@ -58,7 +58,7 @@ client.interceptors.response.use(
     // acessToken만료 에러
     else if (statusCode === 401) {
       const response = await client.post(getAccessTokenUrl(), {
-        refreshToken: refreshToken,
+        refreshToken,
       });
 
       const newAccessToken = response?.data?.accessToken;

@@ -10,6 +10,6 @@ export default ProfileTitleText;
 const styles = StyleSheet.create({
   text: {
     fontSize: 16,
-    fontWeight: 700,
+    fontWeight: '700',
   },
 });
