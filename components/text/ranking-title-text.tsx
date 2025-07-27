@@ -9,7 +9,7 @@ export default RankingTitleText;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 700,
   },
 });

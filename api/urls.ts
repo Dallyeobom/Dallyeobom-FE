@@ -4,7 +4,7 @@ export const getCheckNameUrl = () => '/api/v1/auth/check-nickname';
 export const getTermsUrl = () => '/api/v1/auth/terms';
 export const getTermsDetailUrl = (id: number) => `/api/v1/auth/terms/${id}`;
 export const getUserRankingUrl = (type: string) => `/api/v1/user-rank/${type}`;
-export const getAccessTokenUrl = () => `/api/v1/auth/temporal/refresh`;
+export const getAccessTokenUrl = () => `/api/v1/auth/refresh`;
 
 export const getNearRunnerCourseUrl = (
   latitude: number,

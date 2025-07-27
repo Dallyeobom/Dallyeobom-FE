@@ -9,6 +9,11 @@ function ProfileLayout() {
         options={{
           headerShown: true,
           title: '내 프로필',
+          headerShadowVisible: false,
+          headerTitleStyle: {
+            fontSize: 18,
+            fontWeight: 'bold',
+          },
         }}
       />
       <Stack.Screen

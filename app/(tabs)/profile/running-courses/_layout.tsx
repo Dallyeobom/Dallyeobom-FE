@@ -8,9 +8,15 @@ function RunningCoursesLayout() {
         headerShown: true,
         title: '내가 달린 코스',
         headerStyle: {
-          backgroundColor: 'red',
+          // backgroundColor: 'red',
         },
-        headerTintColor: '#fff',
+        headerShadowVisible: false,
+        headerLeft: () => null,
+
+        headerTitleStyle: {
+          fontSize: 18,
+          fontWeight: 'bold',
+        },
       }}
     />
   );
