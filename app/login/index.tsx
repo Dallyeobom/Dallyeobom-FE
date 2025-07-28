@@ -51,7 +51,6 @@ const LoginScreen: React.FC = () => {
         router.replace('/(tabs)');
       }
     } catch (e) {
-      console.log('kakao로그인에러', e);
       Alert.alert('로그인 실패', '카카오 로그인에 실패했습니다. 다시 시도해주세요.');
     }
   };

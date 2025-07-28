@@ -9,8 +9,7 @@ import type {
   NicknameCheckResponse,
   NicknameCheckSchemaParams,
 } from '@/types/auth';
-import axios from 'axios';
-import { API_BASE_URL } from '../client';
+import authClient from '../auth-client';
 import {
   getCheckNameUrl,
   getKaKaoLoginUrl,
@@ -21,11 +20,6 @@ import {
 } from './urls';
 
 // 인증 전용 클라이언트
-const authClient = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-  adapter: 'fetch',
-});
 
 export const KaKaoSignup = async (
   params: KaKaoSignUpParams,
@@ -37,11 +31,7 @@ export const KaKaoSignup = async (
 export const KaKaoLogin = async (
   params: KaKaoLoginParams,
 ): Promise<KaKaoLoginResponse> => {
-  const { data } = await authClient.post(getKaKaoLoginUrl(), params, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const { data } = await authClient.post(getKaKaoLoginUrl(), params);
   return data;
 };
 
