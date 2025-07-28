@@ -68,7 +68,7 @@ export default function RootLayout() {
         </Stack.Protected>
 
         {/* 로그인이 됬을때 보이는 화면 */}
-        <Stack.Protected guard={isLoggedIn}>
+        <Stack.Protected guard={!isLoggedIn}>
           <Stack.Screen
             name="(tabs)"
             options={{ headerShown: false }}

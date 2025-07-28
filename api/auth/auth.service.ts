@@ -37,7 +37,11 @@ export const KaKaoSignup = async (
 export const KaKaoLogin = async (
   params: KaKaoLoginParams,
 ): Promise<KaKaoLoginResponse> => {
-  const { data } = await authClient.post(getKaKaoLoginUrl(), params);
+  const { data } = await authClient.post(getKaKaoLoginUrl(), params, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
   return data;
 };
 

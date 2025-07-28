@@ -20,12 +20,12 @@ export const getGoogleMapsApiKey = (): string => {
   return apiKey as string;
 };
 
-export const getKoreanAddress = (addressComponents: any) => {
+export const getKoreanAddress = (addressComponents: AddressComponent[]) => {
   let city = '';
   let district = '';
   let dong = '';
 
-  addressComponents.forEach((component: AddressComponent[]) => {
+  addressComponents.forEach((component: AddressComponent) => {
     if (component.types.includes('administrative_area_level_1')) {
       city = component.long_name; // 시, 도..
     }
