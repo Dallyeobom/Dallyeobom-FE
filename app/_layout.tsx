@@ -2,14 +2,20 @@ import { useKaKaoInit } from '@/hooks/use-kakao-init';
 import { useAuthStore } from '@/stores/auth-store';
 import { useLocationStore } from '@/stores/location-store';
 import { base } from '@/styles/color';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 import { Image } from 'react-native';
 import 'react-native-reanimated';
-
+type JwtToken = {
+  exp: string;
+  nickName: string;
+  userId: string;
+};
 export default function RootLayout() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const handleloggedIn = useAuthStore((state) => state.handleloggedIn);
@@ -19,15 +25,21 @@ export default function RootLayout() {
   });
 
   const getAccessTokenRefreshToken = async () => {
-    const accessToken = await SecureStore.getItemAsync('accessToken');
-    const refreshToken = await SecureStore.getItemAsync('refreshToken');
+    try {
+      const accessToken = await SecureStore.getItemAsync('accessToken');
+      console.log('acc', accessToken);
+      const refreshToken = await SecureStore.getItemAsync('refreshToken');
+      if (accessToken && refreshToken) {
+        const decoded = jwtDecode<JwtToken>(accessToken);
+        await AsyncStorage.setItem('userId', decoded.userId);
+        handleloggedIn();
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
 
     // await SecureStore.deleteItemAsync('accessToken');
     // await SecureStore.deleteItemAsync('refreshToken');
-
-    if (accessToken && refreshToken) {
-      handleloggedIn();
-    }
   };
 
   useKaKaoInit();

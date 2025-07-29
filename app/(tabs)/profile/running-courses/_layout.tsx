@@ -1,7 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function RunningCoursesLayout() {
@@ -24,17 +23,17 @@ function RunningCoursesLayout() {
                 router.back();
               }}
             >
-              <Ionicons
+              {/* <Ionicons
                 name="chevron-back"
                 size={24}
                 color="#9CA3AF"
                 style={styles.chevronIcon}
-              />
-              {/* <Image
+              /> */}
+              <Image
                 source={require('@/assets/images/left-chevron.png')}
                 style={styles.leftChevronImage}
                 resizeMode="contain"
-              /> */}
+              />
             </Pressable>
             <Text style={styles.headerText}>내가 달린 코스</Text>
           </View>

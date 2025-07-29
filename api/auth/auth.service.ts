@@ -14,7 +14,6 @@ import {
   getCheckNameUrl,
   getKaKaoLoginUrl,
   getKaKaoSignUpUrl,
-  getMyInfo,
   getTermsDetailUrl,
   getTermsUrl,
 } from './urls';
@@ -57,9 +56,4 @@ export const DoubleCheckNickname = async (
   return {
     isDuplicated: data.isDuplicated,
   };
-};
-// user정보 가져오기
-export const GetUserInfo = async () => {
-  const { data } = await authClient.get(getMyInfo());
-  return data;
 };
