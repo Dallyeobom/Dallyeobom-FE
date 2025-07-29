@@ -61,5 +61,5 @@ export const DoubleCheckNickname = async (
 // user정보 가져오기
 export const GetUserInfo = async () => {
   const { data } = await authClient.get(getMyInfo());
-  console.log('data', data);
+  return data;
 };

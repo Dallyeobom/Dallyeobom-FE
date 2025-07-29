@@ -20,11 +20,10 @@ export default function RootLayout() {
 
   const getAccessTokenRefreshToken = async () => {
     const accessToken = await SecureStore.getItemAsync('accessToken');
-
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
-    await SecureStore.deleteItemAsync('accessToken');
-    await SecureStore.deleteItemAsync('refreshToken');
+    // await SecureStore.deleteItemAsync('accessToken');
+    // await SecureStore.deleteItemAsync('refreshToken');
 
     if (accessToken && refreshToken) {
       handleloggedIn();

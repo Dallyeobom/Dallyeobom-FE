@@ -53,7 +53,6 @@ export default RunningCoursesLayout;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: 'blue',
     display: 'flex',
     flexDirection: 'row',
 
