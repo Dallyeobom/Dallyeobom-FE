@@ -50,9 +50,13 @@ function Index() {
   const handleFetchNearRunner = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     const { lat: latitude, lng: longitude } = selectedCoords;
+    const radius = 1000;
+    const maxCount = 10;
     const params = {
       latitude,
       longitude,
+      radius,
+      maxCount,
     };
     const response = await nearRunnerCourses(params);
     setNearByRunnerData(response ?? []);

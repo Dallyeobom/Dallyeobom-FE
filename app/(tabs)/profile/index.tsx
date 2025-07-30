@@ -15,7 +15,7 @@ function Profile() {
       <View style={styles.pictureSection}>
         <View style={styles.profileImageContainer}>
           <Image
-            source={require('@/assets/images/mode.png')}
+            source={require('@/assets/images/user-profile.png')}
             style={{ width: '100%', height: '100%' }}
             resizeMode="cover"
           />
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 40,
-    columnGap: 6,
+    columnGap: 4,
   },
 
   nameText: {

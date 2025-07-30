@@ -8,7 +8,7 @@ function ProfileLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: '내 프로필',
+          title: '내 정보',
           headerShadowVisible: false,
           headerTitleStyle: {
             fontSize: 18,

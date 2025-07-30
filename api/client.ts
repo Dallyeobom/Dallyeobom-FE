@@ -4,9 +4,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
-
-export const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_BASE_URL ?? 'https://jayden-bin.cc';
+import { API_BASE_URL } from './base-url';
 
 const client = axios.create({
   baseURL: API_BASE_URL,

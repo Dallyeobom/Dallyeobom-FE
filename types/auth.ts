@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 export const kakaoLoginParamsSchema = z.object({
   providerAccessToken: z.string(),
+  fcmToken: z.string().optional(),
 });
 
 export type KaKaoLoginParams = z.infer<typeof kakaoLoginParamsSchema>;
