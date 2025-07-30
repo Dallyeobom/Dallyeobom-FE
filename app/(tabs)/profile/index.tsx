@@ -10,6 +10,10 @@ function Profile() {
     router.push('/(tabs)/profile/running-courses');
   };
 
+  const handleMyFavoriteCourses = () => {
+    router.push('/(tabs)/profile/favorite-courses');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.pictureSection}>
@@ -61,7 +65,10 @@ function Profile() {
           />
         </Pressable>
 
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handleMyFavoriteCourses}
+        >
           <View style={styles.titleBar}>
             <Text style={styles.title}>내 찜 코스</Text>
           </View>
