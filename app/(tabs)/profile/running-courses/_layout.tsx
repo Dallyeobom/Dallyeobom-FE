@@ -1,3 +1,4 @@
+import { base } from '@/styles/color';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -13,11 +14,12 @@ function RunningCoursesLayout() {
         headerShown: true,
         title: '내가 달린 코스',
         headerStyle: {
-          backgroundColor: 'blue',
+          backgroundColor: base['white'],
         },
         headerShadowVisible: false,
         header: () => (
-          <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
+          // insets.top이 paddingTop에 적용이 잘 안되는듯?
+          <View style={[styles.headerContainer, { paddingTop: 40 }]}>
             <Pressable
               onPress={() => {
                 router.back();
@@ -54,11 +56,11 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
-
     alignItems: 'center',
     columnGap: 100,
     paddingHorizontal: 20,
     paddingVertical: 20,
+    backgroundColor: base['white'],
   },
 
   leftChevronImage: {

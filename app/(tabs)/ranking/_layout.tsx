@@ -17,7 +17,7 @@ function RankingLayout() {
         headerTitle: () => <RankingTitleText />,
       }}
     >
-      <Stack.Screen name="ranking" />
+      <Stack.Screen name="index" />
     </Stack>
   );
 }

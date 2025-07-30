@@ -1,27 +1,122 @@
 import { courseCompleteHistory } from '@/api/course-complete/course-complete.service';
+import MyrunningCourseItem from '@/components/item/my-running-course-item';
+import NoDataItem from '@/components/item/no-data-item';
+import VerticalList from '@/components/list/verical-list';
+import LoadingSpinner from '@/components/loading';
+import { courseCompleteHistoryItems } from '@/mocks/data';
+import { gray } from '@/styles/color';
+import { CourseCompleteHistoryItem } from '@/types/course-complete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 function RunningCourses() {
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const getUserId = async () => {
-    const userId = await AsyncStorage.getItem('userId');
-    setCurrentUserId(Number(userId));
-  };
-  const getMyRunningCourses = async () => {
-    const data = await courseCompleteHistory({
-      userId: 135,
-    });
-    console.log('나는 러닝 코쑤', data);
-  };
+  const [myRunningCourseData, setMyRunningCourseData] = useState<
+    CourseCompleteHistoryItem[]
+  >([]);
+  const [loading, setLoading] = useState(false);
 
-  getUserId();
+  const getMyRunningCourses = async () => {
+    setLoading(true);
+    const userId = await AsyncStorage.getItem('userId');
+    if (!userId) {
+      return;
+    }
+    const data = await courseCompleteHistory({
+      userId: Number(userId),
+      lastId: 10,
+      size: 10,
+    });
+    if (!data || data?.items.length === 0) {
+      // TODO: UI확인을 위해 임시로 넣음
+      setMyRunningCourseData(courseCompleteHistoryItems);
+    } else {
+      setMyRunningCourseData(data?.items);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     getMyRunningCourses();
-  }, [currentUserId]);
-  return <Text>RunningCourses2222입니다아아</Text>;
+  }, []);
+
+  return (
+    <View style={styles.section}>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {myRunningCourseData.length > 0 ? (
+            <VerticalList
+              data={myRunningCourseData}
+              renderItem={MyrunningCourseItem}
+              // handleScroll={handleScroll}
+            />
+          ) : (
+            <View
+              style={[
+                styles.noDataPopularCourseContainer,
+                {
+                  marginTop: '34%',
+                  marginBottom: '20%',
+                },
+              ]}
+            >
+              <NoDataItem />
+              <View style={styles.noDataTextContainer}>
+                <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
+                <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+              </View>
+            </View>
+          )}
+        </>
+      )}
+    </View>
+  );
 }
 
 export default RunningCourses;
+
+const styles = StyleSheet.create({
+  section: {
+    display: 'flex',
+    padding: 8,
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  titleBarContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  titleBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 6,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  noDataNearRunnerCourseContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    rowGap: 8,
+  },
+
+  noDataPopularCourseContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    rowGap: 8,
+  },
+  noDataTextContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: gray[30],
+    fontSize: 16,
+  },
+});
