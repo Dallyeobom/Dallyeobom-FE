@@ -1,11 +1,14 @@
 import { z } from 'zod';
-import { UserSchema } from './user';
 
+export const userSchema = z.object({
+  id: z.number(),
+  nickname: z.string(),
+});
 export const nearUserCoursesResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
   courseImage: z.string().url(),
-  user: UserSchema,
+  user: userSchema,
 });
 
 export const popularCourseResponseSchema = z.object({

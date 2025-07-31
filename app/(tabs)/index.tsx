@@ -1,4 +1,5 @@
 import { nearRunnerCourses, popularCourses } from '@/api/course/course.service';
+import { userInfo } from '@/api/user/user.service';
 import FloatingButton from '@/components/button/floating-button';
 import NearByRunnerCourseItem from '@/components/item/nearby-runner-course-item';
 import NoDataItem from '@/components/item/no-data-item';
@@ -83,6 +84,8 @@ function Index() {
   useEffect(() => {
     handleFetchNearRunner();
     handleFetchPopularCourses();
+    userInfo();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCoords?.lat, selectedCoords?.lng]);
 

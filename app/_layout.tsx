@@ -42,6 +42,7 @@ export default function RootLayout() {
   };
 
   useKaKaoInit();
+
   useEffect(() => {
     getAccessTokenRefreshToken();
   }, [loaded]);

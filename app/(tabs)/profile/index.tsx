@@ -2,13 +2,22 @@ import NickNameEditCard from '@/components/card/nickname-edit-card';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { base, gray } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
+  const [userNickName, setUserNickName] = useState<string | null>(null);
+  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
   const router = useRouter();
 
+  const getMyInfo = async () => {
+    const nickname = await AsyncStorage.getItem('nickname');
+    const profileImage = await AsyncStorage.getItem('profileImage');
+    setUserNickName(nickname);
+    setUserProfileImage(profileImage);
+  };
   const [isNickNameModal, setIsNickNameModal] = useState(false);
 
   const handleRunningCourses = () => {
@@ -27,12 +36,20 @@ function Profile() {
     setIsNickNameModal(!isNickNameModal);
   };
 
+  useEffect(() => {
+    getMyInfo();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.pictureSection}>
         <View style={styles.profileImageContainer}>
           <Image
-            source={require('@/assets/images/user-profile.png')}
+            source={
+              userProfileImage
+                ? { uri: userProfileImage }
+                : require('@/assets/images/user-profile.png')
+            }
             style={{ width: '100%', height: '100%' }}
             resizeMode="cover"
           />
@@ -44,7 +61,7 @@ function Profile() {
           </View>
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>윤지수</Text>
+          <Text style={styles.nameText}>{userNickName}</Text>
           <Pressable onPress={handleEditNameModal}>
             <Image
               source={require('@/assets/images/mode.png')}
