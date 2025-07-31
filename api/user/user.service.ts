@@ -12,7 +12,6 @@ export const userRanking = async (type: string): Promise<RankingDataResponse | n
   }
 };
 
-// {"nickname": "test", "profileImage": null}
 export const userInfo = async () => {
   try {
     const { data } = await client.get(getUserInfo());

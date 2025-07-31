@@ -23,6 +23,12 @@ function ProfileLayout() {
         }}
       />
       <Stack.Screen
+        name="recorded-courses"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="favorite-courses"
         options={{
           headerShown: false,

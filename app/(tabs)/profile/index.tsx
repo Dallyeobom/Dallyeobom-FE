@@ -1,17 +1,30 @@
+import NickNameEditCard from '@/components/card/nickname-edit-card';
+import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { base, gray } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
   const router = useRouter();
+
+  const [isNickNameModal, setIsNickNameModal] = useState(false);
+
   const handleRunningCourses = () => {
     router.push('/(tabs)/profile/running-courses');
   };
 
+  const handleRecordedCourses = () => {
+    router.push('/(tabs)/profile/recorded-courses');
+  };
+
   const handleMyFavoriteCourses = () => {
     router.push('/(tabs)/profile/favorite-courses');
+  };
+
+  const handleEditNameModal = () => {
+    setIsNickNameModal(!isNickNameModal);
   };
 
   return (
@@ -32,10 +45,12 @@ function Profile() {
         </View>
         <View style={styles.nameContainer}>
           <Text style={styles.nameText}>윤지수</Text>
-          <Image
-            source={require('@/assets/images/mode.png')}
-            style={styles.modeImage}
-          />
+          <Pressable onPress={handleEditNameModal}>
+            <Image
+              source={require('@/assets/images/mode.png')}
+              style={styles.modeImage}
+            />
+          </Pressable>
         </View>
       </View>
       <View style={styles.gap} />
@@ -54,7 +69,10 @@ function Profile() {
           />
         </Pressable>
 
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handleRecordedCourses}
+        >
           <View style={styles.titleBar}>
             <Text style={styles.title}>내 기록</Text>
           </View>
@@ -116,6 +134,12 @@ function Profile() {
           </View>
         </Pressable>
       </View>
+
+      {isNickNameModal && (
+        <BottomUpModal close={() => setIsNickNameModal(false)}>
+          <NickNameEditCard />
+        </BottomUpModal>
+      )}
     </View>
   );
 }
@@ -157,6 +181,7 @@ const styles = StyleSheet.create({
   pictureSection: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     rowGap: 20,
   },
 
@@ -168,13 +193,15 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderWidth: 1,
     borderColor: '#9CA3AF',
+    backgroundColor: 'green',
   },
 
   nameContainer: {
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 40,
-    columnGap: 4,
+    // columnGap: 4,
+    // backgroundColor: 'blue',
   },
 
   nameText: {
@@ -184,7 +211,7 @@ const styles = StyleSheet.create({
 
   cameraImageContainer: {
     position: 'absolute',
-    zIndex: 10,
+    zIndex: 20,
     bottom: 0,
     right: 0,
   },

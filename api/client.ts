@@ -9,18 +9,19 @@ import { API_BASE_URL } from './base-url';
 const client = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
-  adapter: 'fetch',
 });
 
 client.interceptors.request.use(
   async (config) => {
     const accessToken = await SecureStore.getItemAsync('accessToken');
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
   function (error) {
+    console.log('error ===>>>', error);
     return Promise.reject(error);
   },
 );
@@ -30,6 +31,7 @@ client.interceptors.response.use(
     return res;
   },
   async (error) => {
+    console.log('interceptorError', error);
     const { logout } = useAuthStore.getState();
 
     const statusCode = error.response?.status;
