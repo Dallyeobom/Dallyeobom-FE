@@ -1,5 +1,7 @@
 import NickNameEditCard from '@/components/card/nickname-edit-card';
+import ProfileImageEditCard from '@/components/card/profileImage-edit-card';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
+import { useControlTabBar } from '@/hooks/use-control-tarbar.tsx';
 import { base, gray } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,12 +11,16 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
   const [userNickName, setUserNickName] = useState<string>('');
-  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
   const [newNickname, onChangeNewNickname] = useState('');
   const [isNickNameModal, setIsNickNameModal] = useState(false);
   const [isNickNameChangeSaved, setIsNickNameChangeSaved] = useState(false);
 
+  // 프로필 이미지 사진
+  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
+  const [isProfileImageModal, setIsProfileImageModal] = useState(false);
+
   const router = useRouter();
+  useControlTabBar(isNickNameModal || isProfileImageModal);
 
   const getMyInfo = async () => {
     const nickname = (await AsyncStorage.getItem('nickname')) ?? '';
@@ -36,8 +42,14 @@ function Profile() {
     router.push('/(tabs)/profile/favorite-courses');
   };
 
+  // 닉네임 모달 띄우기
   const handleEditNameModal = () => {
     setIsNickNameModal(!isNickNameModal);
+  };
+
+  // 프로필 이미지 모달 띄우기
+  const handleEditProfileImageModal = () => {
+    setIsProfileImageModal(!isProfileImageModal);
   };
 
   useEffect(() => {
@@ -47,29 +59,36 @@ function Profile() {
   return (
     <View style={styles.container}>
       <View style={styles.pictureSection}>
-        <View style={styles.profileImageContainer}>
-          <Image
-            source={
-              userProfileImage
-                ? { uri: userProfileImage }
-                : require('@/assets/images/user-profile.png')
-            }
-            style={{ width: '100%', height: '100%' }}
-            resizeMode="cover"
-          />
-          <View style={styles.cameraImageContainer}>
+        <View>
+          <View style={styles.profileImageContainer}>
             <Image
-              source={require('@/assets/images/camera.png')}
-              style={styles.cameraImage}
+              source={
+                userProfileImage
+                  ? { uri: userProfileImage }
+                  : require('@/assets/images/user-profile.png')
+              }
+              style={{ width: '100%', height: '100%' }}
+              resizeMode="cover"
             />
           </View>
+          <Pressable
+            style={styles.cameraImageContainer}
+            onPress={handleEditProfileImageModal}
+          >
+            <Image
+              source={require('@/assets/images/camera.png')}
+              width={35}
+              height={35}
+            />
+          </Pressable>
         </View>
         <View style={styles.nameContainer}>
           <Text style={styles.nameText}>{userNickName}</Text>
           <Pressable onPress={handleEditNameModal}>
             <Image
               source={require('@/assets/images/mode.png')}
-              style={styles.modeImage}
+              width={35}
+              height={35}
             />
           </Pressable>
         </View>
@@ -156,7 +175,7 @@ function Profile() {
         </Pressable>
       </View>
 
-      {isNickNameModal && (
+      {isNickNameModal && !isProfileImageModal && (
         <BottomUpModal close={() => setIsNickNameModal(false)}>
           <NickNameEditCard
             newNickname={newNickname}
@@ -164,6 +183,11 @@ function Profile() {
             setIsNickNameChangeSaved={setIsNickNameChangeSaved}
             setIsNickNameModal={setIsNickNameModal}
           />
+        </BottomUpModal>
+      )}
+      {isProfileImageModal && (
+        <BottomUpModal close={() => setIsProfileImageModal(false)}>
+          <ProfileImageEditCard />
         </BottomUpModal>
       )}
     </View>
@@ -220,15 +244,13 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderWidth: 1,
     borderColor: '#9CA3AF',
-    backgroundColor: 'green',
+    zIndex: 1,
   },
 
   nameContainer: {
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 40,
-    // columnGap: 4,
-    // backgroundColor: 'blue',
   },
 
   nameText: {
@@ -238,16 +260,8 @@ const styles = StyleSheet.create({
 
   cameraImageContainer: {
     position: 'absolute',
-    zIndex: 20,
     bottom: 0,
     right: 0,
-  },
-  cameraImage: {
-    width: 32,
-    height: 32,
-  },
-  modeImage: {
-    width: 24,
-    height: 24,
+    zIndex: 10,
   },
 });

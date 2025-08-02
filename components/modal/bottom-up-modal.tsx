@@ -1,6 +1,13 @@
 import { base } from '@/styles/color';
 import React from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 interface Props {
   children: React.ReactNode;
@@ -15,16 +22,24 @@ export default function BottomUpModal({ children, close }: Props) {
       visible={true}
       onRequestClose={close}
     >
-      <Pressable style={styles.backdrop} onPress={close} />
-
-      <View style={styles.modalContent}>
-        {children}
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.overlay}
+      >
+        <Pressable
+          style={styles.backdrop}
+          onPress={close}
+        />
+        <View style={styles.modalContent}>{children}</View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+  },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
