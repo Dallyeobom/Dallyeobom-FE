@@ -1,26 +1,58 @@
+import { changeNickName } from '@/api/user/user.service';
 import { base, main } from '@/styles/color';
-import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import AsyncAlert from '../alert/async-alert';
 
-function NickNameEditCard() {
-  const [nickname, onChangeNickname] = useState('');
+interface NickNameEditCardProps {
+  newNickname: string;
+  onChangeNewNickname: (nickname: string) => void;
+  setIsNickNameChangeSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNickNameModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  const handleNicknameChange = () => {};
+function NickNameEditCard({
+  newNickname,
+  onChangeNewNickname,
+  setIsNickNameChangeSaved,
+  setIsNickNameModal,
+}: NickNameEditCardProps) {
+  const handleNicknameChange = (text: string) => {
+    onChangeNewNickname(text);
+  };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    onChangeNewNickname('');
+  };
 
-  const handlePress = () => {};
+  const handleNicknameSave = async (nickname: string) => {
+    const statusCode = await changeNickName(nickname);
+
+    if (statusCode === 200) {
+      await AsyncStorage.setItem('nickname', nickname);
+      setIsNickNameChangeSaved(true);
+      await AsyncAlert({ message: '닉네임 변경에 성공하였습니다.' });
+      setIsNickNameChangeSaved(false);
+    } else if (statusCode === 409) {
+      Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+      return;
+    } else {
+      Alert.alert('닉네임 변경에 실패하였습니다.');
+    }
+    setIsNickNameModal(false);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.text}>닉네임 설정</Text>
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, nickname.length > 0 && styles.inputActiveBorder]}
+          style={[styles.input, newNickname?.length > 0 && styles.inputActiveBorder]}
           onChangeText={handleNicknameChange}
-          value={nickname}
+          value={newNickname}
           placeholder="닉네임 입력"
         />
-        {nickname.length > 0 && (
+        {newNickname.length > 0 && (
           <Pressable
             style={styles.image}
             onPress={handleDelete}
@@ -30,15 +62,15 @@ function NickNameEditCard() {
         )}
       </View>
       <Pressable
-        onPress={handlePress}
+        onPress={() => handleNicknameSave(newNickname)}
         style={[
           styles.button,
           {
-            backgroundColor: nickname.length > 0 ? main[80] : main[10],
+            backgroundColor: newNickname.length > 0 ? main[80] : main[10],
           },
         ]}
       >
-        <Text style={styles.buttonText}>가입하기</Text>
+        <Text style={styles.buttonText}>저장하기</Text>
       </Pressable>
     </View>
   );

@@ -8,17 +8,21 @@ import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
-  const [userNickName, setUserNickName] = useState<string | null>(null);
+  const [userNickName, setUserNickName] = useState<string>('');
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
+  const [newNickname, onChangeNewNickname] = useState('');
+  const [isNickNameModal, setIsNickNameModal] = useState(false);
+  const [isNickNameChangeSaved, setIsNickNameChangeSaved] = useState(false);
+
   const router = useRouter();
 
   const getMyInfo = async () => {
-    const nickname = await AsyncStorage.getItem('nickname');
+    const nickname = (await AsyncStorage.getItem('nickname')) ?? '';
     const profileImage = await AsyncStorage.getItem('profileImage');
     setUserNickName(nickname);
     setUserProfileImage(profileImage);
+    onChangeNewNickname(nickname);
   };
-  const [isNickNameModal, setIsNickNameModal] = useState(false);
 
   const handleRunningCourses = () => {
     router.push('/(tabs)/profile/running-courses');
@@ -38,7 +42,7 @@ function Profile() {
 
   useEffect(() => {
     getMyInfo();
-  }, []);
+  }, [isNickNameChangeSaved]);
 
   return (
     <View style={styles.container}>
@@ -154,7 +158,12 @@ function Profile() {
 
       {isNickNameModal && (
         <BottomUpModal close={() => setIsNickNameModal(false)}>
-          <NickNameEditCard />
+          <NickNameEditCard
+            newNickname={newNickname}
+            onChangeNewNickname={onChangeNewNickname}
+            setIsNickNameChangeSaved={setIsNickNameChangeSaved}
+            setIsNickNameModal={setIsNickNameModal}
+          />
         </BottomUpModal>
       )}
     </View>
@@ -167,6 +176,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: base['white'],
     flex: 1,
+    position: 'relative',
   },
   section: {
     display: 'flex',
