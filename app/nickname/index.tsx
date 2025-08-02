@@ -1,3 +1,4 @@
+import AsyncAlert from '@/components/alert/async-alert';
 import TermsAndConditionlist from '@/components/list/agreement-list';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
@@ -23,9 +24,7 @@ function Index() {
 
   const handlePress = async () => {
     if (nickname.length < 2) {
-      Alert.alert('닉네임을 두글자 이상 작성해주세요', '', [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ]);
+      await AsyncAlert({ message: '닉네임을 두글자 이상 작성해주세요' });
       return;
     }
 
