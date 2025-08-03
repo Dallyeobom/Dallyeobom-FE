@@ -1,33 +1,48 @@
-import * as ImagePicker from 'expo-image-picker';
+import { changeUserProfileImage, userInfo } from '@/api/user/user.service';
+import { useCameraRequest } from '@/hooks/use-camera-request.tsx';
+import { usePicturesRequest } from '@/hooks/use-picture-request';
 import React from 'react';
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AsyncAlert from '../alert/async-alert';
 
-function ProfileImageEditCard() {
-  const handleCamera = async () => {
-    //  {"canAskAgain": true, "expires": "never", "granted": false, "status": "undetermined"}
-    // 사용자에게 아직 권한 요청을 한 적 없음 (status: undertermined), granted: false => 권한 허용이 안됨
-    const { canAskAgain, granted } = await ImagePicker.getCameraPermissionsAsync();
-    if (granted) {
-      await ImagePicker.launchCameraAsync();
-      return;
-    }
+interface ProfileImageEditCardProps {
+  setIsProfileImageModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setProfileImageChangeSaved: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-    // 권한 요청을 할 수 있을 경우
-    if (canAskAgain) {
-      const { granted: newGranted } = await ImagePicker.requestCameraPermissionsAsync();
-      if (newGranted) {
-        await ImagePicker.launchCameraAsync();
-        return;
+function ProfileImageEditCard({
+  setIsProfileImageModal,
+  setProfileImageChangeSaved,
+}: ProfileImageEditCardProps) {
+  const { handleCamera } = useCameraRequest();
+  const { handlePictures } = usePicturesRequest();
+
+  const handleUploadPictures = async () => {
+    try {
+      const { fileName, mimeType, uri } = (await handlePictures()) as any;
+      const formData = new FormData();
+      formData.append('profileImage', {
+        uri: uri,
+        name: fileName,
+        type: mimeType,
+      } as any);
+
+      const response = await changeUserProfileImage(formData);
+      if (response === 200) {
+        setProfileImageChangeSaved(true);
+        await AsyncAlert({ message: '프로필 사진이 변경되었습니다.' });
+        await userInfo();
+        setProfileImageChangeSaved(false);
       }
-      await AsyncAlert({ message: '카메라를 사용하려면 권한이 필요합니다.' });
-      return;
-    }
+    } catch (error) {
+      //TODO: 400 fileSIze처리하기
+      await AsyncAlert({ message: '프로필 사진 변경에 실패하였습니다.' });
 
-    // 권한 요청을 할 수 없을 경우
-    await AsyncAlert({ message: '설정 > 앱에서 카메라 권한을 직접 허용해주세요.' });
-    Linking.openSettings();
+      console.log('error', error);
+    }
+    setIsProfileImageModal(false);
   };
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -36,7 +51,10 @@ function ProfileImageEditCard() {
       >
         <Text style={styles.text}>사진 촬영</Text>
       </Pressable>
-      <Pressable style={styles.press}>
+      <Pressable
+        style={styles.press}
+        onPress={handleUploadPictures}
+      >
         <Text style={styles.text}>앨범에서 선택</Text>
       </Pressable>
       <Pressable style={styles.press}>

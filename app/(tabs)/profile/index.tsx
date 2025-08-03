@@ -18,6 +18,7 @@ function Profile() {
   // 프로필 이미지 사진
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
   const [isProfileImageModal, setIsProfileImageModal] = useState(false);
+  const [isProfileImageChangeSaved, setProfileImageChangeSaved] = useState(false);
 
   const router = useRouter();
   // 모달이 열릴때 tabbar안보이게 하는 훅
@@ -55,7 +56,7 @@ function Profile() {
 
   useEffect(() => {
     getMyInfo();
-  }, [isNickNameChangeSaved]);
+  }, [isNickNameChangeSaved, isProfileImageChangeSaved]);
 
   return (
     <View style={styles.container}>
@@ -186,9 +187,12 @@ function Profile() {
           />
         </BottomUpModal>
       )}
-      {isProfileImageModal && (
+      {isProfileImageModal && !isNickNameModal && (
         <BottomUpModal close={() => setIsProfileImageModal(false)}>
-          <ProfileImageEditCard />
+          <ProfileImageEditCard
+            setIsProfileImageModal={setIsProfileImageModal}
+            setProfileImageChangeSaved={setProfileImageChangeSaved}
+          />
         </BottomUpModal>
       )}
     </View>

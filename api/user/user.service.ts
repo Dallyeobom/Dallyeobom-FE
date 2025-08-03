@@ -1,7 +1,12 @@
 import { RankingDataResponse, UserInfoResponse } from '@/types/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import client from '../client';
-import { changeNickNameUrl, getUserInfoUrl, getUserRankingUrl } from './urls';
+import {
+  changeNickNameUrl,
+  changeUserProfileImageUrl,
+  getUserInfoUrl,
+  getUserRankingUrl,
+} from './urls';
 
 export const userRanking = async (type: string): Promise<RankingDataResponse | null> => {
   try {
@@ -36,6 +41,21 @@ export const changeNickName = async (nickname: string) => {
     return status;
   } catch (error) {
     console.error('닉네임 변경 API중 :', error);
+    return null;
+  }
+};
+
+export const changeUserProfileImage = async (formData: any) => {
+  try {
+    const { status } = await client.put(changeUserProfileImageUrl(), formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return status;
+  } catch (error) {
+    console.error('유저 프로필 이미지 API 변경중 :', error);
     return null;
   }
 };
