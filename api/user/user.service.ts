@@ -45,17 +45,16 @@ export const changeNickName = async (nickname: string) => {
   }
 };
 
-export const changeUserProfileImage = async (formData: any) => {
+export const changeUserProfileImage = async (formData: FormData) => {
   try {
     const { status } = await client.put(changeUserProfileImageUrl(), formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-
     return status;
   } catch (error) {
-    console.error('유저 프로필 이미지 API 변경중 :', error);
+    console.error(' 프로필 이미지 API 변경중 :', error);
     return null;
   }
 };

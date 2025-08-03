@@ -21,7 +21,7 @@ function Profile() {
   const [isProfileImageChangeSaved, setProfileImageChangeSaved] = useState(false);
 
   const router = useRouter();
-  // 모달이 열릴때 tabbar안보이게 하는 훅
+  // 모달이 열릴때 tabar안보이게 하는 훅
   useControlTabBar(isNickNameModal || isProfileImageModal);
 
   const getMyInfo = async () => {

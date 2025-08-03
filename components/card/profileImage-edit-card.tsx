@@ -1,6 +1,6 @@
 import { changeUserProfileImage, userInfo } from '@/api/user/user.service';
 import { useCameraRequest } from '@/hooks/use-camera-request.tsx';
-import { usePicturesRequest } from '@/hooks/use-picture-request';
+import { PictureFile, usePicturesRequest } from '@/hooks/use-picture-request';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AsyncAlert from '../alert/async-alert';
@@ -19,7 +19,13 @@ function ProfileImageEditCard({
 
   const handleUploadPictures = async () => {
     try {
-      const { fileName, mimeType, uri } = (await handlePictures()) as any;
+      const result = await handlePictures();
+      if (!result || !result.uri || !result.fileName || !result.mimeType) {
+        await AsyncAlert({ message: '이미지 정보를 가져올 수 없습니다.' });
+        return;
+      }
+
+      const { fileName, mimeType, uri } = (await handlePictures()) as PictureFile;
       const formData = new FormData();
       formData.append('profileImage', {
         uri: uri,
@@ -37,11 +43,13 @@ function ProfileImageEditCard({
     } catch (error) {
       //TODO: 400 fileSIze처리하기
       await AsyncAlert({ message: '프로필 사진 변경에 실패하였습니다.' });
-
       console.log('error', error);
     }
     setIsProfileImageModal(false);
   };
+
+  // TODO: 사진 delete 구현하기
+  const handleDeletePictures = async () => {};
 
   return (
     <View style={styles.container}>
@@ -57,7 +65,10 @@ function ProfileImageEditCard({
       >
         <Text style={styles.text}>앨범에서 선택</Text>
       </Pressable>
-      <Pressable style={styles.press}>
+      <Pressable
+        style={styles.press}
+        onPress={handleDeletePictures}
+      >
         <Text style={styles.deleteText}>삭제하기</Text>
       </Pressable>
     </View>
