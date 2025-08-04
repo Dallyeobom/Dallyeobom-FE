@@ -1,11 +1,7 @@
 import AsyncAlert from '@/components/alert/async-alert';
 import * as ImagePicker from 'expo-image-picker';
 import { Linking } from 'react-native';
-export interface PictureFile {
-  uri: string;
-  fileName: string;
-  mimeType: string;
-}
+
 export const usePicturesRequest = () => {
   const handlePictures = async () => {
     const { canAskAgain, granted } = await ImagePicker.getMediaLibraryPermissionsAsync();

@@ -84,10 +84,13 @@ function Index() {
   useEffect(() => {
     handleFetchNearRunner();
     handleFetchPopularCourses();
-    userInfo();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCoords?.lat, selectedCoords?.lng]);
+
+  useEffect(() => {
+    userInfo();
+  }, []);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>

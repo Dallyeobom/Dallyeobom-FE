@@ -1,6 +1,6 @@
 import { changeUserProfileImage, userInfo } from '@/api/user/user.service';
 import { useCameraRequest } from '@/hooks/use-camera-request.tsx';
-import { PictureFile, usePicturesRequest } from '@/hooks/use-picture-request';
+import { usePicturesRequest } from '@/hooks/use-picture-request';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AsyncAlert from '../alert/async-alert';
@@ -25,7 +25,7 @@ function ProfileImageEditCard({
         return;
       }
 
-      const { fileName, mimeType, uri } = (await handlePictures()) as PictureFile;
+      const { fileName, mimeType, uri } = result;
       const formData = new FormData();
       formData.append('profileImage', {
         uri: uri,

@@ -79,8 +79,7 @@ function Profile() {
           >
             <Image
               source={require('@/assets/images/camera.png')}
-              width={35}
-              height={35}
+              style={{ width: 35, height: 35 }}
             />
           </Pressable>
         </View>
@@ -89,8 +88,7 @@ function Profile() {
           <Pressable onPress={handleEditNameModal}>
             <Image
               source={require('@/assets/images/mode.png')}
-              width={35}
-              height={35}
+              style={{ width: 35, height: 35 }}
             />
           </Pressable>
         </View>
