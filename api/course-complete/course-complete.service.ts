@@ -1,17 +1,22 @@
+import {
+  CourseCompleteHistoryParams,
+  CourseCompleteHistoryResponse,
+} from '@/types/course-complete';
 import client from '../client';
 import { getCourseCompleteHistory } from './urls';
 
-export const courseCompleteHistory = async (params: any): Promise<any | null> => {
-  console.log('파람쓰으으', params);
-
+export const courseCompleteHistory = async (
+  params: CourseCompleteHistoryParams,
+): Promise<CourseCompleteHistoryResponse | null> => {
   try {
-    const { data } = await client.get(getCourseCompleteHistory(), {
-      params,
+    const { userId, lastId, size } = params;
+    const { data } = await client.get(getCourseCompleteHistory(userId), {
+      params: { lastId, size },
     });
+
     return data;
   } catch (error) {
-    console.error('코스 complete history:', error);
-
+    console.error('나의 running course list', error);
     return null;
   }
 };

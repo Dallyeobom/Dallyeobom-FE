@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-function RunningCourses() {
+function FavoriteCourses() {
   const [myRunningCourseData, setMyRunningCourseData] = useState<
     CourseCompleteHistoryItem[]
   >([]);
@@ -64,8 +64,8 @@ function RunningCourses() {
             >
               <NoDataItem />
               <View style={styles.noDataTextContainer}>
-                <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
-                <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+                <Text style={styles.noDataText}>현재 내가 선택한</Text>
+                <Text style={styles.noDataText}>찜 코스가 없습니다.</Text>
               </View>
             </View>
           )}
@@ -75,7 +75,7 @@ function RunningCourses() {
   );
 }
 
-export default RunningCourses;
+export default FavoriteCourses;
 
 const styles = StyleSheet.create({
   section: {

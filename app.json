@@ -27,6 +27,21 @@
     "plugins": [
       "expo-router",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow dallybom to access your photos.",
+          "savePhotosPermission": "Allow dallybom to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",

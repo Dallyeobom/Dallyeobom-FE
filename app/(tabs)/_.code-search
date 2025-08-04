@@ -1,0 +1,23 @@
+# Query: 인기코스
+# ContextLines: 1
+
+4 results - 3 files
+
+api/course/course.service.ts:
+  30    } catch (error) {
+  31:     console.error('인기코스 API 요청 중 에러 발생:', error);
+  32  
+
+app/(tabs)/index.tsx:
+  138                    <View style={styles.titleBar}>
+  139:                     <Text style={styles.title}>인기코스</Text>
+  140                      <Image source={require('@/assets/images/thumbs-up.png')} />
+
+  161                        <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
+  162:                       <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+  163                      </View>
+
+app/(tabs)/profile/running-courses/index.tsx:
+  56              <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
+  57:             <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+  58            </View>

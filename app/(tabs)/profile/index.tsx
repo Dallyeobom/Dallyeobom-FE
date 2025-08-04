@@ -1,37 +1,96 @@
+import NickNameEditCard from '@/components/card/nickname-edit-card';
+import ProfileImageEditCard from '@/components/card/profileImage-edit-card';
+import BottomUpModal from '@/components/modal/bottom-up-modal';
+import { useControlTabBar } from '@/hooks/use-control-tarbar.tsx';
 import { base, gray } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
+  const [userNickName, setUserNickName] = useState<string>('');
+  const [newNickname, onChangeNewNickname] = useState('');
+  const [isNickNameModal, setIsNickNameModal] = useState(false);
+  const [isNickNameChangeSaved, setIsNickNameChangeSaved] = useState(false);
+
+  // 프로필 이미지 사진
+  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
+  const [isProfileImageModal, setIsProfileImageModal] = useState(false);
+  const [isProfileImageChangeSaved, setProfileImageChangeSaved] = useState(false);
+
   const router = useRouter();
+  // 모달이 열릴때 tabar안보이게 하는 훅
+  useControlTabBar(isNickNameModal || isProfileImageModal);
+
+  const getMyInfo = async () => {
+    const nickname = (await AsyncStorage.getItem('nickname')) ?? '';
+    const profileImage = await AsyncStorage.getItem('profileImage');
+    setUserNickName(nickname);
+    setUserProfileImage(profileImage);
+    onChangeNewNickname(nickname);
+  };
+
   const handleRunningCourses = () => {
     router.push('/(tabs)/profile/running-courses');
   };
 
+  const handleRecordedCourses = () => {
+    router.push('/(tabs)/profile/recorded-courses');
+  };
+
+  const handleMyFavoriteCourses = () => {
+    router.push('/(tabs)/profile/favorite-courses');
+  };
+
+  // 닉네임 모달 띄우기
+  const handleEditNameModal = () => {
+    setIsNickNameModal(!isNickNameModal);
+  };
+
+  // 프로필 이미지 모달 띄우기
+  const handleEditProfileImageModal = () => {
+    setIsProfileImageModal(!isProfileImageModal);
+  };
+
+  useEffect(() => {
+    getMyInfo();
+  }, [isNickNameChangeSaved, isProfileImageChangeSaved]);
+
   return (
     <View style={styles.container}>
       <View style={styles.pictureSection}>
-        <View style={styles.profileImageContainer}>
-          <Image
-            source={require('@/assets/images/user-profile.png')}
-            style={{ width: '100%', height: '100%' }}
-            resizeMode="cover"
-          />
-          <View style={styles.cameraImageContainer}>
+        <View>
+          <View style={styles.profileImageContainer}>
             <Image
-              source={require('@/assets/images/camera.png')}
-              style={styles.cameraImage}
+              source={
+                userProfileImage
+                  ? { uri: userProfileImage }
+                  : require('@/assets/images/user-profile.png')
+              }
+              style={{ width: '100%', height: '100%' }}
+              resizeMode="cover"
             />
           </View>
+          <Pressable
+            style={styles.cameraImageContainer}
+            onPress={handleEditProfileImageModal}
+          >
+            <Image
+              source={require('@/assets/images/camera.png')}
+              style={{ width: 35, height: 35 }}
+            />
+          </Pressable>
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>윤지수</Text>
-          <Image
-            source={require('@/assets/images/mode.png')}
-            style={styles.modeImage}
-          />
+          <Text style={styles.nameText}>{userNickName}</Text>
+          <Pressable onPress={handleEditNameModal}>
+            <Image
+              source={require('@/assets/images/mode.png')}
+              style={{ width: 35, height: 35 }}
+            />
+          </Pressable>
         </View>
       </View>
       <View style={styles.gap} />
@@ -50,7 +109,10 @@ function Profile() {
           />
         </Pressable>
 
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handleRecordedCourses}
+        >
           <View style={styles.titleBar}>
             <Text style={styles.title}>내 기록</Text>
           </View>
@@ -61,7 +123,10 @@ function Profile() {
           />
         </Pressable>
 
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handleMyFavoriteCourses}
+        >
           <View style={styles.titleBar}>
             <Text style={styles.title}>내 찜 코스</Text>
           </View>
@@ -109,6 +174,25 @@ function Profile() {
           </View>
         </Pressable>
       </View>
+
+      {isNickNameModal && !isProfileImageModal && (
+        <BottomUpModal close={() => setIsNickNameModal(false)}>
+          <NickNameEditCard
+            newNickname={newNickname}
+            onChangeNewNickname={onChangeNewNickname}
+            setIsNickNameChangeSaved={setIsNickNameChangeSaved}
+            setIsNickNameModal={setIsNickNameModal}
+          />
+        </BottomUpModal>
+      )}
+      {isProfileImageModal && !isNickNameModal && (
+        <BottomUpModal close={() => setIsProfileImageModal(false)}>
+          <ProfileImageEditCard
+            setIsProfileImageModal={setIsProfileImageModal}
+            setProfileImageChangeSaved={setProfileImageChangeSaved}
+          />
+        </BottomUpModal>
+      )}
     </View>
   );
 }
@@ -119,6 +203,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: base['white'],
     flex: 1,
+    position: 'relative',
   },
   section: {
     display: 'flex',
@@ -150,6 +235,7 @@ const styles = StyleSheet.create({
   pictureSection: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     rowGap: 20,
   },
 
@@ -161,13 +247,13 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderWidth: 1,
     borderColor: '#9CA3AF',
+    zIndex: 1,
   },
 
   nameContainer: {
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 40,
-    columnGap: 4,
   },
 
   nameText: {
@@ -177,16 +263,8 @@ const styles = StyleSheet.create({
 
   cameraImageContainer: {
     position: 'absolute',
-    zIndex: 10,
     bottom: 0,
     right: 0,
-  },
-  cameraImage: {
-    width: 32,
-    height: 32,
-  },
-  modeImage: {
-    width: 24,
-    height: 24,
+    zIndex: 10,
   },
 });

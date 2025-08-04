@@ -4,7 +4,7 @@ import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function RunningCoursesLayout() {
+function FavoriteCoursesLayout() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
@@ -12,13 +12,12 @@ function RunningCoursesLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        title: '내가 달린 코스',
+        title: '내 찜 코스',
         headerStyle: {
           backgroundColor: base['white'],
         },
         headerShadowVisible: false,
         header: () => (
-          // insets.top이 paddingTop에 적용이 잘 안되는듯?
           <View style={[styles.headerContainer, { paddingTop: 40 }]}>
             <Pressable
               onPress={() => {
@@ -31,7 +30,7 @@ function RunningCoursesLayout() {
                 resizeMode="contain"
               />
             </Pressable>
-            <Text style={styles.headerText}>내가 달린 코스</Text>
+            <Text style={styles.headerText}>내 찜 코스</Text>
           </View>
         ),
 
@@ -44,7 +43,7 @@ function RunningCoursesLayout() {
   );
 }
 
-export default RunningCoursesLayout;
+export default FavoriteCoursesLayout;
 
 const styles = StyleSheet.create({
   headerContainer: {

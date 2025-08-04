@@ -7,7 +7,7 @@ export default function LoginLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="login" />
+      <Stack.Screen name="index" />
     </Stack>
   );
 }
