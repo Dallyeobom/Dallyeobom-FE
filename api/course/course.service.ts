@@ -6,7 +6,12 @@ import {
   PopularCoursesResponse,
 } from '@/types/course';
 import client from '../client';
-import { getCourseDetailUrl, getNearRunnerCourseUrl, getPopularCourseUrl } from './urls';
+import {
+  courseLikeUrl,
+  getCourseDetailUrl,
+  getNearRunnerCourseUrl,
+  getPopularCourseUrl,
+} from './urls';
 
 export const nearRunnerCourses = async (
   params: NearRunnerCoursesRequest,
@@ -40,6 +45,19 @@ export const courseDetail = async (id: number): Promise<CourseDetailResponse | n
     return data;
   } catch (error) {
     console.error('코스 상세 API 요청 중 에러 발생:', error);
+    return null;
+  }
+};
+
+export const courseLike = async (id: number) => {
+  try {
+    const { status, data } = await client.post(courseLikeUrl(id));
+    return {
+      status,
+      data,
+    };
+  } catch (error) {
+    console.error('코스 좋아요 API 에러', error);
     return null;
   }
 };

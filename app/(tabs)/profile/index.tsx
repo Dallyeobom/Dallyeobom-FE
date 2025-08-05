@@ -1,7 +1,7 @@
 import NickNameEditCard from '@/components/card/nickname-edit-card';
 import ProfileImageEditCard from '@/components/card/profileImage-edit-card';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
-import { useControlTabBar } from '@/hooks/use-control-tarbar.tsx';
+import { useControlTabBar } from '@/hooks/use-control-tarbar';
 import { base, gray } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -254,10 +254,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 40,
+
+    alignItems: 'center',
   },
 
   nameText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '600',
   },
 

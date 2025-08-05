@@ -1,39 +1,68 @@
+import { courseLike } from '@/api/course/course.service';
 import { PopularCoursesResponse } from '@/types/course';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import CourseLevelBadge from '../badge/course-level-badge';
+
+type PopularCourseItemProps = PopularCoursesResponse & {
+  index: number;
+  handleFetch: () => void;
+};
 
 function PopularCourseItem({
   id,
-  name,
-  overViewImageUrl,
+  isLiked,
   length,
-}: PopularCoursesResponse) {
+  level,
+  name,
+  location,
+  overViewImageUrl,
+  handleFetch,
+}: PopularCourseItemProps) {
   const router = useRouter();
 
   const handlePress = () => {
     router.push(`/course/${id}`);
   };
 
+  const handleCourseLike = async (id: number) => {
+    await courseLike(id);
+    handleFetch();
+  };
+
   return (
-    <Pressable
-      style={styles.container}
-      onPress={handlePress}
-    >
-      <Image
-        source={{ uri: overViewImageUrl }}
-        style={styles.image}
-      />
-      <View style={styles.textContainer}>
-        <View style={styles.text}>
+    <View style={styles.container}>
+      <Pressable
+        onPress={handlePress}
+        style={styles.courseContainer}
+      >
+        <Image
+          source={{ uri: overViewImageUrl }}
+          style={styles.image}
+        />
+        <View style={styles.textContainer}>
           <View>
-            <Text style={styles.difficulty}>등산 난이도</Text>
+            <Text style={styles.difficulty}>
+              <CourseLevelBadge level={level} />
+            </Text>
             <Text style={styles.courseName}>{name}</Text>
           </View>
           <Text style={styles.distance}>{`${length}km`}</Text>
         </View>
-        <Image source={require('@/assets/images/heart.png')} />
-      </View>
-    </Pressable>
+      </Pressable>
+      <Pressable
+        onPress={() => handleCourseLike(id)}
+        style={styles.heartImage}
+      >
+        <Image
+          source={
+            isLiked
+              ? require('@/assets/images/heart-fill.png')
+              : require('@/assets/images/heart.png')
+          }
+        />
+      </Pressable>
+    </View>
   );
 }
 
@@ -44,7 +73,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     display: 'flex',
     flexDirection: 'row',
-    columnGap: 16,
+    justifyContent: 'space-between',
+  },
+  subContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  courseContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: 10,
+    flex: 3,
   },
   image: {
     width: 100,
@@ -54,7 +93,6 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   text: {
@@ -77,5 +115,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
+  },
+  heartImage: {
+    // flex: 1,
   },
 });
