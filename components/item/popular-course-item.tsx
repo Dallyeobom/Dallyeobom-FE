@@ -40,10 +40,8 @@ function PopularCourseItem({
           style={styles.image}
         />
         <View style={styles.textContainer}>
-          <View>
-            <Text style={styles.difficulty}>
-              <CourseLevelBadge level={level} />
-            </Text>
+          <View style={styles.subCourseContainer}>
+            <CourseLevelBadge level={level} />
             <Text style={styles.courseName}>{name}</Text>
           </View>
           <Text style={styles.distance}>{`${length}km`}</Text>
@@ -90,6 +88,9 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  subCourseContainer: {
+    display: 'flex',
   },
   text: {
     display: 'flex',
