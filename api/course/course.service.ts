@@ -1,5 +1,6 @@
 import {
   CourseDetailResponse,
+  CourseLikeRespone,
   NearRunnerCoursesRequest,
   NearUserCoursesResponse,
   PopularCoursesRequest,
@@ -49,13 +50,10 @@ export const courseDetail = async (id: number): Promise<CourseDetailResponse | n
   }
 };
 
-export const courseLike = async (id: number) => {
+export const courseLike = async (id: number): Promise<CourseLikeRespone | null> => {
   try {
-    const { status, data } = await client.post(courseLikeUrl(id));
-    return {
-      status,
-      data,
-    };
+    const { data } = await client.post(courseLikeUrl(id));
+    return data;
   } catch (error) {
     console.error('코스 좋아요 API 에러', error);
     return null;

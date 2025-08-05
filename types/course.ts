@@ -53,3 +53,10 @@ export const courseDetailSchema = z.object({
   isCreator: z.boolean(),
 });
 export type CourseDetailResponse = z.infer<typeof courseDetailSchema>;
+
+export const courseLikeResponseSchema = z.object({
+  isLiked: z.boolean(),
+  likeCount: z.number(),
+});
+
+export type CourseLikeRespone = z.infer<typeof courseLikeResponseSchema>;
