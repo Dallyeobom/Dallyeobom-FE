@@ -54,7 +54,7 @@ export const changeUserProfileImage = async (formData: FormData) => {
     });
     return status;
   } catch (error) {
-    console.error(' 프로필 이미지 API 변경중 222:', error);
+    console.error(' 프로필 이미지 API 에러', error);
     return null;
   }
 };

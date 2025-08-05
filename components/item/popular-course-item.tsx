@@ -5,7 +5,6 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
 type PopularCourseItemProps = PopularCoursesResponse & {
-  index: number;
   handleFetch: () => void;
 };
 
@@ -50,10 +49,7 @@ function PopularCourseItem({
           <Text style={styles.distance}>{`${length}km`}</Text>
         </View>
       </Pressable>
-      <Pressable
-        onPress={() => handleCourseLike(id)}
-        style={styles.heartImage}
-      >
+      <Pressable onPress={() => handleCourseLike(id)}>
         <Image
           source={
             isLiked
@@ -115,8 +111,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
-  },
-  heartImage: {
-    // flex: 1,
   },
 });
