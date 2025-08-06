@@ -11,6 +11,8 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "msw.polyfills.js"
+    "msw.polyfills.js",
+    "hooks/use-control-tarbar",
+    "hooks/use-camera-request"
   ]
 }

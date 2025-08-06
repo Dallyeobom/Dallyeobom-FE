@@ -31,8 +31,8 @@ function Index() {
   const [popularCoursesData, setPopularCoursesData] = useState<PopularCoursesResponse[]>(
     [],
   );
-
   const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
+
   const insets = useSafeAreaInsets();
   const { selectedLocation, selectedCoords } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
@@ -149,7 +149,12 @@ function Index() {
                 {popularCoursesData.length > 0 ? (
                   <VerticalList
                     data={popularCoursesData}
-                    renderItem={PopularCourseItem}
+                    renderItem={(item) => (
+                      <PopularCourseItem
+                        {...item}
+                        handleFetch={handleFetchPopularCourses}
+                      />
+                    )}
                     handleScroll={handleScroll}
                   />
                 ) : (

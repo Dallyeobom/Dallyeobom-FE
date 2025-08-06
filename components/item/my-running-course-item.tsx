@@ -30,9 +30,7 @@ function MyrunningCourseItem({
       <View style={styles.textContainer}>
         <View style={styles.text}>
           <View>
-            <Text style={styles.difficulty}>
-              <CourseLevelBadge level={level} />
-            </Text>
+            <CourseLevelBadge level={level} />
             <Text style={styles.courseName}>{name}</Text>
           </View>
           <Text style={styles.distance}>{`${length}km`}</Text>

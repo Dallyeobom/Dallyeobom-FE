@@ -19,11 +19,11 @@ export default CourseLevelBadge;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'blue',
+    alignSelf: 'flex-start',
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 14,
   },
 });
 

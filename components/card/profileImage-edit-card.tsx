@@ -1,5 +1,5 @@
 import { changeUserProfileImage, userInfo } from '@/api/user/user.service';
-import { useCameraRequest } from '@/hooks/use-camera-request.tsx';
+import { useCameraRequest } from '@/hooks/use-camera-request';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';

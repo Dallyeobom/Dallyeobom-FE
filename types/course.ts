@@ -13,10 +13,12 @@ export const nearUserCoursesResponseSchema = z.object({
 
 export const popularCourseResponseSchema = z.object({
   id: z.number(),
+  isLiked: z.boolean(),
+  length: z.number(),
+  level: z.string(),
   name: z.string(),
   location: z.string().url(),
   overViewImageUrl: z.string().url(),
-  length: z.number(),
 });
 export type NearUserCoursesResponse = z.infer<typeof nearUserCoursesResponseSchema>;
 export type PopularCoursesResponse = z.infer<typeof popularCourseResponseSchema>;
@@ -51,3 +53,10 @@ export const courseDetailSchema = z.object({
   isCreator: z.boolean(),
 });
 export type CourseDetailResponse = z.infer<typeof courseDetailSchema>;
+
+export const courseLikeResponseSchema = z.object({
+  isLiked: z.boolean(),
+  likeCount: z.number(),
+});
+
+export type CourseLikeRespone = z.infer<typeof courseLikeResponseSchema>;
