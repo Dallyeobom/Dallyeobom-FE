@@ -60,3 +60,33 @@ export const courseLikeResponseSchema = z.object({
 });
 
 export type CourseLikeRespone = z.infer<typeof courseLikeResponseSchema>;
+
+export const favoriteCourseParamsSchema = z.object({
+  userId: z.number(),
+  lastId: z.number().optional(),
+  size: z.number().optional(),
+});
+
+export type FavoriteCourseParams = z.infer<typeof favoriteCourseParamsSchema>;
+
+const favoriteCourseItemSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+  location: z.string(),
+  overViewImageUrl: z.string(),
+  length: z.number().int(),
+  level: z.string(),
+  isLiked: z.boolean(),
+});
+
+const FavoriteCourseItemsResponseSchema = z.object({
+  items: z.array(favoriteCourseItemSchema),
+  lastId: z.number().int(),
+  hasNext: z.boolean(),
+});
+
+export type FavoriteCourseItemsResponse = z.infer<
+  typeof FavoriteCourseItemsResponseSchema
+>;
+
+export type FavoriteCourseItem = z.infer<typeof favoriteCourseItemSchema>;

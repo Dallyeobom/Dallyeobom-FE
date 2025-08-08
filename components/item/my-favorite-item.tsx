@@ -1,9 +1,9 @@
-import { CourseCompleteHistoryItem } from '@/types/course-complete';
+import { FavoriteCourseItem } from '@/types/course';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
-function MyrunningCourseItem({
+function MyFavoriteItem({
   id,
   name,
   location,
@@ -11,7 +11,7 @@ function MyrunningCourseItem({
   length,
   level,
   isLiked,
-}: CourseCompleteHistoryItem) {
+}: FavoriteCourseItem) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -41,7 +41,7 @@ function MyrunningCourseItem({
   );
 }
 
-export default MyrunningCourseItem;
+export default MyFavoriteItem;
 
 const styles = StyleSheet.create({
   container: {

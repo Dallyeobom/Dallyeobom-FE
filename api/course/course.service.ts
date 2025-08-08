@@ -1,6 +1,8 @@
 import {
   CourseDetailResponse,
   CourseLikeRespone,
+  FavoriteCourseItemsResponse,
+  FavoriteCourseParams,
   NearRunnerCoursesRequest,
   NearUserCoursesResponse,
   PopularCoursesRequest,
@@ -10,6 +12,7 @@ import client from '../client';
 import {
   courseLikeUrl,
   getCourseDetailUrl,
+  getFavoriteCourseUrl,
   getNearRunnerCourseUrl,
   getPopularCourseUrl,
 } from './urls';
@@ -56,6 +59,22 @@ export const courseLike = async (id: number): Promise<CourseLikeRespone | null> 
     return data;
   } catch (error) {
     console.error('코스 좋아요 API 에러', error);
+    return null;
+  }
+};
+
+export const getFavoriteCourse = async (
+  params: FavoriteCourseParams,
+): Promise<FavoriteCourseItemsResponse | null> => {
+  try {
+    const { userId, lastId, size } = params;
+    const { data } = await client.get(getFavoriteCourseUrl(userId), {
+      params: { lastId, size },
+    });
+
+    return data;
+  } catch (error) {
+    console.error('나의 running course list', error);
     return null;
   }
 };

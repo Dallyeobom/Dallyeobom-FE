@@ -8,12 +8,12 @@ export const courseCompleteHistoryParamsSchema = z.object({
 
 const courseCompleteHistoryItemSchema = z.object({
   id: z.number().int(),
-  courseId: z.number().int().optional(),
   name: z.string(),
-  level: z.string(),
-  interval: z.number().int(),
+  location: z.string(),
+  overViewImageUrl: z.string(),
   length: z.number().int(),
-  completionImage: z.string().url().optional(),
+  level: z.string(),
+  isLiked: z.boolean(),
 });
 
 const courseCompleteHistoryResponseSchema = z.object({

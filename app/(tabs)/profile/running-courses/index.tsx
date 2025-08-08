@@ -3,7 +3,7 @@ import MyrunningCourseItem from '@/components/item/my-running-course-item';
 import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
-import { courseCompleteHistoryItems } from '@/mocks/data';
+import { exampleCourseCompleteHistory } from '@/mocks/data';
 import { gray } from '@/styles/color';
 import { CourseCompleteHistoryItem } from '@/types/course-complete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,7 +29,7 @@ function RunningCourses() {
     });
     if (!data || data?.items.length === 0) {
       // TODO: UI확인을 위해 임시로 넣음
-      setMyRunningCourseData(courseCompleteHistoryItems);
+      setMyRunningCourseData(exampleCourseCompleteHistory);
     } else {
       setMyRunningCourseData(data?.items);
     }
