@@ -7,6 +7,8 @@ import {
   NearUserCoursesResponse,
   PopularCoursesRequest,
   PopularCoursesResponse,
+  RunningCourseItemsResponse,
+  RunningCourseParams,
 } from '@/types/course';
 import client from '../client';
 import {
@@ -15,6 +17,7 @@ import {
   getFavoriteCourseUrl,
   getNearRunnerCourseUrl,
   getPopularCourseUrl,
+  getRunningHistoryUrl,
 } from './urls';
 
 export const nearRunnerCourses = async (
@@ -74,6 +77,21 @@ export const getFavoriteCourse = async (
     return data;
   } catch (error) {
     console.error('내 찜코스 li22t22d32 에2러', error);
+    return null;
+  }
+};
+
+export const getRunningCourse = async (
+  params: RunningCourseParams,
+): Promise<RunningCourseItemsResponse | null> => {
+  try {
+    const { userId, lastId, size } = params;
+    const { data } = await client.get(getRunningHistoryUrl(userId), {
+      params: { lastId, size },
+    });
+    return data;
+  } catch (error) {
+    console.error('내가 달린 코스 API 에러', error);
     return null;
   }
 };

@@ -1,19 +1,17 @@
-import { courseCompleteHistory } from '@/api/course-complete/course-complete.service';
-import MyrunningCourseItem from '@/components/item/my-running-course-item';
+import { getRunningCourse } from '@/api/course/course.service';
+import MyRunningCourseItem from '@/components/item/my-running-course-item';
 import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
 import { exampleCourseCompleteHistory } from '@/mocks/data';
 import { gray } from '@/styles/color';
-import { CourseCompleteHistoryItem } from '@/types/course-complete';
+import { RunningCourseItem } from '@/types/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 function RunningCourses() {
-  const [myRunningCourseData, setMyRunningCourseData] = useState<
-    CourseCompleteHistoryItem[]
-  >([]);
+  const [myRunningCourseData, setMyRunningCourseData] = useState<RunningCourseItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   // refetch할..
@@ -23,7 +21,7 @@ function RunningCourses() {
     if (!userId) {
       return;
     }
-    const data = await courseCompleteHistory({
+    const data = await getRunningCourse({
       userId: Number(userId),
       lastId: 10,
       size: 10,
@@ -51,10 +49,9 @@ function RunningCourses() {
             <VerticalList
               data={myRunningCourseData}
               renderItem={(item) => (
-                <MyrunningCourseItem
+                <MyRunningCourseItem
                   {...item}
-                  // TODO: refetch 훅
-                  handleFetch={() => {}}
+                  handleFetch={getMyRunningCourses}
                 />
               )}
             />

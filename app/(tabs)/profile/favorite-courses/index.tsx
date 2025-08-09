@@ -47,7 +47,12 @@ function FavoriteCourses() {
           {favoriteCourseData.length > 0 ? (
             <VerticalList
               data={favoriteCourseData}
-              renderItem={MyFavoriteItem}
+              renderItem={(item) => (
+                <MyFavoriteItem
+                  {...item}
+                  handleFetch={getMyFavoriteCourses}
+                />
+              )}
             />
           ) : (
             <View

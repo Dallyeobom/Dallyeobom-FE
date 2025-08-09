@@ -6,7 +6,7 @@ export const courseCompleteHistoryParamsSchema = z.object({
   size: z.number().optional(),
 });
 
-const courseCompleteHistoryItemSchema = z.object({
+const recordedCourseHistoryItemSchema = z.object({
   id: z.number().int(),
   name: z.string(),
   location: z.string(),
@@ -16,8 +16,8 @@ const courseCompleteHistoryItemSchema = z.object({
   isLiked: z.boolean(),
 });
 
-const courseCompleteHistoryResponseSchema = z.object({
-  items: z.array(courseCompleteHistoryItemSchema),
+const recordedCourseHistoryResponseSchema = z.object({
+  items: z.array(recordedCourseHistoryItemSchema),
   lastId: z.number().int(),
   hasNext: z.boolean(),
 });
@@ -25,7 +25,7 @@ export type CourseCompleteHistoryParams = z.infer<
   typeof courseCompleteHistoryParamsSchema
 >;
 
-export type CourseCompleteHistoryItem = z.infer<typeof courseCompleteHistoryItemSchema>;
-export type CourseCompleteHistoryResponse = z.infer<
-  typeof courseCompleteHistoryResponseSchema
+export type RecordedCourseHistoryItem = z.infer<typeof recordedCourseHistoryItemSchema>;
+export type RecordedCourseHistoryResponse = z.infer<
+  typeof recordedCourseHistoryResponseSchema
 >;

@@ -83,13 +83,13 @@ function Index() {
 
   useEffect(() => {
     handleFetchNearRunner();
-    handleFetchPopularCourses();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCoords?.lat, selectedCoords?.lng]);
 
   useEffect(() => {
     userInfo();
+    handleFetchPopularCourses();
   }, []);
 
   return (

@@ -5,3 +5,7 @@ export const courseLikeUrl = (id: number) => `/api/v1/course/${id}/like`;
 
 export const getFavoriteCourseUrl = (userId: number) =>
   `/api/v1/course/user/${userId}/like`;
+
+// 내가 달린 코스
+export const getRunningHistoryUrl = (userId: number) =>
+  `/api/v1/course/user/${userId}/completed`;

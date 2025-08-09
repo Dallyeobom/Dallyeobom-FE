@@ -1,14 +1,14 @@
 import { courseLike } from '@/api/course/course.service';
-import { CourseCompleteHistoryItem } from '@/types/course-complete';
+import { RecordedCourseHistoryItem } from '@/types/course-complete';
 import { useRouter } from 'expo-router';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
-type MyrunningCourseItemProps = CourseCompleteHistoryItem & {
+type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
   handleFetch: () => void;
 };
 
-function MyrunningCourseItem({
+function MyRunningCourseItem({
   id,
   name,
   location,
@@ -17,7 +17,7 @@ function MyrunningCourseItem({
   level,
   isLiked,
   handleFetch,
-}: MyrunningCourseItemProps) {
+}: MyRunningCourseItemProps) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -30,7 +30,7 @@ function MyrunningCourseItem({
       Alert.alert('좋아요 반영에 실패하였습니다.');
       return;
     }
-    // handleFetch();
+    handleFetch();
   };
 
   return (
@@ -66,7 +66,7 @@ function MyrunningCourseItem({
   );
 }
 
-export default MyrunningCourseItem;
+export default MyRunningCourseItem;
 
 const styles = StyleSheet.create({
   container: {
