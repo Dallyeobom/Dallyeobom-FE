@@ -60,7 +60,7 @@ function RecordedCourses() {
           ) : (
             <View
               style={[
-                styles.noDataPopularCourseContainer,
+                styles.noDataRecordedCourseContainer,
                 {
                   marginTop: '34%',
                   marginBottom: '20%',
@@ -89,29 +89,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  titleBarContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  titleBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 6,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  noDataNearRunnerCourseContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    rowGap: 8,
-  },
 
-  noDataPopularCourseContainer: {
+  noDataRecordedCourseContainer: {
     display: 'flex',
     alignItems: 'center',
     rowGap: 8,

@@ -1,13 +1,13 @@
 import {
-  CourseCompleteHistoryParams,
-  CourseCompleteHistoryResponse,
+  RecordedCourseHistoryParams,
+  RecordedCourseHistoryResponse,
 } from '@/types/course-complete';
 import client from '../client';
 import { getMyRecordedCourseHistory } from './urls';
 
 export const myRecordedCourseHistory = async (
-  params: CourseCompleteHistoryParams,
-): Promise<CourseCompleteHistoryResponse | null> => {
+  params: RecordedCourseHistoryParams,
+): Promise<RecordedCourseHistoryResponse | null> => {
   try {
     const { userId, lastId, size } = params;
     const { data } = await client.get(getMyRecordedCourseHistory(userId), {

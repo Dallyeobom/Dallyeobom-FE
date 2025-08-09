@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const courseCompleteHistoryParamsSchema = z.object({
+export const recordedCourseHistoryParamsSchema = z.object({
   userId: z.number(),
   lastId: z.number().optional(),
   size: z.number().optional(),
@@ -21,8 +21,8 @@ const recordedCourseHistoryResponseSchema = z.object({
   lastId: z.number().int(),
   hasNext: z.boolean(),
 });
-export type CourseCompleteHistoryParams = z.infer<
-  typeof courseCompleteHistoryParamsSchema
+export type RecordedCourseHistoryParams = z.infer<
+  typeof recordedCourseHistoryParamsSchema
 >;
 
 export type RecordedCourseHistoryItem = z.infer<typeof recordedCourseHistoryItemSchema>;
