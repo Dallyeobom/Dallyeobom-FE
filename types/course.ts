@@ -71,9 +71,9 @@ export type FavoriteCourseParams = z.infer<typeof favoriteCourseParamsSchema>;
 
 const favoriteCourseItemSchema = z.object({
   id: z.number().int(),
+  courseId: z.number(),
   name: z.string(),
-  location: z.string(),
-  overViewImageUrl: z.string(),
+  overViewImage: z.string(),
   length: z.number().int(),
   level: z.string(),
   isLiked: z.boolean(),
@@ -85,8 +85,8 @@ const FavoriteCourseItemsResponseSchema = z.object({
   hasNext: z.boolean(),
 });
 
+export type FavoriteCourseItem = z.infer<typeof favoriteCourseItemSchema>;
+
 export type FavoriteCourseItemsResponse = z.infer<
   typeof FavoriteCourseItemsResponseSchema
 >;
-
-export type FavoriteCourseItem = z.infer<typeof favoriteCourseItemSchema>;

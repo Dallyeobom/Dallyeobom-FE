@@ -1,9 +1,9 @@
 import { getFavoriteCourse } from '@/api/course/course.service';
-import MyrunningCourseItem from '@/components/item/my-running-course-item';
+import MyFavoriteItem from '@/components/item/my-favorite-item';
 import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
-import { testData } from '@/mocks/data';
+import { examplefavoriteCourses } from '@/mocks/data';
 import { gray } from '@/styles/color';
 import { FavoriteCourseItem } from '@/types/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,7 +27,7 @@ function FavoriteCourses() {
     });
     if (!data || data?.items.length === 0) {
       // TODO: UI확인을 위해 임시로 넣음
-      setFavoriteCourseData(testData);
+      setFavoriteCourseData(examplefavoriteCourses);
     } else {
       setFavoriteCourseData(data?.items);
     }
@@ -47,8 +47,7 @@ function FavoriteCourses() {
           {favoriteCourseData.length > 0 ? (
             <VerticalList
               data={favoriteCourseData}
-              renderItem={MyrunningCourseItem}
-              // handleScroll={handleScroll}
+              renderItem={MyFavoriteItem}
             />
           ) : (
             <View

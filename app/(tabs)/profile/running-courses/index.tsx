@@ -16,6 +16,7 @@ function RunningCourses() {
   >([]);
   const [loading, setLoading] = useState(false);
 
+  // refetch할..
   const getMyRunningCourses = async () => {
     setLoading(true);
     const userId = await AsyncStorage.getItem('userId');
@@ -49,8 +50,13 @@ function RunningCourses() {
           {myRunningCourseData.length > 0 ? (
             <VerticalList
               data={myRunningCourseData}
-              renderItem={MyrunningCourseItem}
-              // handleScroll={handleScroll}
+              renderItem={(item) => (
+                <MyrunningCourseItem
+                  {...item}
+                  // TODO: refetch 훅
+                  handleFetch={() => {}}
+                />
+              )}
             />
           ) : (
             <View
@@ -64,8 +70,8 @@ function RunningCourses() {
             >
               <NoDataItem />
               <View style={styles.noDataTextContainer}>
-                <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
-                <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+                <Text style={styles.noDataText}>내가 완주한 코스가</Text>
+                <Text style={styles.noDataText}>없습니다.</Text>
               </View>
             </View>
           )}

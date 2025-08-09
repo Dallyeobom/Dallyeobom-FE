@@ -13,10 +13,9 @@ export const courseCompleteHistory = async (
     const { data } = await client.get(getCourseCompleteHistory(userId), {
       params: { lastId, size },
     });
-
     return data;
   } catch (error) {
-    console.error('나의 running course list', error);
+    console.error('나의 running course 4244list', error);
     return null;
   }
 };

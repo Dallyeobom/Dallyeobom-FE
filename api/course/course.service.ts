@@ -71,10 +71,9 @@ export const getFavoriteCourse = async (
     const { data } = await client.get(getFavoriteCourseUrl(userId), {
       params: { lastId, size },
     });
-
     return data;
   } catch (error) {
-    console.error('나의 running course list', error);
+    console.error('내 찜코스 li22t22d32 에2러', error);
     return null;
   }
 };
