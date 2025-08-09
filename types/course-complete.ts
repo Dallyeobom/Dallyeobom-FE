@@ -1,31 +1,31 @@
 import { z } from 'zod';
 
-export const courseCompleteHistoryParamsSchema = z.object({
+export const recordedCourseHistoryParamsSchema = z.object({
   userId: z.number(),
   lastId: z.number().optional(),
   size: z.number().optional(),
 });
 
-const courseCompleteHistoryItemSchema = z.object({
+const recordedCourseHistoryItemSchema = z.object({
   id: z.number().int(),
-  courseId: z.number().int().optional(),
   name: z.string(),
-  level: z.string(),
-  interval: z.number().int(),
+  location: z.string(),
+  overViewImageUrl: z.string(),
   length: z.number().int(),
-  completionImage: z.string().url().optional(),
+  level: z.string(),
+  isLiked: z.boolean(),
 });
 
-const courseCompleteHistoryResponseSchema = z.object({
-  items: z.array(courseCompleteHistoryItemSchema),
+const recordedCourseHistoryResponseSchema = z.object({
+  items: z.array(recordedCourseHistoryItemSchema),
   lastId: z.number().int(),
   hasNext: z.boolean(),
 });
-export type CourseCompleteHistoryParams = z.infer<
-  typeof courseCompleteHistoryParamsSchema
+export type RecordedCourseHistoryParams = z.infer<
+  typeof recordedCourseHistoryParamsSchema
 >;
 
-export type CourseCompleteHistoryItem = z.infer<typeof courseCompleteHistoryItemSchema>;
-export type CourseCompleteHistoryResponse = z.infer<
-  typeof courseCompleteHistoryResponseSchema
+export type RecordedCourseHistoryItem = z.infer<typeof recordedCourseHistoryItemSchema>;
+export type RecordedCourseHistoryResponse = z.infer<
+  typeof recordedCourseHistoryResponseSchema
 >;

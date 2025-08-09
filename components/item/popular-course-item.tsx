@@ -1,7 +1,7 @@
 import { courseLike } from '@/api/course/course.service';
 import { PopularCoursesResponse } from '@/types/course';
 import { useRouter } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
 type PopularCourseItemProps = PopularCoursesResponse & {
@@ -25,7 +25,11 @@ function PopularCourseItem({
   };
 
   const handleCourseLike = async (id: number) => {
-    await courseLike(id);
+    const result = await courseLike(id);
+    if (!result) {
+      Alert.alert('좋아요 반영에 실패하였습니다.');
+      return;
+    }
     handleFetch();
   };
 
@@ -69,10 +73,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  subContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
+
   courseContainer: {
     display: 'flex',
     flexDirection: 'row',

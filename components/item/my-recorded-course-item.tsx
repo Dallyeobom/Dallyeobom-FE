@@ -4,11 +4,11 @@ import { useRouter } from 'expo-router';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
-type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
+type MyRecordedCourseItemProps = RecordedCourseHistoryItem & {
   handleFetch: () => void;
 };
 
-function MyRunningCourseItem({
+function MyRecordedCourseItem({
   id,
   name,
   location,
@@ -17,7 +17,7 @@ function MyRunningCourseItem({
   level,
   isLiked,
   handleFetch,
-}: MyRunningCourseItemProps) {
+}: MyRecordedCourseItemProps) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -66,7 +66,7 @@ function MyRunningCourseItem({
   );
 }
 
-export default MyRunningCourseItem;
+export default MyRecordedCourseItem;
 
 const styles = StyleSheet.create({
   container: {
