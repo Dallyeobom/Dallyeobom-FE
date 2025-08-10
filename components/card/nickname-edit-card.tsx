@@ -1,5 +1,6 @@
 import { changeNickname } from '@/api/user/user.service';
 import { base, main } from '@/styles/color';
+import { showErrorAlert } from '@/utils/error-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -27,16 +28,20 @@ function NicknameEditCard({
   };
 
   const handleNicknameSave = async (nickname: string) => {
-    const statusCode = await changeNickname(nickname);
+    try {
+      const statusCode = await changeNickname(nickname);
 
-    if (statusCode === 200) {
-      await AsyncStorage.setItem('nickname', nickname);
-      setIsNicknameChangeSaved(true);
-      await AsyncAlert({ message: '닉네임 변경에 성공하였습니다.' });
-      setIsNicknameChangeSaved(false);
-      setIsNicknameModal(false);
-    } else if (statusCode === 409) {
-      Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+      if (statusCode === 200) {
+        await AsyncStorage.setItem('nickname', nickname);
+        setIsNicknameChangeSaved(true);
+        await AsyncAlert({ message: '닉네임 변경에 성공하였습니다.' });
+        setIsNicknameChangeSaved(false);
+        setIsNicknameModal(false);
+      } else if (statusCode === 409) {
+        Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+      }
+    } catch (error) {
+      showErrorAlert(error, 'NICKNAME_CHANGE', '닉네임 변경 실패');
     }
   };
   return (

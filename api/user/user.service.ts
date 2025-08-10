@@ -1,5 +1,5 @@
 import { RankingDataResponse, UserInfoResponse } from '@/types/user';
-import { handleError, showErrorAlert } from '@/utils/error-handler';
+import { handleError } from '@/utils/error-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import client from '../client';
 import {
@@ -50,8 +50,7 @@ export const changeNickname = async (nickname: string) => {
     if (appError.statusCode === 409) {
       return appError.statusCode;
     }
-    showErrorAlert(appError, 'NICKNAME_CHANGE', '닉네임 변경 실패');
-    return null;
+    throw appError;
   }
 };
 
@@ -65,7 +64,6 @@ export const changeUserProfileImage = async (formData: FormData) => {
     return status;
   } catch (error) {
     const appError = handleError(error, 'changeUserProfileImage');
-    showErrorAlert(appError, 'PROFILE_IMAGE_CHANGE', '프로필 이미지 변경 실패');
-    return null;
+    throw appError;
   }
 };

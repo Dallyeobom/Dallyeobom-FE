@@ -6,7 +6,7 @@ import {
   PopularCoursesRequest,
   PopularCoursesResponse,
 } from '@/types/course';
-import { handleError, showErrorAlert } from '@/utils/error-handler';
+import { handleError } from '@/utils/error-handler';
 import client from '../client';
 import {
   courseLikeUrl,
@@ -64,7 +64,6 @@ export const courseLike = async (id: number): Promise<CourseLikeRespone | null> 
     return data;
   } catch (error) {
     const appError = handleError(error, 'courseLike');
-    showErrorAlert(appError, 'COURSE_LIKE', '좋아요 처리 실패');
-    return null;
+    throw appError;
   }
 };

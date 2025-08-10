@@ -9,7 +9,7 @@ import type {
   NicknameCheckResponse,
   NicknameCheckSchemaParams,
 } from '@/types/auth';
-import { handleError, showErrorAlert } from '@/utils/error-handler';
+import { handleError } from '@/utils/error-handler';
 import authClient from '../auth-client';
 import {
   getCheckNameUrl,
@@ -28,8 +28,7 @@ export const KaKaoSignup = async (
     return data;
   } catch (error) {
     const appError = handleError(error, 'KaKaoSignup');
-    showErrorAlert(appError, 'SIGNUP', '회원가입 실패');
-    return null;
+    throw appError;
   }
 };
 
@@ -41,8 +40,7 @@ export const KaKaoLogin = async (
     return data;
   } catch (error) {
     const appError = handleError(error, 'KaKaoLogin');
-    showErrorAlert(appError, 'LOGIN', '로그인 실패');
-    return null;
+    throw appError;
   }
 };
 
@@ -53,8 +51,7 @@ export const TermsList = async (): Promise<AgreementsSchema[]> => {
     return data;
   } catch (error) {
     const appError = handleError(error, 'TermsList');
-    showErrorAlert(appError, 'TERMS', '이용약관 목록을 불러오는데 실패했습니다.');
-    return [];
+    throw appError;
   }
 };
 
@@ -67,12 +64,7 @@ export const TermsDetail = async (
     return data;
   } catch (error) {
     const appError = handleError(error, 'TermsDetail');
-    showErrorAlert(
-      appError,
-      'TERMS_DETAIL',
-      '이용약관 상세 정보를 불러오는데 실패했습니다.',
-    );
-    return null;
+    throw appError;
   }
 };
 
@@ -89,7 +81,6 @@ export const DoubleCheckNickname = async (
     };
   } catch (error) {
     const appError = handleError(error, 'DoubleCheckNickname');
-    showErrorAlert(appError, 'NICKNAME_CHECK', '닉네임 중복 확인에 실패했습니다.');
-    return null;
+    throw appError;
   }
 };

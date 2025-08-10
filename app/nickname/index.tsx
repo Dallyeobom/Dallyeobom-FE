@@ -4,6 +4,7 @@ import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
 import { base, main } from '@/styles/color';
 import { AgreementsSchema } from '@/types/auth';
+import { showErrorAlert } from '@/utils/error-handler';
 import React, { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -40,9 +41,13 @@ function Index() {
       return;
     }
 
-    const result = await termsList();
-    setTermsAndConditionData(result);
-    setIsAgreementModal(true);
+    try {
+      const result = await termsList();
+      setTermsAndConditionData(result);
+      setIsAgreementModal(true);
+    } catch (error) {
+      showErrorAlert(error, 'TERMS', '약관 정보를 불러오는데 실패했습니다.');
+    }
   };
 
   const handleDelete = () => {
