@@ -67,26 +67,39 @@ export const handleError = (error: any, context?: string): AppError => {
   }
 
   if (error?.code === 'NETWORK_ERROR' || error?.message?.includes('Network')) {
-    return new AppError('네트워크 오류가 발생했습니다.', ErrorType.NETWORK, undefined, error);
+    return new AppError(
+      '네트워크 오류가 발생했습니다.',
+      ErrorType.NETWORK,
+      undefined,
+      error,
+    );
   }
 
   if (error instanceof Error) {
     return new AppError(error.message, ErrorType.UNKNOWN, undefined, error);
   }
 
-  return new AppError('알 수 없는 오류가 발생했습니다.', ErrorType.UNKNOWN, undefined, error);
+  return new AppError(
+    '알 수 없는 오류가 발생했습니다.',
+    ErrorType.UNKNOWN,
+    undefined,
+    error,
+  );
 };
 
 export const showErrorAlert = (
   error: any,
   context?: string,
-  title: string = '오류'
+  title: string = '오류',
 ): void => {
   const appError = handleError(error, context);
   const message = getUserFriendlyMessage(appError);
 
-  console.error(`[${context || 'UNKNOWN'}] ${appError.type} Error:`, appError.originalError || error);
-  
+  console.error(
+    `[${context || 'UNKNOWN'}] ${appError.type} Error:`,
+    appError.originalError || error,
+  );
+
   Alert.alert(title, message);
 };
 
@@ -94,12 +107,15 @@ export const showErrorAlertWithCallback = (
   error: any,
   callback: () => void,
   context?: string,
-  title: string = '오류'
+  title: string = '오류',
 ): void => {
   const appError = handleError(error, context);
   const message = getUserFriendlyMessage(appError);
 
-  console.error(`[${context || 'UNKNOWN'}] ${appError.type} Error:`, appError.originalError || error);
+  console.error(
+    `[${context || 'UNKNOWN'}] ${appError.type} Error:`,
+    appError.originalError || error,
+  );
 
   Alert.alert(title, message, [
     {
