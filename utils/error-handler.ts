@@ -60,7 +60,7 @@ export const handleError = (error: any, context?: string): AppError => {
     if (status === 401 || status === 403) {
       return new AppError(message, ErrorType.AUTH, status, error);
     }
-    if (status === 400) {
+    if (status === 400 || status === 409) {
       return new AppError(message, ErrorType.VALIDATION, status, error);
     }
     return new AppError(message, ErrorType.UNKNOWN, status, error);

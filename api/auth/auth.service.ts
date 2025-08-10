@@ -53,7 +53,8 @@ export const TermsList = async (): Promise<AgreementsSchema[]> => {
     return data;
   } catch (error) {
     const appError = handleError(error, 'TermsList');
-    throw appError;
+    showErrorAlert(appError, 'TERMS', '이용약관 목록을 불러오는데 실패했습니다.');
+    return [];
   }
 };
 

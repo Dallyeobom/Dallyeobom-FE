@@ -47,6 +47,9 @@ export const changeNickname = async (nickname: string) => {
     return status;
   } catch (error) {
     const appError = handleError(error, 'changeNickname');
+    if (appError.statusCode === 409) {
+      return appError.statusCode;
+    }
     showErrorAlert(appError, 'NICKNAME_CHANGE', '닉네임 변경 실패');
     return null;
   }

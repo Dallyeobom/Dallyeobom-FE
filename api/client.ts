@@ -99,6 +99,8 @@ client.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
           return client(originalRequest);
+        } else {
+          throw new Error('새로운 액세스 토큰이 응답에 포함되지 않았습니다.');
         }
       } catch (refreshError) {
         if (__DEV__) {
