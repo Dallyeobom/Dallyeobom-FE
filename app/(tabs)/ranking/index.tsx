@@ -1,6 +1,6 @@
 import { userRanking } from '@/api/user/user.service';
 import RankingButton from '@/components/button/ranking-button';
-import MyProfileItem from '@/components/item/my-profile-item';
+import RankingMyProfileCard from '@/components/card/ranking-my-profile-card';
 import RankingRunnerItem from '@/components/item/ranking-runner-item';
 import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
@@ -9,7 +9,7 @@ import { RankingEnum } from '@/types/enum';
 import { CurrentUserRank, RankingDataList } from '@/types/user';
 import { mapRankingTextToEnum } from '@/utils/ranking';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const RANKING_OPTIONS: RankingEnum[] = ['WEEKLY', 'MONTHLY', 'YEARLY'];
 
@@ -67,15 +67,7 @@ function Ranking() {
           />
         </View>
       </View>
-
-      <View style={styles.bottomCardWrapper}>
-        {currentUserRanking ? (
-          <MyProfileItem data={currentUserRanking} />
-        ) : (
-          // TODO: 추후에 UI나오면은 넣을 예정
-          <Text>기록이없습니다.</Text>
-        )}
-      </View>
+      <RankingMyProfileCard currentUserRanking={currentUserRanking} />
     </View>
   );
 }
