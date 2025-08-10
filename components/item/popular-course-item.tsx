@@ -25,8 +25,10 @@ function PopularCourseItem({
   };
 
   const handleCourseLike = async (id: number) => {
-    await courseLike(id);
-    handleFetch();
+    const result = await courseLike(id);
+    if (result) {
+      handleFetch();
+    }
   };
 
   return (

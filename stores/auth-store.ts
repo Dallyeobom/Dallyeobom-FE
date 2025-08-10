@@ -17,8 +17,8 @@ interface AuthState {
     nickName: string,
     providerAccessToken: string,
     terms: AgreementsSchemaParams[],
-  ) => Promise<KaKaoSignUpResponse>;
-  kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
+  ) => Promise<KaKaoSignUpResponse | null>;
+  kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse | null>;
   doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
   termsList: () => Promise<AgreementsSchema[]>;
 }
@@ -40,38 +40,44 @@ export const useAuthStore = create<AuthState>((set) => ({
     providerAccessToken: string,
     terms: AgreementsSchemaParams[],
   ) => {
-    const { accessToken, refreshToken } = await authAPI.KaKaoSignup({
+    const result = await authAPI.KaKaoSignup({
       nickName,
       providerAccessToken,
       terms,
     });
-    if (!accessToken || !refreshToken) {
-      throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');
+    
+    if (!result) {
+      return null;
     }
-    await SecureStore.setItemAsync('accessToken', accessToken);
-    await SecureStore.setItemAsync('refreshToken', refreshToken);
-    return {
-      accessToken,
-      refreshToken,
-    };
+
+    const { accessToken, refreshToken } = result;
+    if (accessToken && refreshToken) {
+      await SecureStore.setItemAsync('accessToken', accessToken);
+      await SecureStore.setItemAsync('refreshToken', refreshToken);
+    }
+    
+    return result;
   },
   // 카카오 로그인
   kakaoLogin: async (providerAccessToken: string) => {
-    const { accessToken, refreshToken, isNewUser } = await authAPI.KaKaoLogin({
+    const result = await authAPI.KaKaoLogin({
       providerAccessToken: providerAccessToken,
       fcmToken: '',
     });
+    
+    if (!result) {
+      return null;
+    }
+
+    const { accessToken, refreshToken, isNewUser } = result;
     if (isNewUser) {
       await SecureStore.setItemAsync('providerAccessToken', providerAccessToken);
     } else {
       await SecureStore.setItemAsync('accessToken', accessToken);
       await SecureStore.setItemAsync('refreshToken', refreshToken);
     }
-    return {
-      accessToken,
-      refreshToken,
-      isNewUser,
-    };
+    
+    return result;
   },
 
   // nickname 중복체크

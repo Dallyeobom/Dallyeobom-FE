@@ -42,22 +42,20 @@ function TermsAndConditionlist({
 
     const termsData = processTermsData(agreementData);
 
-    try {
-      const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
-      if (result.accessToken && result.refreshToken) {
-        Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
-          {
-            text: '확인',
-            onPress: () => {
-              setModalVisible(true);
-              handleloggedIn();
-              router.replace('/(tabs)');
-            },
+    const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
+    if (result && result.accessToken && result.refreshToken) {
+      Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
+        {
+          text: '확인',
+          onPress: () => {
+            setModalVisible(true);
+            handleloggedIn();
+            router.replace('/(tabs)');
           },
-        ]);
-      }
-    } catch (error) {
-      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+        },
+      ]);
+    } else {
+      Alert.alert('회원가입 실패', '회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
 

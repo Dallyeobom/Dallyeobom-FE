@@ -34,13 +34,10 @@ function NickNameEditCard({
       setIsNickNameChangeSaved(true);
       await AsyncAlert({ message: '닉네임 변경에 성공하였습니다.' });
       setIsNickNameChangeSaved(false);
+      setIsNickNameModal(false);
     } else if (statusCode === 409) {
       Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
-      return;
-    } else {
-      Alert.alert('닉네임 변경에 실패하였습니다.');
     }
-    setIsNickNameModal(false);
   };
   return (
     <View style={styles.container}>
