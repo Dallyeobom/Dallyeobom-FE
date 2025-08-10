@@ -1,23 +1,23 @@
 import { courseLike } from '@/api/course/course.service';
-import { RecordedCourseHistoryItem } from '@/types/course-complete';
+import { FavoriteCourseItem } from '@/types/course';
 import { useRouter } from 'expo-router';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
-type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
+type MyFavoriteItemProps = FavoriteCourseItem & {
   handleFetch: () => void;
 };
 
-function MyRunningCourseItem({
+function MyFavoriteItem({
   id,
+  courseId,
   name,
-  location,
-  overViewImageUrl,
+  overViewImage,
   length,
   level,
   isLiked,
   handleFetch,
-}: MyRunningCourseItemProps) {
+}: MyFavoriteItemProps) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -40,7 +40,7 @@ function MyRunningCourseItem({
         style={styles.subContainer}
       >
         <Image
-          source={{ uri: overViewImageUrl }}
+          source={{ uri: overViewImage }}
           style={styles.image}
         />
         <View style={styles.textContainer}>
@@ -66,14 +66,13 @@ function MyRunningCourseItem({
   );
 }
 
-export default MyRunningCourseItem;
+export default MyFavoriteItem;
 
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   subContainer: {
     display: 'flex',

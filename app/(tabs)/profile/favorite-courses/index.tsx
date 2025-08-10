@@ -1,43 +1,41 @@
-import { courseCompleteHistory } from '@/api/course-complete/course-complete.service';
-import MyrunningCourseItem from '@/components/item/my-running-course-item';
+import { getFavoriteCourse } from '@/api/course/course.service';
+import MyFavoriteItem from '@/components/item/my-favorite-item';
 import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
-import { courseCompleteHistoryItems } from '@/mocks/data';
+import { examplefavoriteCourses } from '@/mocks/data';
 import { gray } from '@/styles/color';
-import { CourseCompleteHistoryItem } from '@/types/course-complete';
+import { FavoriteCourseItem } from '@/types/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 function FavoriteCourses() {
-  const [myRunningCourseData, setMyRunningCourseData] = useState<
-    CourseCompleteHistoryItem[]
-  >([]);
+  const [favoriteCourseData, setFavoriteCourseData] = useState<FavoriteCourseItem[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const getMyRunningCourses = async () => {
+  const getMyFavoriteCourses = async () => {
     setLoading(true);
     const userId = await AsyncStorage.getItem('userId');
     if (!userId) {
       return;
     }
-    const data = await courseCompleteHistory({
+    const data = await getFavoriteCourse({
       userId: Number(userId),
       lastId: 10,
       size: 10,
     });
     if (!data || data?.items.length === 0) {
       // TODO: UI확인을 위해 임시로 넣음
-      setMyRunningCourseData(courseCompleteHistoryItems);
+      setFavoriteCourseData(examplefavoriteCourses);
     } else {
-      setMyRunningCourseData(data?.items);
+      setFavoriteCourseData(data?.items);
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    getMyRunningCourses();
+    getMyFavoriteCourses();
   }, []);
 
   return (
@@ -46,11 +44,15 @@ function FavoriteCourses() {
         <LoadingSpinner />
       ) : (
         <>
-          {myRunningCourseData.length > 0 ? (
+          {favoriteCourseData.length > 0 ? (
             <VerticalList
-              data={myRunningCourseData}
-              renderItem={MyrunningCourseItem}
-              // handleScroll={handleScroll}
+              data={favoriteCourseData}
+              renderItem={(item) => (
+                <MyFavoriteItem
+                  {...item}
+                  handleFetch={getMyFavoriteCourses}
+                />
+              )}
             />
           ) : (
             <View
