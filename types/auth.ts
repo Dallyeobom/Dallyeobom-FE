@@ -20,7 +20,7 @@ const agreementSchemaParms = z.object({
 export type AgreementsSchemaParams = z.infer<typeof agreementSchemaParms>;
 
 export const kakaoSignUpParamsSchema = z.object({
-  nickName: z.string(),
+  nickname: z.string(),
   providerAccessToken: z.string(),
   terms: z.array(agreementSchemaParms),
 });

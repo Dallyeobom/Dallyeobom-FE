@@ -19,7 +19,7 @@ function MyProfileItem({ data }: MyProfileItemProps) {
           style={styles.profileImage}
         />
         <View>
-          <Text style={styles.nickName}>TEST</Text>
+          <Text style={styles.nickname}>TEST</Text>
           <Text style={styles.distance}>{data.runningLength}KM</Text>
         </View>
       </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     color: gray[80],
     textAlign: 'center',
   },
-  nickName: {
+  nickname: {
     color: gray[40],
   },
   distance: {

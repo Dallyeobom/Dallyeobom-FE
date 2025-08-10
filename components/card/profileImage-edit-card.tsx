@@ -1,6 +1,7 @@
 import { changeUserProfileImage, userInfo } from '@/api/user/user.service';
 import { useCameraRequest } from '@/hooks/use-camera-request';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
+import { showErrorAlert } from '@/utils/error-handler';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AsyncAlert from '../alert/async-alert';
@@ -42,8 +43,7 @@ function ProfileImageEditCard({
       }
     } catch (error) {
       //TODO: 400 fileSIze처리하기
-      await AsyncAlert({ message: '프로필 사진 변경에 실패하였습니다.' });
-      console.log('error', error);
+      showErrorAlert(error, 'PROFILE_IMAGE_CHANGE', '프로필 사진 변경 실패');
     }
     setIsProfileImageModal(false);
   };

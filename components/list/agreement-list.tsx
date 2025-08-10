@@ -4,6 +4,7 @@ import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
 import { AgreementsSchema } from '@/types/auth';
 import { processAgreementData, processTermsData } from '@/utils/signup';
+import { showErrorAlert } from '@/utils/error-handler';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
@@ -44,7 +45,7 @@ function TermsAndConditionlist({
 
     try {
       const result = await kakaoSignUp(nickname, providerAccessToken, termsData);
-      if (result.accessToken && result.refreshToken) {
+      if (result && result.accessToken && result.refreshToken) {
         Alert.alert('회원가입 성공', '회원가입에 성공하였습니다.', [
           {
             text: '확인',
@@ -55,9 +56,11 @@ function TermsAndConditionlist({
             },
           },
         ]);
+      } else {
+        Alert.alert('회원가입 실패', '회원가입에 실패했습니다. 다시 시도해주세요.');
       }
     } catch (error) {
-      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      showErrorAlert(error, 'SIGNUP', '회원가입 실패');
     }
   };
 

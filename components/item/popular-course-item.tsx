@@ -1,5 +1,6 @@
 import { courseLike } from '@/api/course/course.service';
 import { PopularCoursesResponse } from '@/types/course';
+import { showErrorAlert } from '@/utils/error-handler';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
@@ -25,8 +26,14 @@ function PopularCourseItem({
   };
 
   const handleCourseLike = async (id: number) => {
-    await courseLike(id);
-    handleFetch();
+    try {
+      const result = await courseLike(id);
+      if (result) {
+        handleFetch();
+      }
+    } catch (error) {
+      showErrorAlert(error, 'COURSE_LIKE', '좋아요 처리 실패');
+    }
   };
 
   return (
