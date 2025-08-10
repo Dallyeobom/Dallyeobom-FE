@@ -3,7 +3,7 @@ import { handleError, showErrorAlert } from '@/utils/error-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import client from '../client';
 import {
-  changeNickNameUrl,
+  changeNicknameUrl,
   changeUserProfileImageUrl,
   getUserInfoUrl,
   getUserRankingUrl,
@@ -39,14 +39,14 @@ export const userInfo = async (): Promise<UserInfoResponse | null> => {
   }
 };
 
-export const changeNickName = async (nickname: string) => {
+export const changeNickname = async (nickname: string) => {
   try {
-    const { status } = await client.put(changeNickNameUrl(), {
+    const { status } = await client.put(changeNicknameUrl(), {
       nickname: nickname,
     });
     return status;
   } catch (error) {
-    const appError = handleError(error, 'changeNickName');
+    const appError = handleError(error, 'changeNickname');
     showErrorAlert(appError, 'NICKNAME_CHANGE', '닉네임 변경 실패');
     return null;
   }

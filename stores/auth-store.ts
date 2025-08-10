@@ -14,12 +14,12 @@ interface AuthState {
   handleloggedIn: () => void;
   logout: () => Promise<void>;
   kakaoSignUp: (
-    nickName: string,
+    nickname: string,
     providerAccessToken: string,
     terms: AgreementsSchemaParams[],
   ) => Promise<KaKaoSignUpResponse | null>;
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse | null>;
-  doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
+  doubleCheckNickname: (nickname: string) => Promise<NicknameCheckResponse>;
   termsList: () => Promise<AgreementsSchema[]>;
 }
 
@@ -36,16 +36,16 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   // 카카오 회원가입
   kakaoSignUp: async (
-    nickName: string,
+    nickname: string,
     providerAccessToken: string,
     terms: AgreementsSchemaParams[],
   ) => {
     const result = await authAPI.KaKaoSignup({
-      nickName,
+      nickname,
       providerAccessToken,
       terms,
     });
-    
+
     if (!result) {
       return null;
     }
@@ -55,7 +55,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       await SecureStore.setItemAsync('accessToken', accessToken);
       await SecureStore.setItemAsync('refreshToken', refreshToken);
     }
-    
+
     return result;
   },
   // 카카오 로그인
@@ -64,7 +64,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       providerAccessToken: providerAccessToken,
       fcmToken: '',
     });
-    
+
     if (!result) {
       return null;
     }
@@ -76,7 +76,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       await SecureStore.setItemAsync('accessToken', accessToken);
       await SecureStore.setItemAsync('refreshToken', refreshToken);
     }
-    
+
     return result;
   },
 

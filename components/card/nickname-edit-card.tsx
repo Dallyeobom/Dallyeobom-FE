@@ -1,23 +1,23 @@
-import { changeNickName } from '@/api/user/user.service';
+import { changeNickname } from '@/api/user/user.service';
 import { base, main } from '@/styles/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import AsyncAlert from '../alert/async-alert';
 
-interface NickNameEditCardProps {
+interface NicknameEditCardProps {
   newNickname: string;
   onChangeNewNickname: (nickname: string) => void;
-  setIsNickNameChangeSaved: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsNickNameModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNicknameChangeSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNicknameModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function NickNameEditCard({
+function NicknameEditCard({
   newNickname,
   onChangeNewNickname,
-  setIsNickNameChangeSaved,
-  setIsNickNameModal,
-}: NickNameEditCardProps) {
+  setIsNicknameChangeSaved,
+  setIsNicknameModal,
+}: NicknameEditCardProps) {
   const handleNicknameChange = (text: string) => {
     onChangeNewNickname(text);
   };
@@ -27,14 +27,14 @@ function NickNameEditCard({
   };
 
   const handleNicknameSave = async (nickname: string) => {
-    const statusCode = await changeNickName(nickname);
+    const statusCode = await changeNickname(nickname);
 
     if (statusCode === 200) {
       await AsyncStorage.setItem('nickname', nickname);
-      setIsNickNameChangeSaved(true);
+      setIsNicknameChangeSaved(true);
       await AsyncAlert({ message: '닉네임 변경에 성공하였습니다.' });
-      setIsNickNameChangeSaved(false);
-      setIsNickNameModal(false);
+      setIsNicknameChangeSaved(false);
+      setIsNicknameModal(false);
     } else if (statusCode === 409) {
       Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
     }
@@ -73,7 +73,7 @@ function NickNameEditCard({
   );
 }
 
-export default NickNameEditCard;
+export default NicknameEditCard;
 
 const styles = StyleSheet.create({
   container: {
