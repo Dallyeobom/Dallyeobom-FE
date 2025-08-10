@@ -59,20 +59,27 @@ export const TermsList = async (): Promise<AgreementsSchema[]> => {
 };
 
 // 이용약관 상세 조회
-export const TermsDetail = async (id: number): Promise<AgreementDetailResponse> => {
+export const TermsDetail = async (
+  id: number,
+): Promise<AgreementDetailResponse | null> => {
   try {
     const { data } = await authClient.get(getTermsDetailUrl(id));
     return data;
   } catch (error) {
     const appError = handleError(error, 'TermsDetail');
-    throw appError;
+    showErrorAlert(
+      appError,
+      'TERMS_DETAIL',
+      '이용약관 상세 정보를 불러오는데 실패했습니다.',
+    );
+    return null;
   }
 };
 
 // 닉네임 중복 체크
 export const DoubleCheckNickname = async (
   params: NicknameCheckSchemaParams,
-): Promise<NicknameCheckResponse> => {
+): Promise<NicknameCheckResponse | null> => {
   try {
     const { data } = await authClient.get(getCheckNameUrl(), {
       params: { nickname: params.nickname },
@@ -82,6 +89,7 @@ export const DoubleCheckNickname = async (
     };
   } catch (error) {
     const appError = handleError(error, 'DoubleCheckNickname');
-    throw appError;
+    showErrorAlert(appError, 'NICKNAME_CHECK', '닉네임 중복 확인에 실패했습니다.');
+    return null;
   }
 };

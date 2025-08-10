@@ -19,7 +19,7 @@ interface AuthState {
     terms: AgreementsSchemaParams[],
   ) => Promise<KaKaoSignUpResponse | null>;
   kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse | null>;
-  doubleCheckNickname: (nickname: string) => Promise<NicknameCheckResponse>;
+  doubleCheckNickname: (nickname: string) => Promise<NicknameCheckResponse | null>;
   termsList: () => Promise<AgreementsSchema[]>;
 }
 
@@ -82,10 +82,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   // nickname 중복체크
   doubleCheckNickname: async (nickname: string) => {
-    const { isDuplicated } = await authAPI.DoubleCheckNickname({
+    const data = await authAPI.DoubleCheckNickname({
       nickname,
     });
-    return { isDuplicated };
+    return data;
   },
 
   // 이용약관 리스트 조회

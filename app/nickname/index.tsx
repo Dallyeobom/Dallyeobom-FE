@@ -29,9 +29,9 @@ function Index() {
     }
 
     try {
-      const { isDuplicated } = await doubleCheckNickname(nickname);
+      const data = await doubleCheckNickname(nickname);
 
-      if (isDuplicated) {
+      if (data?.isDuplicated) {
         Alert.alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
         return;
       }
