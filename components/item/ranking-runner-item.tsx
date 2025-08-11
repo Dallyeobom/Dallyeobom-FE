@@ -29,7 +29,7 @@ function RankingRunnerItem({
           style={styles.profileImage}
         />
         <View>
-          <Text style={styles.nickName}>{nickname}</Text>
+          <Text style={styles.nickname}>{nickname}</Text>
           <Text style={styles.runningLength}>{runningLength} km</Text>
         </View>
       </View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     textAlign: 'center',
   },
-  nickName: {
+  nickname: {
     fontWeight: 700,
   },
   runningLength: {

@@ -1,4 +1,4 @@
-import NickNameEditCard from '@/components/card/nickname-edit-card';
+import NicknameEditCard from '@/components/card/nickname-edit-card';
 import ProfileImageEditCard from '@/components/card/profileImage-edit-card';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useControlTabBar } from '@/hooks/use-control-tarbar';
@@ -10,10 +10,10 @@ import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function Profile() {
-  const [userNickName, setUserNickName] = useState<string>('');
+  const [userNickname, setUserNickname] = useState<string>('');
   const [newNickname, onChangeNewNickname] = useState('');
-  const [isNickNameModal, setIsNickNameModal] = useState(false);
-  const [isNickNameChangeSaved, setIsNickNameChangeSaved] = useState(false);
+  const [isNicknameModal, setIsNicknameModal] = useState(false);
+  const [isNicknameChangeSaved, setIsNicknameChangeSaved] = useState(false);
 
   // 프로필 이미지 사진
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
@@ -22,12 +22,12 @@ function Profile() {
 
   const router = useRouter();
   // 모달이 열릴때 tabar안보이게 하는 훅
-  useControlTabBar(isNickNameModal || isProfileImageModal);
+  useControlTabBar(isNicknameModal || isProfileImageModal);
 
   const getMyInfo = async () => {
     const nickname = (await AsyncStorage.getItem('nickname')) ?? '';
     const profileImage = await AsyncStorage.getItem('profileImage');
-    setUserNickName(nickname);
+    setUserNickname(nickname);
     setUserProfileImage(profileImage);
     onChangeNewNickname(nickname);
   };
@@ -46,7 +46,7 @@ function Profile() {
 
   // 닉네임 모달 띄우기
   const handleEditNameModal = () => {
-    setIsNickNameModal(!isNickNameModal);
+    setIsNicknameModal(!isNicknameModal);
   };
 
   // 프로필 이미지 모달 띄우기
@@ -56,7 +56,7 @@ function Profile() {
 
   useEffect(() => {
     getMyInfo();
-  }, [isNickNameChangeSaved, isProfileImageChangeSaved]);
+  }, [isNicknameChangeSaved, isProfileImageChangeSaved]);
 
   return (
     <View style={styles.container}>
@@ -84,7 +84,7 @@ function Profile() {
           </Pressable>
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>{userNickName}</Text>
+          <Text style={styles.nameText}>{userNickname}</Text>
           <Pressable onPress={handleEditNameModal}>
             <Image
               source={require('@/assets/images/mode.png')}
@@ -175,17 +175,17 @@ function Profile() {
         </Pressable>
       </View>
 
-      {isNickNameModal && !isProfileImageModal && (
-        <BottomUpModal close={() => setIsNickNameModal(false)}>
-          <NickNameEditCard
+      {isNicknameModal && !isProfileImageModal && (
+        <BottomUpModal close={() => setIsNicknameModal(false)}>
+          <NicknameEditCard
             newNickname={newNickname}
             onChangeNewNickname={onChangeNewNickname}
-            setIsNickNameChangeSaved={setIsNickNameChangeSaved}
-            setIsNickNameModal={setIsNickNameModal}
+            setIsNicknameChangeSaved={setIsNicknameChangeSaved}
+            setIsNicknameModal={setIsNicknameModal}
           />
         </BottomUpModal>
       )}
-      {isProfileImageModal && !isNickNameModal && (
+      {isProfileImageModal && !isNicknameModal && (
         <BottomUpModal close={() => setIsProfileImageModal(false)}>
           <ProfileImageEditCard
             setIsProfileImageModal={setIsProfileImageModal}
