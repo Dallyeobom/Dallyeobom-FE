@@ -1,12 +1,11 @@
-import RankingTitle from '@/components/title/ranking-title-text';
 import { Stack } from 'expo-router';
 import React from 'react';
 
-function RankingLayout() {
+function SearchLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: 'bold',
@@ -14,7 +13,7 @@ function RankingLayout() {
 
         headerBackVisible: false,
         headerShadowVisible: false,
-        headerTitle: () => <RankingTitle />,
+        headerTitle: () => null,
       }}
     >
       <Stack.Screen name="index" />
@@ -22,4 +21,4 @@ function RankingLayout() {
   );
 }
 
-export default RankingLayout;
+export default SearchLayout;
