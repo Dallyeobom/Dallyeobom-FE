@@ -1,35 +1,34 @@
-import { courseCompleteHistory } from '@/api/course-complete/course-complete.service';
-import MyrunningCourseItem from '@/components/item/my-running-course-item';
+import { getRunningCourse } from '@/api/course/course.service';
+import MyRunningCourseItem from '@/components/item/my-running-course-item';
 import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
-import { courseCompleteHistoryItems } from '@/mocks/data';
+import { exampleCourseCompleteHistory } from '@/mocks/data';
 import { gray } from '@/styles/color';
-import { CourseCompleteHistoryItem } from '@/types/course-complete';
+import { RunningCourseItem } from '@/types/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 function RunningCourses() {
-  const [myRunningCourseData, setMyRunningCourseData] = useState<
-    CourseCompleteHistoryItem[]
-  >([]);
+  const [myRunningCourseData, setMyRunningCourseData] = useState<RunningCourseItem[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // refetch할..
   const getMyRunningCourses = async () => {
     setLoading(true);
     const userId = await AsyncStorage.getItem('userId');
     if (!userId) {
       return;
     }
-    const data = await courseCompleteHistory({
+    const data = await getRunningCourse({
       userId: Number(userId),
       lastId: 10,
       size: 10,
     });
     if (!data || data?.items.length === 0) {
       // TODO: UI확인을 위해 임시로 넣음
-      setMyRunningCourseData(courseCompleteHistoryItems);
+      setMyRunningCourseData(exampleCourseCompleteHistory);
     } else {
       setMyRunningCourseData(data?.items);
     }
@@ -49,8 +48,12 @@ function RunningCourses() {
           {myRunningCourseData.length > 0 ? (
             <VerticalList
               data={myRunningCourseData}
-              renderItem={MyrunningCourseItem}
-              // handleScroll={handleScroll}
+              renderItem={(item) => (
+                <MyRunningCourseItem
+                  {...item}
+                  handleFetch={getMyRunningCourses}
+                />
+              )}
             />
           ) : (
             <View
@@ -64,8 +67,8 @@ function RunningCourses() {
             >
               <NoDataItem />
               <View style={styles.noDataTextContainer}>
-                <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
-                <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
+                <Text style={styles.noDataText}>내가 완주한 코스가</Text>
+                <Text style={styles.noDataText}>없습니다.</Text>
               </View>
             </View>
           )}
