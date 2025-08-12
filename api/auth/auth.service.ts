@@ -9,6 +9,7 @@ import type {
   NicknameCheckResponse,
   NicknameCheckSchemaParams,
 } from '@/types/auth';
+import { handleError } from '@/utils/error-handler';
 import authClient from '../auth-client';
 import {
   getCheckNameUrl,
@@ -19,41 +20,67 @@ import {
 } from './urls';
 
 // 인증 전용 클라이언트
-
 export const KaKaoSignup = async (
   params: KaKaoSignUpParams,
-): Promise<KaKaoSignUpResponse> => {
-  const { data } = await authClient.post(getKaKaoSignUpUrl(), params);
-  return data;
+): Promise<KaKaoSignUpResponse | null> => {
+  try {
+    const { data } = await authClient.post(getKaKaoSignUpUrl(), params);
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'KaKaoSignup');
+    throw appError;
+  }
 };
 
 export const KaKaoLogin = async (
   params: KaKaoLoginParams,
-): Promise<KaKaoLoginResponse> => {
-  const { data } = await authClient.post(getKaKaoLoginUrl(), params);
-  return data;
+): Promise<KaKaoLoginResponse | null> => {
+  try {
+    const { data } = await authClient.post(getKaKaoLoginUrl(), params);
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'KaKaoLogin');
+    throw appError;
+  }
 };
 
 // 이용약관 리스트
 export const TermsList = async (): Promise<AgreementsSchema[]> => {
-  const { data } = await authClient.get(getTermsUrl());
-  return data;
+  try {
+    const { data } = await authClient.get(getTermsUrl());
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'TermsList');
+    throw appError;
+  }
 };
 
 // 이용약관 상세 조회
-export const TermsDetail = async (id: number): Promise<AgreementDetailResponse> => {
-  const { data } = await authClient.get(getTermsDetailUrl(id));
-  return data;
+export const TermsDetail = async (
+  id: number,
+): Promise<AgreementDetailResponse | null> => {
+  try {
+    const { data } = await authClient.get(getTermsDetailUrl(id));
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'TermsDetail');
+    throw appError;
+  }
 };
 
 // 닉네임 중복 체크
 export const DoubleCheckNickname = async (
   params: NicknameCheckSchemaParams,
-): Promise<NicknameCheckResponse> => {
-  const { data } = await authClient.get(getCheckNameUrl(), {
-    params: { nickname: params.nickname },
-  });
-  return {
-    isDuplicated: data.isDuplicated,
-  };
+): Promise<NicknameCheckResponse | null> => {
+  try {
+    const { data } = await authClient.get(getCheckNameUrl(), {
+      params: { nickname: params.nickname },
+    });
+    return {
+      isDuplicated: data.isDuplicated,
+    };
+  } catch (error) {
+    const appError = handleError(error, 'DoubleCheckNickname');
+    throw appError;
+  }
 };

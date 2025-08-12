@@ -13,7 +13,7 @@ import { Image } from 'react-native';
 import 'react-native-reanimated';
 type JwtToken = {
   exp: string;
-  nickName: string;
+  nickname: string;
   userId: string;
 };
 export default function RootLayout() {

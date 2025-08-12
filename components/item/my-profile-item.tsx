@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     color: gray[80],
     textAlign: 'center',
   },
-  nickName: {
+  nickname: {
     color: gray[40],
   },
   distance: {

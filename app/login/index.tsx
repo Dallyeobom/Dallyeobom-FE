@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/auth-store';
+import { showErrorAlert } from '@/utils/error-handler';
 import { login } from '@react-native-kakao/user';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
@@ -38,20 +39,25 @@ const LoginScreen: React.FC = () => {
   const handleLogin = async () => {
     try {
       const kakaoLoginResult = await login();
-      if (!kakaoLoginResult.accessToken) {
+      if (!kakaoLoginResult?.accessToken) {
         Alert.alert('로그인 실패', '카카오 로그인에 실패했습니다. 다시 시도해주세요.');
         return;
       }
 
       const result = await KaKaoLogin(kakaoLoginResult.accessToken);
+      if (!result) {
+        Alert.alert('로그인 실패', '서버 로그인에 실패했습니다. 다시 시도해주세요.');
+        return;
+      }
+
       if (result.isNewUser) {
         router.push('/nickname');
       } else {
         handleloggedIn();
         router.replace('/(tabs)');
       }
-    } catch (e) {
-      Alert.alert('로그인 실패', '카카오 로그인에 실패했습니다. 다시 시도해주세요.');
+    } catch (error) {
+      showErrorAlert(error, 'LOGIN', '로그인 실패');
     }
   };
 

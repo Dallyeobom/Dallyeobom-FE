@@ -14,12 +14,12 @@ interface AuthState {
   handleloggedIn: () => void;
   logout: () => Promise<void>;
   kakaoSignUp: (
-    nickName: string,
+    nickname: string,
     providerAccessToken: string,
     terms: AgreementsSchemaParams[],
-  ) => Promise<KaKaoSignUpResponse>;
-  kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse>;
-  doubleCheckNickname: (nickName: string) => Promise<NicknameCheckResponse>;
+  ) => Promise<KaKaoSignUpResponse | null>;
+  kakaoLogin: (providerAccessToken: string) => Promise<KaKaoLoginResponse | null>;
+  doubleCheckNickname: (nickname: string) => Promise<NicknameCheckResponse | null>;
   termsList: () => Promise<AgreementsSchema[]>;
 }
 
@@ -36,61 +36,77 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   // 카카오 회원가입
   kakaoSignUp: async (
-    nickName: string,
+    nickname: string,
     providerAccessToken: string,
     terms: AgreementsSchemaParams[],
   ) => {
-    const { accessToken, refreshToken } = await authAPI.KaKaoSignup({
-      nickName,
-      providerAccessToken,
-      terms,
-    });
-    if (!accessToken || !refreshToken) {
-      throw new Error('카카오 회원가입에 실패했습니다. 다시 시도해주세요.');
+    try {
+      const result = await authAPI.KaKaoSignup({
+        nickname,
+        providerAccessToken,
+        terms,
+      });
+
+      if (result?.accessToken && result?.refreshToken) {
+        await SecureStore.setItemAsync('accessToken', result.accessToken);
+        await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+      }
+
+      return result;
+    } catch {
+      return null;
     }
-    await SecureStore.setItemAsync('accessToken', accessToken);
-    await SecureStore.setItemAsync('refreshToken', refreshToken);
-    return {
-      accessToken,
-      refreshToken,
-    };
   },
   // 카카오 로그인
   kakaoLogin: async (providerAccessToken: string) => {
-    const { accessToken, refreshToken, isNewUser } = await authAPI.KaKaoLogin({
-      providerAccessToken: providerAccessToken,
-      fcmToken: '',
-    });
-    if (isNewUser) {
-      await SecureStore.setItemAsync('providerAccessToken', providerAccessToken);
-    } else {
-      await SecureStore.setItemAsync('accessToken', accessToken);
-      await SecureStore.setItemAsync('refreshToken', refreshToken);
+    try {
+      const result = await authAPI.KaKaoLogin({
+        providerAccessToken: providerAccessToken,
+        fcmToken: '',
+      });
+
+      if (result?.isNewUser) {
+        await SecureStore.setItemAsync('providerAccessToken', providerAccessToken);
+      } else if (result?.accessToken && result?.refreshToken) {
+        await SecureStore.setItemAsync('accessToken', result.accessToken);
+        await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+      }
+
+      return result;
+    } catch {
+      return null;
     }
-    return {
-      accessToken,
-      refreshToken,
-      isNewUser,
-    };
   },
 
   // nickname 중복체크
   doubleCheckNickname: async (nickname: string) => {
-    const { isDuplicated } = await authAPI.DoubleCheckNickname({
-      nickname,
-    });
-    return { isDuplicated };
+    try {
+      const data = await authAPI.DoubleCheckNickname({
+        nickname,
+      });
+      return data;
+    } catch {
+      return null;
+    }
   },
 
   // 이용약관 리스트 조회
   termsList: async () => {
-    const data = await authAPI.TermsList();
-    return data;
+    try {
+      const data = await authAPI.TermsList();
+      return data;
+    } catch {
+      return [];
+    }
   },
 
   // 이용약관 디테일 조회
   termsDetail: async (id: number) => {
-    const data = await authAPI.TermsDetail(id);
-    return data;
+    try {
+      const data = await authAPI.TermsDetail(id);
+      return data;
+    } catch {
+      return null;
+    }
   },
 }));

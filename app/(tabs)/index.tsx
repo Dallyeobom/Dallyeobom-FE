@@ -13,6 +13,7 @@ import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base, gray } from '@/styles/color';
 import type { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/course';
+import { showErrorAlert } from '@/utils/error-handler';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
@@ -50,29 +51,39 @@ function Index() {
 
   const handleFetchNearRunner = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
-    const { lat: latitude, lng: longitude } = selectedCoords;
-    const radius = 1000;
-    const maxCount = 10;
-    const params = {
-      latitude,
-      longitude,
-      radius,
-      maxCount,
-    };
-    const response = await nearRunnerCourses(params);
-    setNearByRunnerData(response ?? []);
+    try {
+      const { lat: latitude, lng: longitude } = selectedCoords;
+      const radius = 1000;
+      const maxCount = 10;
+      const params = {
+        latitude,
+        longitude,
+        radius,
+        maxCount,
+      };
+      const response = await nearRunnerCourses(params);
+      setNearByRunnerData(response ?? []);
+    } catch (error) {
+      showErrorAlert(error, 'NEAR_RUNNER_COURSES', '주변 코스를 불러오는데 실패했습니다.');
+      setNearByRunnerData([]);
+    }
   };
 
   const handleFetchPopularCourses = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
-    // const { lat: latitude, lng: longitude } = selectedCoords;
-    // TODO: 데이터 확인에 필요한 임시 고정 값
-    const params = {
-      latitude: 37.5665,
-      longitude: 126.978,
-    };
-    const response = await popularCourses(params);
-    setPopularCoursesData(response ?? []);
+    try {
+      // const { lat: latitude, lng: longitude } = selectedCoords;
+      // TODO: 데이터 확인에 필요한 임시 고정 값
+      const params = {
+        latitude: 37.5665,
+        longitude: 126.978,
+      };
+      const response = await popularCourses(params);
+      setPopularCoursesData(response ?? []);
+    } catch (error) {
+      showErrorAlert(error, 'POPULAR_COURSES', '인기 코스를 불러오는데 실패했습니다.');
+      setPopularCoursesData([]);
+    }
   };
 
   useEffect(() => {
@@ -89,7 +100,14 @@ function Index() {
   }, [selectedCoords?.lat, selectedCoords?.lng]);
 
   useEffect(() => {
-    userInfo();
+    const fetchUserInfo = async () => {
+      try {
+        await userInfo();
+      } catch (error) {
+        showErrorAlert(error, 'USER_INFO', '사용자 정보를 불러오는데 실패했습니다.');
+      }
+    };
+    fetchUserInfo();
   }, []);
 
   return (

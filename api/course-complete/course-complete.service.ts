@@ -2,6 +2,7 @@ import {
   RecordedCourseHistoryParams,
   RecordedCourseHistoryResponse,
 } from '@/types/course-complete';
+import { handleError } from '@/utils/error-handler';
 import client from '../client';
 import { getMyRecordedCourseHistory } from './urls';
 
@@ -15,7 +16,10 @@ export const myRecordedCourseHistory = async (
     });
     return data;
   } catch (error) {
-    console.error('나의 기록 list', error);
+    const appError = handleError(error, 'courseCompleteHistory');
+    if (__DEV__) {
+      console.error('[COURSE_COMPLETE] 나의 running course list 에러:', appError);
+    }
     return null;
   }
 };

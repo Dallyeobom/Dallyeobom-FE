@@ -8,6 +8,7 @@ import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
 import { CurrentUserRank, RankingDataList } from '@/types/user';
 import { mapRankingTextToEnum } from '@/utils/ranking';
+import { showErrorAlert } from '@/utils/error-handler';
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -21,15 +22,21 @@ function Ranking() {
   );
 
   const fetchRankingData = useCallback(async (status: string) => {
-    const result = await userRanking(status);
-    if (!result) {
+    try {
+      const result = await userRanking(status);
+      if (!result) {
+        setRankingList([]);
+        setCurrentUserRanking(null);
+        return;
+      }
+
+      setRankingList(result.list);
+      setCurrentUserRanking(result.currentUserRank);
+    } catch (error) {
+      showErrorAlert(error, 'RANKING', '랭킹 정보를 불러오는데 실패했습니다.');
       setRankingList([]);
       setCurrentUserRanking(null);
-      return;
     }
-
-    setRankingList(result.list);
-    setCurrentUserRanking(result.currentUserRank);
   }, []);
 
   const handleSelect = useCallback(
