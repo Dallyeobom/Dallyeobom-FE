@@ -1,4 +1,5 @@
 import { useRecommendationSearch } from '@/hooks/use-recommendation-search';
+import { useSearchText } from '@/hooks/use-search-town';
 import { gray, main } from '@/styles/color';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -14,14 +15,18 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Search() {
-  const [searchText, onChangSearchText] = useState('');
+  // const [searchText, onChangSearchText] = useState('');
+  // const [searchLoading, setSearchLoading] = useState(false);
   const [recommandationTextArr, setRecommendationTextArr] = useState<string[]>([]);
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const { handleRecommendationCourse } = useRecommendationSearch();
+  const { searchText, onChangSearchText, searchLoading, searchResults, searchLocation } =
+    useSearchText();
 
-  const handleNicknameChange = (text: string) => {
+  // 검색어 ChangeText
+  const handleSearchTextChange = (text: string) => {
     onChangSearchText(text);
   };
 
@@ -46,7 +51,7 @@ function Search() {
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.input, searchText.length > 0 && styles.inputActiveBorder]}
-            onChangeText={handleNicknameChange}
+            onChangeText={handleSearchTextChange}
             value={searchText}
             placeholder="동명(읍,면) 입력 (ex 서초동)"
           />
@@ -54,7 +59,7 @@ function Search() {
             <Pressable
               style={styles.image}
               onPress={() => {
-                console.log('TEST');
+                onChangSearchText('');
               }}
             >
               <Image source={require('@/assets/images/close.png')} />
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap: 6,
     justifyContent: 'center',
-    backgroundColor: 'blue',
+
     marginBottom: 10,
   },
 
