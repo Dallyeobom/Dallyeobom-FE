@@ -138,6 +138,7 @@ function Search() {
             <View style={styles.recommandSearchContainer}>
               <Text style={styles.searchText}>추천검색</Text>
               <FlatList
+                // TODO: UI확인을 위해 현재 하드코딩
                 // data={recommandationTextArr}
                 data={[
                   '서초구',
@@ -145,9 +146,7 @@ function Search() {
                   '라면',
                   '서울 자전거 코스',
                   '장거리',
-                  'test6',
-                  'test7',
-                  'test8',
+                  '테스트 입니다',
                 ]}
                 horizontal={true}
                 keyExtractor={(_, index) => String(index)}
