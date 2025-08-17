@@ -1,9 +1,17 @@
+import { popularCourses } from '@/api/course/course.service';
+import NoDataItem from '@/components/item/no-data-item';
+import SearchCourseItem from '@/components/item/search-course-item';
+import VerticalList from '@/components/list/verical-list';
 import { useRecommendationSearch } from '@/hooks/use-recommendation-search';
-import { useSearchText } from '@/hooks/use-search-town';
+import { useSearchResult } from '@/hooks/use-search-result';
+import { useSearchText } from '@/hooks/use-search-text';
+import { useLocationStore } from '@/stores/location-store';
 import { gray, main } from '@/styles/color';
+import { showErrorAlert } from '@/utils/error-handler';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
+  Dimensions,
   FlatList,
   Image,
   Pressable,
@@ -14,20 +22,51 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
 function Search() {
-  // const [searchText, onChangSearchText] = useState('');
-  // const [searchLoading, setSearchLoading] = useState(false);
   const [recommandationTextArr, setRecommendationTextArr] = useState<string[]>([]);
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const { handleRecommendationCourse } = useRecommendationSearch();
-  const { searchText, onChangSearchText, searchLoading, searchResults, searchLocation } =
-    useSearchText();
+  const { searchResultCourseArr, setSearchResultCourseArr, handleGetSearchResult } =
+    useSearchResult();
+  const { selectedLocation, selectedCoords } = useLocationStore();
 
-  // 검색어 ChangeText
-  const handleSearchTextChange = (text: string) => {
-    onChangSearchText(text);
+  const {
+    searchText,
+    onChangeSearchText,
+    searchLoading,
+    searchResults,
+    setSearchResults,
+    searchLocation,
+  } = useSearchText();
+
+  const handleSelectedAddress = (item: string) => {
+    onChangeSearchText(item);
+    setSearchResults([]);
+  };
+  const handleFetchPopularCourses = async () => {
+    if (!selectedCoords?.lat || !selectedCoords.lng) return;
+    try {
+      const { lat: latitude, lng: longitude } = selectedCoords;
+
+      const radius = 1000;
+      const maxCount = 10;
+      const params = {
+        latitude: latitude,
+        longitude: longitude,
+
+        radius,
+        maxCount,
+      };
+      const response = await popularCourses(params);
+      setSearchResultCourseArr(response ?? []);
+    } catch (error) {
+      showErrorAlert(error, 'POPULAR_COURSES', '인기 코스를 불러오는데 실패했습니다.');
+      setSearchResultCourseArr([]);
+    }
   };
 
   useEffect(() => {
@@ -37,8 +76,16 @@ function Search() {
     });
   }, []);
 
+  useEffect(() => {
+    handleGetSearchResult(searchText);
+  }, [searchText]);
+
+  console.log('현재 검색어 ==>>>> ', searchText);
+  console.log('serac 검색어 결고t입니다아 ===>>>>>>>', searchResults);
+  console.log('코스 결과 ===>>>>>', searchResultCourseArr);
+
   return (
-    <View>
+    <View style={styles.wrapper}>
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <Pressable
           onPress={() => {
@@ -51,7 +98,10 @@ function Search() {
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.input, searchText.length > 0 && styles.inputActiveBorder]}
-            onChangeText={handleSearchTextChange}
+            onChangeText={(text) => {
+              onChangeSearchText(text);
+              searchLocation();
+            }}
             value={searchText}
             placeholder="동명(읍,면) 입력 (ex 서초동)"
           />
@@ -59,7 +109,9 @@ function Search() {
             <Pressable
               style={styles.image}
               onPress={() => {
-                onChangSearchText('');
+                onChangeSearchText('');
+                setSearchResults([]);
+                setSearchResultCourseArr([]);
               }}
             >
               <Image source={require('@/assets/images/close.png')} />
@@ -67,31 +119,86 @@ function Search() {
           )}
         </View>
       </View>
-      <View style={styles.searchContainer}>
-        <View style={styles.recommandSearch}>
-          <Text style={styles.searchText}>추천검색</Text>
-          <FlatList
-            // data={recommandationTextArr}
-            data={[
-              '서초구',
-              '방배동',
-              '라면',
-              '서울 자전거 코스',
-              '장거리',
-              'test6',
-              'test7',
-              'test8',
-            ]}
-            horizontal={true}
-            keyExtractor={(_, index) => String(index)}
-            renderItem={({ item }) => (
-              <View style={styles.itemContainer}>
-                <Text style={styles.item}>{item}</Text>
+      <View style={styles.container}>
+        {searchText.length === 0 && (
+          <View style={styles.recommandSearchContainer}>
+            <Text style={styles.searchText}>추천검색</Text>
+            <FlatList
+              // data={recommandationTextArr}
+              data={[
+                '서초구',
+                '방배동',
+                '라면',
+                '서울 자전거 코스',
+                '장거리',
+                'test6',
+                'test7',
+                'test8',
+              ]}
+              horizontal={true}
+              keyExtractor={(_, index) => String(index)}
+              renderItem={({ item }) => (
+                <View style={styles.itemContainer}>
+                  <Text style={styles.item}>{item}</Text>
+                </View>
+              )}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        )}
+
+        {/* 검색어 결과 */}
+        {searchText.length > 0 &&
+          searchResults.length === 0 &&
+          searchResultCourseArr.length === 0 && (
+            <View style={[styles.noDataNearRunnerCourseContainer, { marginTop: '50%' }]}>
+              <NoDataItem />
+              <View style={styles.noDataTextContainer}>
+                <Text style={styles.noDataText}>검색 결과가 없어요.</Text>
+                <Text style={styles.noDataText}>다른 키워드로 다시 찾아보세요!</Text>
               </View>
-            )}
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
+            </View>
+          )}
+
+        {searchText.length > 0 && searchResults.length > 0 && (
+          <View style={styles.searchResultContainer}>
+            <FlatList
+              data={searchResults}
+              horizontal={false}
+              keyExtractor={(_, index) => String(index)}
+              renderItem={({ item }) => (
+                <Pressable
+                  style={styles.searchItemContainer}
+                  onPress={() => {
+                    handleSelectedAddress(item);
+                  }}
+                >
+                  <Image
+                    source={require('@/assets/images/search-result.png')}
+                    style={{ width: 20, height: 20 }}
+                  />
+                  <Text style={styles.searchItem}>{item}</Text>
+                </Pressable>
+              )}
+            />
+          </View>
+        )}
+
+        {/* 검색 결과 코스 */}
+        {searchResultCourseArr.length > 0 && searchResults.length === 0 && (
+          <View style={styles.searchResultCourseContainer}>
+            <Text style={styles.searchResultText}>검색 결과</Text>
+            <VerticalList
+              data={searchResultCourseArr}
+              renderItem={(item) => (
+                <SearchCourseItem
+                  {...item}
+                  handleFetch={handleFetchPopularCourses}
+                />
+              )}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -100,13 +207,15 @@ function Search() {
 export default Search;
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   header: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     columnGap: 6,
     justifyContent: 'center',
-
     marginBottom: 10,
   },
 
@@ -139,24 +248,24 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  searchContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: 'red',
-    paddingLeft: 20,
-    // paddingHorizontal: 20,
-  },
-  recommandSearch: {
+  container: {
     display: 'flex',
     rowGap: 10,
+  },
+
+  recommandSearchContainer: {
+    display: 'flex',
+    rowGap: 10,
+
+    paddingLeft: 20,
   },
   searchText: {
     fontSize: 18,
     fontWeight: '800',
   },
   itemContainer: {
-    backgroundColor: gray[10],
-    borderRadius: 20,
+    backgroundColor: gray[15],
+    borderRadius: 100,
     marginRight: 6,
     alignSelf: 'flex-start',
   },
@@ -169,5 +278,45 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     paddingVertical: 6,
     paddingHorizontal: 12,
+  },
+  noDataNearRunnerCourseContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    rowGap: 8,
+
+    height: SCREEN_HEIGHT,
+  },
+  noDataTextContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: gray[30],
+    fontSize: 16,
+  },
+
+  searchResultContainer: {
+    paddingLeft: 20,
+  },
+
+  searchItemContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 8,
+    marginBottom: 20,
+  },
+  searchItem: {
+    fontSize: 18,
+  },
+  searchResultCourseContainer: {
+    display: 'flex',
+    backgroundColor: 'blue',
+    rowGap: 10,
+    paddingLeft: 20,
+  },
+  searchResultText: {
+    fontSize: 16,
+    fontWeight: 700,
   },
 });
