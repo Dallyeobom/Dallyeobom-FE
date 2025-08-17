@@ -25,12 +25,10 @@ export const useSearchResult = () => {
       const location = jsonResponse.results[0].geometry.location;
       const radius = 1000;
       const maxCount = 10;
-      const params = {
-        // latitude: location.lat,
-        // longitude: location.lng,
-        latitude: 37.5665,
-        longitude: 126.978,
 
+      const params = {
+        latitude: location.lat,
+        longitude: location.lng,
         radius,
         maxCount,
       };

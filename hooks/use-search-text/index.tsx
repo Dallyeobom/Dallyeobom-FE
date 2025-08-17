@@ -25,7 +25,6 @@ export const useSearchText = () => {
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const queries = [searchText + '동', searchText];
-        console.log('queries', queries);
 
         const searchPromises = queries.map(async (query) => {
           const autocompleteUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&types=(regions)&language=ko&components=country:kr&key=${GOOGLE_MAPS_API_KEY}`;

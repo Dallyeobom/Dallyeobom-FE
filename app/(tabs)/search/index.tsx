@@ -2,6 +2,7 @@ import { popularCourses } from '@/api/course/course.service';
 import NoDataItem from '@/components/item/no-data-item';
 import SearchCourseItem from '@/components/item/search-course-item';
 import VerticalList from '@/components/list/verical-list';
+import { useSearchTextAsyncStorage } from '@/hooks/use-async-storage/search-text';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useRecommendationSearch } from '@/hooks/use-recommendation-search';
 import { useSearchResult } from '@/hooks/use-search-result';
@@ -9,7 +10,6 @@ import { useSearchText } from '@/hooks/use-search-text';
 import { useLocationStore } from '@/stores/location-store';
 import { gray, main } from '@/styles/color';
 import { showErrorAlert } from '@/utils/error-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -35,6 +35,13 @@ function Search() {
   const { searchResultCourseArr, setSearchResultCourseArr, handleGetSearchResult } =
     useSearchResult();
   const { selectedLocation, selectedCoords } = useLocationStore();
+  const {
+    savedSearchTextArr,
+    handleSavedSearchText,
+
+    handleDeleteSearchText,
+    handleDeleteAllSearchText,
+  } = useSearchTextAsyncStorage();
 
   const {
     searchText,
@@ -50,8 +57,9 @@ function Search() {
   const handleSelectedAddress = async (item: string) => {
     onChangeSearchText(item);
     setSearchResults([]);
-    await AsyncStorage.setItem('searchText', item);
+    handleSavedSearchText(item);
   };
+
   const handleFetchPopularCourses = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     try {
@@ -82,14 +90,8 @@ function Search() {
 
   useEffect(() => {
     if (debouncedValue.trim().length === 0) return;
-
     handleGetSearchResult(debouncedValue);
   }, [debouncedValue]);
-
-  // console.log('searchText ====>>>>>>>>', searchText);
-  // console.log('debouceVAle', debouncedValue);
-  // console.log('searchResultCourseArr ===>>>', searchResultCourseArr);
-  // console.log('searchResult컨테이너', searchResultCourseArr);
 
   return (
     <View style={styles.wrapper}>
@@ -108,7 +110,6 @@ function Search() {
             onChangeText={(text) => {
               onChangeSearchText(text);
               searchLocation();
-              console.log('온체인지 텍스뜨응으 ===>>>>>>', text);
               if (text.trim() === '') {
                 setSearchResultCourseArr([]);
               }
@@ -132,29 +133,84 @@ function Search() {
       </View>
       <View style={styles.container}>
         {searchText.length === 0 && (
-          <View style={styles.recommandSearchContainer}>
-            <Text style={styles.searchText}>추천검색</Text>
-            <FlatList
-              // data={recommandationTextArr}
-              data={[
-                '서초구',
-                '방배동',
-                '라면',
-                '서울 자전거 코스',
-                '장거리',
-                'test6',
-                'test7',
-                'test8',
-              ]}
-              horizontal={true}
-              keyExtractor={(_, index) => String(index)}
-              renderItem={({ item }) => (
-                <View style={styles.itemContainer}>
-                  <Text style={styles.item}>{item}</Text>
+          <View style={styles.recommandSearchAndSavedSearchContainer}>
+            {/* 추천 검색어 */}
+            <View style={styles.recommandSearchContainer}>
+              <Text style={styles.searchText}>추천검색</Text>
+              <FlatList
+                // data={recommandationTextArr}
+                data={[
+                  '서초구',
+                  '방배동',
+                  '라면',
+                  '서울 자전거 코스',
+                  '장거리',
+                  'test6',
+                  'test7',
+                  'test8',
+                ]}
+                horizontal={true}
+                keyExtractor={(_, index) => String(index)}
+                renderItem={({ item }) => (
+                  <View style={styles.itemContainer}>
+                    <Text style={styles.item}>{item}</Text>
+                  </View>
+                )}
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
+            {/* 검색어 저장 */}
+            {savedSearchTextArr.length > 0 && (
+              <View style={styles.savedSearchContainer}>
+                <View style={styles.savedSearchTitle}>
+                  <Text style={styles.searchText}>검색 결과</Text>
+                  <Pressable onPress={handleDeleteAllSearchText}>
+                    <Text style={styles.deleteText}>전체 삭제</Text>
+                  </Pressable>
                 </View>
-              )}
-              showsHorizontalScrollIndicator={false}
-            />
+                <FlatList
+                  data={savedSearchTextArr}
+                  horizontal={false}
+                  keyExtractor={(_, index) => String(index)}
+                  renderItem={({ item, index }) => (
+                    <Pressable
+                      style={styles.savedSearchItem}
+                      onPress={() => {
+                        handleSelectedAddress(item);
+                      }}
+                    >
+                      <View style={styles.savedSearchSubItem}>
+                        <Image
+                          source={require('@/assets/images/access-time.png')}
+                          style={{ width: 20, height: 20 }}
+                        />
+                        <Text
+                          style={styles.searchItem}
+                          numberOfLines={2}
+                          ellipsizeMode="tail"
+                        >
+                          {item}
+                        </Text>
+                      </View>
+                      <View style={styles.deleteSearchItem}>
+                        <Pressable
+                          hitSlop={10}
+                          onPress={() => {
+                            handleDeleteSearchText(index);
+                          }}
+                        >
+                          <Image
+                            source={require('@/assets/images/delete.png')}
+                            style={{ width: 14, height: 14 }}
+                          />
+                        </Pressable>
+                      </View>
+                    </Pressable>
+                  )}
+                  ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+                />
+              </View>
+            )}
           </View>
         )}
 
@@ -266,15 +322,23 @@ const styles = StyleSheet.create({
     rowGap: 10,
   },
 
+  recommandSearchAndSavedSearchContainer: {
+    display: 'flex',
+    rowGap: 20,
+  },
+
   recommandSearchContainer: {
     display: 'flex',
     rowGap: 10,
-
     paddingLeft: 20,
   },
   searchText: {
     fontSize: 18,
     fontWeight: '800',
+  },
+  deleteText: {
+    fontSize: 14,
+    color: gray[15],
   },
   itemContainer: {
     backgroundColor: gray[15],
@@ -292,11 +356,41 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
   },
+
+  savedSearchContainer: {
+    display: 'flex',
+    rowGap: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+
+  savedSearchTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  savedSearchItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  savedSearchSubItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    columnGap: 8,
+    width: '90%',
+  },
+  deleteSearchItem: {},
+
   noDataNearRunnerCourseContainer: {
     display: 'flex',
     alignItems: 'center',
     rowGap: 8,
-
     height: SCREEN_HEIGHT,
   },
   noDataTextContainer: {
@@ -320,7 +414,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   searchItem: {
+    flexShrink: 1,
     fontSize: 18,
+    flexWrap: 'wrap',
   },
   searchResultCourseContainer: {
     display: 'flex',
