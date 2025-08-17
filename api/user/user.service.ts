@@ -26,8 +26,8 @@ export const userInfo = async (): Promise<UserInfoResponse | null> => {
   try {
     const { data } = await client.get(getUserInfoUrl());
     if (data) {
-      AsyncStorage.setItem('nickname', data.nickname);
-      AsyncStorage.setItem('profileImage', data.profileImage);
+      await AsyncStorage.setItem('nickname', data.nickname);
+      await AsyncStorage.setItem('profileImage', data.profileImage);
     }
     return data ?? { nickname: '', profileImage: null };
   } catch (error) {

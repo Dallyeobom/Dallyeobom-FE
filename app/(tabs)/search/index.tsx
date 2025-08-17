@@ -2,12 +2,14 @@ import { popularCourses } from '@/api/course/course.service';
 import NoDataItem from '@/components/item/no-data-item';
 import SearchCourseItem from '@/components/item/search-course-item';
 import VerticalList from '@/components/list/verical-list';
+import { useDebounce } from '@/hooks/use-debounce';
 import { useRecommendationSearch } from '@/hooks/use-recommendation-search';
 import { useSearchResult } from '@/hooks/use-search-result';
 import { useSearchText } from '@/hooks/use-search-text';
 import { useLocationStore } from '@/stores/location-store';
 import { gray, main } from '@/styles/color';
 import { showErrorAlert } from '@/utils/error-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -43,9 +45,12 @@ function Search() {
     searchLocation,
   } = useSearchText();
 
-  const handleSelectedAddress = (item: string) => {
+  const { debouncedValue } = useDebounce(searchText, 500);
+
+  const handleSelectedAddress = async (item: string) => {
     onChangeSearchText(item);
     setSearchResults([]);
+    await AsyncStorage.setItem('searchText', item);
   };
   const handleFetchPopularCourses = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
@@ -57,7 +62,6 @@ function Search() {
       const params = {
         latitude: latitude,
         longitude: longitude,
-
         radius,
         maxCount,
       };
@@ -77,12 +81,15 @@ function Search() {
   }, []);
 
   useEffect(() => {
-    handleGetSearchResult(searchText);
-  }, [searchText]);
+    if (debouncedValue.trim().length === 0) return;
 
-  console.log('현재 검색어 ==>>>> ', searchText);
-  console.log('serac 검색어 결고t입니다아 ===>>>>>>>', searchResults);
-  console.log('코스 결과 ===>>>>>', searchResultCourseArr);
+    handleGetSearchResult(debouncedValue);
+  }, [debouncedValue]);
+
+  // console.log('searchText ====>>>>>>>>', searchText);
+  // console.log('debouceVAle', debouncedValue);
+  // console.log('searchResultCourseArr ===>>>', searchResultCourseArr);
+  // console.log('searchResult컨테이너', searchResultCourseArr);
 
   return (
     <View style={styles.wrapper}>
@@ -101,6 +108,10 @@ function Search() {
             onChangeText={(text) => {
               onChangeSearchText(text);
               searchLocation();
+              console.log('온체인지 텍스뜨응으 ===>>>>>>', text);
+              if (text.trim() === '') {
+                setSearchResultCourseArr([]);
+              }
             }}
             value={searchText}
             placeholder="동명(읍,면) 입력 (ex 서초동)"
@@ -185,20 +196,22 @@ function Search() {
         )}
 
         {/* 검색 결과 코스 */}
-        {searchResultCourseArr.length > 0 && searchResults.length === 0 && (
-          <View style={styles.searchResultCourseContainer}>
-            <Text style={styles.searchResultText}>검색 결과</Text>
-            <VerticalList
-              data={searchResultCourseArr}
-              renderItem={(item) => (
-                <SearchCourseItem
-                  {...item}
-                  handleFetch={handleFetchPopularCourses}
-                />
-              )}
-            />
-          </View>
-        )}
+        {debouncedValue.length !== 0 &&
+          searchResultCourseArr.length > 0 &&
+          searchResults.length === 0 && (
+            <View style={styles.searchResultCourseContainer}>
+              <Text style={styles.searchResultText}>검색 결과</Text>
+              <VerticalList
+                data={searchResultCourseArr}
+                renderItem={(item) => (
+                  <SearchCourseItem
+                    {...item}
+                    handleFetch={handleFetchPopularCourses}
+                  />
+                )}
+              />
+            </View>
+          )}
       </View>
     </View>
   );
