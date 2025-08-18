@@ -1,7 +1,20 @@
-export const getRecommandationSearchText = (data: any) => {
-  return data.map((item: any) => item.name);
+import {
+  FavoriteCourseItemsResponse,
+  PopularCoursesResponse,
+  RunningCourseItemsResponse,
+} from '@/types/course';
+
+export const extractPopularCourseNames = (data: PopularCoursesResponse[] | null) => {
+  if (!data) return [];
+  return data.map((item) => item.name);
 };
 
-export const getRecommandationSearchText2 = (data: any) => {
-  return data.items.map((item: any) => item.name);
+export const extractFavoriteCourseNames = (data: FavoriteCourseItemsResponse | null) => {
+  if (!data) return [];
+  return data.items.map((item) => item.name);
+};
+
+export const extractRunningCourseNames = (data: RunningCourseItemsResponse | null) => {
+  if (!data) return [];
+  return data.items.map((item) => item.name);
 };

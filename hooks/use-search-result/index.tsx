@@ -39,6 +39,7 @@ export const useSearchResult = () => {
       setSearchResultCourseArr(searchResultResponse);
     } catch (error) {
       console.error('error', error);
+      setSearchResultCourseArr([]);
     }
   };
 

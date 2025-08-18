@@ -25,7 +25,7 @@ function MyProfileItem({
           style={styles.profileImage}
         />
         <View>
-          <Text style={styles.nickName}>{userNickName}</Text>
+          <Text style={styles.nickname}>{userNickName}</Text>
           {/* TODO: runningLength가 없을떄 표시  */}
           <Text style={styles.distance}>{currentUserRanking?.runningLength}KM</Text>
         </View>

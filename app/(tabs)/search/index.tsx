@@ -27,7 +27,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function Search() {
-  const [recommandationTextArr, setRecommendationTextArr] = useState<string[]>([]);
+  const [recommendationTextArr, setRecommendationTextArr] = useState<string[]>([]);
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -38,7 +38,6 @@ function Search() {
   const {
     savedSearchTextArr,
     handleSavedSearchText,
-
     handleDeleteSearchText,
     handleDeleteAllSearchText,
   } = useSearchTextAsyncStorage();
@@ -81,17 +80,28 @@ function Search() {
     }
   };
 
-  useEffect(() => {
-    handleRecommendationCourse().then((data) => {
-      if (!data) return [];
-      setRecommendationTextArr([...data]);
-    });
-  }, []);
+  const fetchRecommendationCourses = async () => {
+    try {
+      const data = await handleRecommendationCourse();
+      if (!data) {
+        setRecommendationTextArr([]);
+        return;
+      }
+      setRecommendationTextArr(data);
+    } catch (error) {
+      console.error('추천 코스 에러:', error);
+      setRecommendationTextArr([]);
+    }
+  };
 
   useEffect(() => {
     if (debouncedValue.trim().length === 0) return;
     handleGetSearchResult(debouncedValue);
   }, [debouncedValue]);
+
+  useEffect(() => {
+    fetchRecommendationCourses();
+  }, []);
 
   return (
     <View style={styles.wrapper}>
@@ -419,7 +429,6 @@ const styles = StyleSheet.create({
   },
   searchResultCourseContainer: {
     display: 'flex',
-    backgroundColor: 'blue',
     rowGap: 10,
     paddingLeft: 20,
   },

@@ -22,7 +22,7 @@ export const useSearchTextAsyncStorage = () => {
         setStorageLength(parsedResult.length);
       }
     } catch (error) {
-      console.error('저장하는데 error가 났습니다', error);
+      console.error('검색 내역 저장 실패(에러 발생)', error);
     }
   };
   const handleGetSavedSearchText = async () => {
@@ -37,13 +37,12 @@ export const useSearchTextAsyncStorage = () => {
         setSavedSearchTextArr([]);
       }
     } catch (error) {
-      console.error('꺼내는데 error가 났습니다', error);
+      console.error('검색 내역 fetch 실패(에러 발생)', error);
     }
   };
 
   const handleDeleteSearchText = async (targetIndex: number) => {
     try {
-      console.log('해당 아이템을 삭제합니다 ==>>>', targetIndex);
       const result = await AsyncStorage.getItem('searchText');
       if (result) {
         const parsedResult = JSON.parse(result);
@@ -54,12 +53,11 @@ export const useSearchTextAsyncStorage = () => {
         }
       }
     } catch (error) {
-      console.error('삭제하는데 에러가 났습니다', error);
+      console.error('검색 내역 삭제 실패(에러 발생)', error);
     }
   };
 
   const handleDeleteAllSearchText = async () => {
-    console.log('전체를 삭제합니다.');
     try {
       const result = await AsyncStorage.getItem('searchText');
       if (result) {
@@ -70,7 +68,7 @@ export const useSearchTextAsyncStorage = () => {
         }
       }
     } catch (error) {
-      console.error('전체 삭제하는데 에러가 났습니다', error);
+      console.error('검색 내역 삭제 실패(에러 발생)', error);
     }
   };
 

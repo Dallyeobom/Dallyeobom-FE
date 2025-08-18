@@ -4,8 +4,9 @@ import {
   popularCourses,
 } from '@/api/course/course.service';
 import {
-  getRecommandationSearchText,
-  getRecommandationSearchText2,
+  extractFavoriteCourseNames,
+  extractPopularCourseNames,
+  extractRunningCourseNames,
 } from '@/utils/recommand-course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -16,9 +17,8 @@ export const useRecommendationSearch = () => {
       longitude: 126.978,
     };
 
-    // 내 주변 인기코스
     const popularCourseResponse = await popularCourses(params);
-    const result1 = getRecommandationSearchText(popularCourseResponse);
+    const result1 = extractPopularCourseNames(popularCourseResponse);
     const userId = await AsyncStorage.getItem('userId');
     if (!userId) {
       return;
@@ -29,7 +29,7 @@ export const useRecommendationSearch = () => {
       size: 10,
     });
 
-    const result2 = getRecommandationSearchText2(favoriteCourseResponse);
+    const result2 = extractFavoriteCourseNames(favoriteCourseResponse);
 
     const runningCourseResponse = await getRunningCourse({
       userId: Number(userId),
@@ -37,7 +37,7 @@ export const useRecommendationSearch = () => {
       size: 10,
     });
 
-    const result3 = getRecommandationSearchText2(runningCourseResponse);
+    const result3 = extractRunningCourseNames(runningCourseResponse);
 
     const finalResult = [...result1, ...result2, ...result3];
     return finalResult;
