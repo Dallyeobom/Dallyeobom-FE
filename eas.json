@@ -7,13 +7,6 @@
     "preview": {
       "android": {
         "buildType": "apk"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "https://jayden-bin.cc",
-        "EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY": "cc8bef820682b89305e2562d11971d99",
-        "EXPO_PUBLIC_KAKAO_JAVASCRIPT_APP_KEY": "33dd7ebac045cbd7cfedcab10f892fb8",
-        "EXPO_PUBLIC_KAKAO_REST_API_KEY": "a16d404b0cd5cd014e2124d498d0e096",
-        "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "AIzaSyAmTj-KocJW5BoNMSni47PFpkY5kfZT0cQ"
       }
     },
     "preview2": {
