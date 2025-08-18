@@ -63,7 +63,6 @@ function Search() {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     try {
       const { lat: latitude, lng: longitude } = selectedCoords;
-
       const radius = 1000;
       const maxCount = 10;
       const params = {
@@ -392,7 +391,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     columnGap: 8,
-    width: '90%',
   },
   deleteSearchItem: {},
 
