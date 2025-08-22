@@ -1,16 +1,17 @@
 import { userRanking } from '@/api/user/user.service';
 import RankingButton from '@/components/button/ranking-button';
 import RankingMyProfileCard from '@/components/card/ranking-my-profile-card';
+import NoDataItem from '@/components/item/no-data-item';
 import RankingRunnerItem from '@/components/item/ranking-runner-item';
 import VerticalList from '@/components/list/verical-list';
 import withRankingGuard from '@/components/wrapper/ranking-wrapper';
 import { base, gray } from '@/styles/color';
 import { RankingEnum } from '@/types/enum';
 import { CurrentUserRank, RankingDataList } from '@/types/user';
-import { mapRankingTextToEnum } from '@/utils/ranking';
 import { showErrorAlert } from '@/utils/error-handler';
+import { mapRankingTextToEnum } from '@/utils/ranking';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const RANKING_OPTIONS: RankingEnum[] = ['WEEKLY', 'MONTHLY', 'YEARLY'];
 
@@ -67,14 +68,27 @@ function Ranking() {
             ))}
           </View>
         </View>
-        <View style={styles.dataContainer}>
-          <VerticalList
-            data={rankingList}
-            renderItem={RankingRunnerItem}
-          />
-        </View>
+        {rankingList.length > 0 ? (
+          <View style={styles.dataContainer}>
+            <VerticalList
+              data={rankingList}
+              renderItem={RankingRunnerItem}
+            />
+          </View>
+        ) : (
+          <View style={[styles.noDataRankingCourseContainer, { marginTop: '60%' }]}>
+            <NoDataItem />
+            <View style={styles.noDataTextContainer}>
+              <Text style={styles.noDataText}>아직 1위 주자가 없습니다!</Text>
+              <Text style={styles.noDataText}>코스를 완주하고 첫 랭커에 도전하세요!</Text>
+            </View>
+          </View>
+        )}
       </View>
-      <RankingMyProfileCard currentUserRanking={currentUserRanking} />
+
+      {currentUserRanking && (
+        <RankingMyProfileCard currentUserRanking={currentUserRanking} />
+      )}
     </View>
   );
 }
@@ -114,5 +128,19 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderTopRightRadius: 14,
     borderTopLeftRadius: 14,
+  },
+  noDataRankingCourseContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    rowGap: 8,
+  },
+
+  noDataTextContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: gray[30],
+    fontSize: 16,
   },
 });
