@@ -1,4 +1,4 @@
-import RankingTitleText from '@/components/text/ranking-title-text';
+import RankingTitle from '@/components/title/ranking-title-text';
 import { Stack } from 'expo-router';
 import React from 'react';
 
@@ -14,7 +14,7 @@ function RankingLayout() {
 
         headerBackVisible: false,
         headerShadowVisible: false,
-        headerTitle: () => <RankingTitleText />,
+        headerTitle: () => <RankingTitle />,
       }}
     >
       <Stack.Screen name="index" />

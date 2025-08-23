@@ -64,7 +64,11 @@ function Index() {
       const response = await nearRunnerCourses(params);
       setNearByRunnerData(response ?? []);
     } catch (error) {
-      showErrorAlert(error, 'NEAR_RUNNER_COURSES', '주변 코스를 불러오는데 실패했습니다.');
+      showErrorAlert(
+        error,
+        'NEAR_RUNNER_COURSES',
+        '주변 코스를 불러오는데 실패했습니다.',
+      );
       setNearByRunnerData([]);
     }
   };
@@ -72,11 +76,16 @@ function Index() {
   const handleFetchPopularCourses = async () => {
     if (!selectedCoords?.lat || !selectedCoords.lng) return;
     try {
-      // const { lat: latitude, lng: longitude } = selectedCoords;
-      // TODO: 데이터 확인에 필요한 임시 고정 값
+      const { lat: latitude, lng: longitude } = selectedCoords;
+
+      const radius = 1000;
+      const maxCount = 10;
       const params = {
-        latitude: 37.5665,
-        longitude: 126.978,
+        latitude: latitude,
+        longitude: longitude,
+
+        radius,
+        maxCount,
       };
       const response = await popularCourses(params);
       setPopularCoursesData(response ?? []);

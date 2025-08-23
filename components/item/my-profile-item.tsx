@@ -1,30 +1,38 @@
 import { gray } from '@/styles/color';
+import { CurrentUserRank } from '@/types/user';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-interface RankingRunnerItemsProps {
-  rank: number;
-  runningLength: number;
-  completeCourseCount: number;
+interface MyProfileItemProps {
+  userNickName: string;
+  userProfileImage: string | null;
+  currentUserRanking: CurrentUserRank | null;
 }
 
-interface MyProfileItemProps {
-  data: RankingRunnerItemsProps;
-}
-function MyProfileItem({ data }: MyProfileItemProps) {
+function MyProfileItem({
+  userNickName,
+  userProfileImage,
+  currentUserRanking,
+}: MyProfileItemProps) {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         <Image
-          source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+          source={
+            userProfileImage
+              ? { uri: userProfileImage }
+              : require('@/assets/images/user-profile.png')
+          }
           style={styles.profileImage}
         />
         <View>
-          <Text style={styles.nickname}>TEST</Text>
-          <Text style={styles.distance}>{data.runningLength}KM</Text>
+          <Text style={styles.nickname}>{userNickName}</Text>
+          {/* TODO: runningLength가 없을떄 표시  */}
+          <Text style={styles.distance}>{currentUserRanking?.runningLength}KM</Text>
         </View>
       </View>
+      {/* TODO: rank가 없을떄 표시  */}
       <View style={styles.badge}>
-        <Text style={styles.rank}>{data.rank}등</Text>
+        <Text style={styles.rank}>{currentUserRanking?.rank}등</Text>
       </View>
     </View>
   );

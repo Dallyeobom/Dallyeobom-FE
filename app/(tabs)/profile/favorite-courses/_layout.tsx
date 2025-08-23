@@ -2,10 +2,8 @@ import { base } from '@/styles/color';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function FavoriteCoursesLayout() {
-  const insets = useSafeAreaInsets();
   const router = useRouter();
 
   return (
