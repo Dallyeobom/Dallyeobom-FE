@@ -16,7 +16,7 @@ client.interceptors.request.use(
     if (__DEV__) {
       console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`, config.data);
     }
-    
+
     const accessToken = await SecureStore.getItemAsync('accessToken');
 
     if (accessToken) {
@@ -35,18 +35,24 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response) => {
     if (__DEV__) {
-      console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`, response.data);
+      console.log(
+        `[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`,
+        response.data,
+      );
     }
     return response;
   },
   async (error) => {
     const method = error.config?.method?.toUpperCase() || 'UNKNOWN';
     const url = error.config?.url || 'UNKNOWN';
-    
+
     // 개발 환경에서만 로깅
     if (__DEV__) {
       if (error.response) {
-        console.error(`[API] ${method} ${url} - ${error.response.status}`, error.response.data);
+        console.error(
+          `[API] ${method} ${url} - ${error.response.status}`,
+          error.response.data,
+        );
       } else {
         console.error(`[API] ${method} ${url} - Network Error`, error.message);
       }
@@ -63,7 +69,11 @@ client.interceptors.response.use(
       await SecureStore.deleteItemAsync('refreshToken');
 
       if (__DEV__) {
-        console.warn(`[AUTH] 토큰 만료 - 로그인 페이지로 이동`, { statusCode, hasRefreshToken: !!refreshToken, hasAccessToken: !!accessToken });
+        console.warn(`[AUTH] 토큰 만료 - 로그인 페이지로 이동`, {
+          statusCode,
+          hasRefreshToken: !!refreshToken,
+          hasAccessToken: !!accessToken,
+        });
       }
 
       Alert.alert('유효하지 않은 로그인', '로그인을 다시 해주세요', [
@@ -82,7 +92,7 @@ client.interceptors.response.use(
         if (__DEV__) {
           console.log('[AUTH] AccessToken 만료 - RefreshToken으로 갱신 시도');
         }
-        
+
         const response = await client.post(getAccessTokenUrl(), {
           refreshToken,
         });
@@ -90,7 +100,7 @@ client.interceptors.response.use(
         const newAccessToken = response?.data?.accessToken;
         if (newAccessToken) {
           await SecureStore.setItemAsync('accessToken', newAccessToken);
-          
+
           if (__DEV__) {
             console.log('[AUTH] AccessToken 갱신 성공');
           }
@@ -106,11 +116,11 @@ client.interceptors.response.use(
         if (__DEV__) {
           console.error('[AUTH] 토큰 갱신 실패:', refreshError);
         }
-        
+
         // 토큰 갱신 실패 시 로그아웃 처리
         await SecureStore.deleteItemAsync('accessToken');
         await SecureStore.deleteItemAsync('refreshToken');
-        
+
         Alert.alert('세션 만료', '다시 로그인해주세요', [
           {
             text: '확인',
@@ -120,11 +130,11 @@ client.interceptors.response.use(
             },
           },
         ]);
-        
+
         return Promise.reject(refreshError);
       }
     }
-    
+
     return Promise.reject(error);
   },
 );

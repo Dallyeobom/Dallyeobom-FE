@@ -51,6 +51,7 @@ export const courseDetailSchema = z.object({
     )
     .min(1),
   isCreator: z.boolean(),
+  isLiked: z.boolean(),
 });
 export type CourseDetailResponse = z.infer<typeof courseDetailSchema>;
 
@@ -92,8 +93,6 @@ export type FavoriteCourseItemsResponse = z.infer<
   typeof favoriteCourseItemsResponseSchema
 >;
 
-// 내가 달린 코스
-
 const runningCourseItemSchema = z.object({
   id: z.number().int(),
   name: z.string(),
@@ -121,3 +120,35 @@ export const runningCourseParamsSchema = z.object({
 });
 
 export type RunningCourseParams = z.infer<typeof runningCourseParamsSchema>;
+
+const courseImageSchema = z.object({
+  id: z.number().int(),
+  url: z.string().url(),
+});
+
+const courseImagesResponseSchema = z.object({
+  items: z.array(z.string()),
+  lastId: z.number().int(),
+  hasNext: z.boolean(),
+});
+
+export type CourseImage = z.infer<typeof courseImageSchema>;
+export type CourseImagesResponse = z.infer<typeof courseImagesResponseSchema>;
+
+const userRankSchema = z.object({
+  user: z.object({
+    id: z.number().int(),
+    nickname: z.string(),
+    profileImage: z.string().url().optional(),
+  }),
+  interval: z.number().int(),
+});
+
+const courseRankResponseSchema = z.object({
+  items: z.array(userRankSchema),
+  lastId: z.number().int(),
+  hasNext: z.boolean(),
+});
+
+export type UserRank = z.infer<typeof userRankSchema>;
+export type CourseRankResponse = z.infer<typeof courseRankResponseSchema>;
