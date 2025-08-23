@@ -27,8 +27,7 @@ export default function CoursePhotosScreen() {
   const [courseImages, setCourseImages] = useState<CourseImagesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // 이미지 뷰어 모달 상태
+
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
 
@@ -90,7 +89,10 @@ export default function CoursePhotosScreen() {
       <View style={styles.container}>
         {renderHeader()}
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={gray[40]} />
+          <ActivityIndicator
+            size="large"
+            color={gray[40]}
+          />
           <Text style={styles.loadingText}>사진을 불러오는 중...</Text>
         </View>
       </View>
@@ -140,8 +142,7 @@ export default function CoursePhotosScreen() {
           ))}
         </View>
       </ScrollView>
-      
-      {/* 이미지 뷰어 모달 */}
+
       <ImageViewerModal
         visible={isImageViewerVisible}
         imageUrl={selectedImage || ''}

@@ -519,7 +519,6 @@ export default function CourseDetailScreen() {
       </Animated.View>
       {renderFloatingButton()}
 
-      {/* 이미지 뷰어 모달 */}
       <ImageViewerModal
         visible={isImageViewerVisible}
         imageUrl={selectedImage || ''}

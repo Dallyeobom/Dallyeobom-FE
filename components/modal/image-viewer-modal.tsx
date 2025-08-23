@@ -1,15 +1,8 @@
+import { base } from '@/styles/color';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import {
-  Dimensions,
-  Image,
-  Modal,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Dimensions, Image, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { base } from '@/styles/color';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,11 +27,21 @@ export default function ImageViewerModal({
       statusBarTranslucent
     >
       <View style={styles.container}>
-        <Pressable style={styles.backdrop} onPress={onClose} />
-        
+        <Pressable
+          style={styles.backdrop}
+          onPress={onClose}
+        />
+
         <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
-          <Pressable style={styles.closeButton} onPress={onClose}>
-            <Ionicons name="close" size={24} color={base.white} />
+          <Pressable
+            style={styles.closeButton}
+            onPress={onClose}
+          >
+            <Ionicons
+              name="close"
+              size={24}
+              color={base.white}
+            />
           </Pressable>
         </View>
 
