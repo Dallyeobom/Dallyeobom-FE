@@ -131,7 +131,7 @@ export default function CoursePhotosScreen() {
         <View style={styles.photosGrid}>
           {courseImages.items.map((imageUrl, index) => (
             <Pressable
-              key={`image-${index}`}
+              key={imageUrl}
               onPress={() => handleImagePress(imageUrl)}
             >
               <Image

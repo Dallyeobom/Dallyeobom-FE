@@ -15,7 +15,7 @@ import type {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -53,41 +53,43 @@ export default function CourseDetailScreen() {
   ).current;
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    const fetchCourseDetail = async () => {
-      if (!id || Array.isArray(id)) return;
+  const fetchCourseData = useCallback(async () => {
+    if (!id || Array.isArray(id)) return;
 
-      setIsLoading(true);
-      setError(null);
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        const courseId = parseInt(id, 10);
-        if (isNaN(courseId)) {
-          setError('유효하지 않은 코스 ID입니다.');
-          return;
-        }
-
-        const data = await courseDetail(courseId);
-        if (data) {
-          setCourseData(data);
-
-          const imagesData = await getCourseImages(courseId);
-          setCourseImages(imagesData);
-
-          const rankingData = await getCourseRank(courseId);
-          setCourseRanking(rankingData);
-        } else {
-          setError('코스 정보를 불러올 수 없습니다.');
-        }
-      } catch {
-        setError('코스 정보를 불러오는 중 오류가 발생했습니다.');
-      } finally {
-        setIsLoading(false);
+    try {
+      const courseId = parseInt(id, 10);
+      if (isNaN(courseId)) {
+        setError('유효하지 않은 코스 ID입니다.');
+        return;
       }
-    };
 
-    fetchCourseDetail();
+      const data = await courseDetail(courseId);
+      if (data) {
+        setCourseData(data);
+
+        const [imagesData, rankingData] = await Promise.all([
+          getCourseImages(courseId),
+          getCourseRank(courseId),
+        ]);
+
+        setCourseImages(imagesData);
+        setCourseRanking(rankingData);
+      } else {
+        setError('코스 정보를 불러올 수 없습니다.');
+      }
+    } catch {
+      setError('코스 정보를 불러오는 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    fetchCourseData();
+  }, [fetchCourseData, id]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -356,7 +358,7 @@ export default function CourseDetailScreen() {
         <View style={styles.photosGrid}>
           {displayImages.map((imageUrl, index) => (
             <View
-              key={`${courseImages.lastId}-${index}`}
+              key={imageUrl}
               style={[styles.photoItemContainer, { width: photoSize, height: photoSize }]}
             >
               <Pressable
@@ -368,7 +370,7 @@ export default function CourseDetailScreen() {
                   style={styles.photoItemImage}
                 />
               </Pressable>
-              {index === 2 && courseImages.items.length > 4 && (
+              {index === 3 && courseImages.items.length > 4 && (
                 <Pressable
                   style={styles.photoOverlay}
                   onPress={() => {
@@ -400,33 +402,7 @@ export default function CourseDetailScreen() {
       <Text style={styles.errorText}>{error}</Text>
       <Pressable
         style={styles.retryButton}
-        onPress={() => {
-          setError(null);
-          setIsLoading(true);
-          const fetchCourseDetail = async () => {
-            if (!id || Array.isArray(id)) return;
-
-            try {
-              const courseId = parseInt(id, 10);
-              if (isNaN(courseId)) {
-                setError('유효하지 않은 코스 ID입니다.');
-                return;
-              }
-
-              const data = await courseDetail(courseId);
-              if (data) {
-                setCourseData(data);
-              } else {
-                setError('코스 정보를 불러올 수 없습니다.');
-              }
-            } catch {
-              setError('코스 정보를 불러오는 중 오류가 발생했습니다.');
-            } finally {
-              setIsLoading(false);
-            }
-          };
-          fetchCourseDetail();
-        }}
+        onPress={fetchCourseData}
       >
         <Text style={styles.retryButtonText}>다시 시도</Text>
       </Pressable>
