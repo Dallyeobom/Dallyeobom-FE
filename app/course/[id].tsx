@@ -12,6 +12,7 @@ import type {
   CourseImagesResponse,
   CourseRankResponse,
 } from '@/types/course';
+import { getDifficultyText } from '@/utils/difficulty';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -127,19 +128,6 @@ export default function CourseDetailScreen() {
       },
     }),
   ).current;
-
-  const getDifficultyText = (level: string) => {
-    switch (level) {
-      case 'LOW':
-        return '쉬움';
-      case 'MEDIUM':
-        return '보통';
-      case 'HIGH':
-        return '어려움';
-      default:
-        return level;
-    }
-  };
 
   const formatDistance = (lengthInMeters: number) => {
     if (lengthInMeters >= 1000) {
@@ -429,7 +417,7 @@ export default function CourseDetailScreen() {
         <Pressable style={styles.floatingButton}>
           <View style={styles.floatingButtonSolid}>
             <Image
-              source={require('@/assets/images/running-man.png')}
+              source={require('@/assets/images/runner.png')}
               style={styles.runningIcon}
             />
             <Text style={styles.floatingButtonText}>이 코스로 달리기</Text>

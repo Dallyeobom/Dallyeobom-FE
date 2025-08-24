@@ -3,7 +3,8 @@ import { base, main } from '@/styles/color';
 import { showErrorAlert } from '@/utils/error-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { CloseIcon } from '@/components/icons/CommonIcon';
 import AsyncAlert from '../alert/async-alert';
 
 interface NicknameEditCardProps {
@@ -59,7 +60,7 @@ function NicknameEditCard({
             style={styles.image}
             onPress={handleDelete}
           >
-            <Image source={require('@/assets/images/close.png')} />
+            <CloseIcon width={24} height={24} />
           </Pressable>
         )}
       </View>

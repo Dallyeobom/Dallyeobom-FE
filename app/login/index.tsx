@@ -1,3 +1,4 @@
+import { KakaoSymbolIcon } from '@/components/icons/CommonIcon';
 import { useAuthStore } from '@/stores/auth-store';
 import { showErrorAlert } from '@/utils/error-handler';
 import { login } from '@react-native-kakao/user';
@@ -77,35 +78,35 @@ const LoginScreen: React.FC = () => {
       <View style={styles.subContainer}>
         <View style={styles.mainTextContainer}>
           <Text style={styles.mainText}>당신의 런닝 파트너</Text>
-          <View style={styles.imageContainer}>
-            <Image
-              style={{ width: 220, height: 48 }}
-              source={require('@/assets/images/typo-logo.png')}
-            />
-          </View>
+          <Image
+            style={{ width: 240, height: 60 }}
+            source={require('@/assets/images/intro/typo-logo.png')}
+          />
           <Text style={styles.subText}>가볍게 뛰고 싶을 때, 지금 바로 시작해보세요!</Text>
         </View>
         <Animated.View style={[styles.sliderContainer, animatedStyle]}>
           <Animated.Image
-            source={require('@/assets/images/background.png')}
+            source={require('@/assets/images/intro/background.png')}
             style={styles.image}
             resizeMode="cover"
           />
           <Animated.Image
-            source={require('@/assets/images/background-2.png')}
+            source={require('@/assets/images/intro/background-2.png')}
             style={styles.image}
             resizeMode="cover"
           />
         </Animated.View>
         <View style={styles.loginButtonContainer}>
-          <View>
-            <Image
-              style={{ width: 260 }}
-              source={require('@/assets/images/tooltip.png')}
-            ></Image>
-          </View>
+          <Image
+            style={{ width: 240, height: 60 }}
+            source={require('@/assets/images/intro/tooltip.png')}
+          />
           <View style={styles.kakaoButton}>
-            <Image source={require('@/assets/images/kakao-symbol.png')}></Image>
+            <KakaoSymbolIcon
+              width={20}
+              height={20}
+              style={styles.kakaoIcon}
+            />
             <Pressable onPress={handleLogin}>
               <Text style={styles.kakaoButtonText}>카카오톡으로 3초만에 시작하기</Text>
             </Pressable>
@@ -147,9 +148,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
-  imageContainer: {
-    marginBottom: 20,
-  },
   mainText: {
     fontSize: 16,
     color: '#fff',
@@ -160,6 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#fff',
     fontWeight: '400',
+    marginTop: 15,
   },
 
   loginButtonContainer: {
@@ -179,8 +178,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
+    gap: 8,
     width: '90%',
+  },
+  kakaoIcon: {
+    marginRight: 4,
   },
   kakaoButtonText: {
     fontSize: 16,

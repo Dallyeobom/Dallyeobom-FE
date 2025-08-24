@@ -1,4 +1,5 @@
 import { popularCourses } from '@/api/course/course.service';
+import { CloseIcon } from '@/components/icons/CommonIcon';
 import NoDataItem from '@/components/item/no-data-item';
 import SearchCourseItem from '@/components/item/search-course-item';
 import VerticalList from '@/components/list/verical-list';
@@ -135,7 +136,10 @@ function Search() {
                 setSearchResultCourseArr([]);
               }}
             >
-              <Image source={require('@/assets/images/close.png')} />
+              <CloseIcon
+                width={24}
+                height={24}
+              />
             </Pressable>
           )}
         </View>

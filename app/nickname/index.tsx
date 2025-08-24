@@ -6,7 +6,8 @@ import { base, main } from '@/styles/color';
 import { AgreementsSchema } from '@/types/auth';
 import { showErrorAlert } from '@/utils/error-handler';
 import React, { useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { CloseIcon } from '@/components/icons/CommonIcon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
@@ -73,7 +74,7 @@ function Index() {
               style={styles.image}
               onPress={handleDelete}
             >
-              <Image source={require('@/assets/images/close.png')} />
+              <CloseIcon width={24} height={24} />
             </Pressable>
           )}
         </View>

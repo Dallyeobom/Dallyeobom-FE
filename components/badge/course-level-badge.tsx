@@ -20,6 +20,9 @@ export default CourseLevelBadge;
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'flex-start',
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    borderRadius: 6,
   },
   text: {
     fontWeight: 'bold',

@@ -1,8 +1,9 @@
 import { courseLike } from '@/api/course/course.service';
+import { HeartFillIcon, HeartIcon } from '@/components/icons/CommonIcon';
 import { PopularCoursesResponse } from '@/types/course';
 import { showErrorAlert } from '@/utils/error-handler';
 import { useRouter } from 'expo-router';
-import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
 type PopularCourseItemProps = PopularCoursesResponse & {
@@ -55,13 +56,17 @@ function PopularCourseItem({
         </View>
       </Pressable>
       <Pressable onPress={() => handleCourseLike(id)}>
-        <Image
-          source={
-            isLiked
-              ? require('@/assets/images/heart-fill.png')
-              : require('@/assets/images/heart.png')
-          }
-        />
+        {isLiked ? (
+          <HeartFillIcon
+            width={24}
+            height={24}
+          />
+        ) : (
+          <HeartIcon
+            width={24}
+            height={24}
+          />
+        )}
       </Pressable>
     </View>
   );

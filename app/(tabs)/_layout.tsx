@@ -1,54 +1,82 @@
+import {
+  HomeFillIcon,
+  HomeIcon,
+  ProfileFillIcon,
+  ProfileIcon,
+  RankingFillIcon,
+  RankingIcon,
+  SearchFillIcon,
+  SearchIcon,
+} from '@/components/icons/TabIcon';
 import { gray } from '@/styles/color';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { PlatformPressable } from '@react-navigation/elements';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import type { SvgProps } from 'react-native-svg';
+
+interface TabIconProps {
+  focused: boolean;
+  ActiveIcon: React.ComponentType<SvgProps>;
+  InactiveIcon: React.ComponentType<SvgProps>;
+  label: string;
+  isWideText?: boolean;
+}
+
+function TabIcon({ focused, ActiveIcon, InactiveIcon, label, isWideText }: TabIconProps) {
+  const IconComponent = focused ? ActiveIcon : InactiveIcon;
+
+  return (
+    <View style={styles.tabIconContainer}>
+      <IconComponent
+        width={24}
+        height={24}
+        style={{
+          opacity: focused ? 1 : 0.5,
+        }}
+      />
+      <Text
+        style={[
+          focused ? styles.tabIconActiveText : styles.tabIconInactiveText,
+          isWideText && styles.wideText,
+        ]}
+      >
+        {label}
+      </Text>
+    </View>
+  );
+}
 
 function TabLayout() {
+  const renderTabButton = (props: React.ComponentProps<typeof PlatformPressable>) => (
+    <PlatformPressable
+      {...props}
+      android_ripple={{ color: 'transparent' }}
+    />
+  );
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: gray[100],
         tabBarInactiveTintColor: gray[30],
-        tabBarStyle: {
-          height: 60,
-          paddingTop: 10,
-          backgroundColor: gray[5],
-          borderTopWidth: 0,
-        },
+        tabBarStyle: styles.tabBarStyle,
       }}
     >
       <Tabs.Screen
         name="ranking"
         options={{
           tabBarLabel: () => null,
-          tabBarButton: (props) => (
-            <PlatformPressable
-              {...props}
-              android_ripple={{ color: 'transparent' }}
+          tabBarButton: renderTabButton,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={focused}
+              ActiveIcon={RankingFillIcon}
+              InactiveIcon={RankingIcon}
+              label="랭킹"
             />
-          ),
-          tabBarIcon: ({ color, focused }) => (
-            <View style={styles.tabIconContainer}>
-              <Image
-                source={
-                  focused
-                    ? require('@/assets/images/ranking-fill.png')
-                    : require('@/assets/images/ranking.png')
-                }
-                style={{
-                  width: 24,
-                  height: 24,
-                  tintColor: color,
-                  opacity: focused ? 1 : 0.5,
-                }}
-              />
-              <Text style={focused ? styles.tabIconFilledext : styles.tabIconText}>
-                랭킹
-              </Text>
-            </View>
           ),
         }}
       />
@@ -56,31 +84,14 @@ function TabLayout() {
         name="index"
         options={{
           tabBarLabel: () => null,
-          tabBarButton: (props) => (
-            <PlatformPressable
-              {...props}
-              android_ripple={{ color: 'transparent' }}
+          tabBarButton: renderTabButton,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={focused}
+              ActiveIcon={HomeFillIcon}
+              InactiveIcon={HomeIcon}
+              label="홈"
             />
-          ),
-          tabBarIcon: ({ color, focused }) => (
-            <View style={styles.tabIconContainer}>
-              <Image
-                source={
-                  focused
-                    ? require('@/assets/images/home-fill.png')
-                    : require('@/assets/images/home.png')
-                }
-                style={{
-                  width: 24,
-                  height: 24,
-                  tintColor: color,
-                  opacity: focused ? 1 : 0.5,
-                }}
-              />
-              <Text style={focused ? styles.tabIconFilledext : styles.tabIconText}>
-                홈
-              </Text>
-            </View>
           ),
         }}
       />
@@ -88,31 +99,14 @@ function TabLayout() {
         name="search"
         options={{
           tabBarLabel: () => null,
-          tabBarButton: (props) => (
-            <PlatformPressable
-              {...props}
-              android_ripple={{ color: 'transparent' }}
+          tabBarButton: renderTabButton,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={focused}
+              ActiveIcon={SearchFillIcon}
+              InactiveIcon={SearchIcon}
+              label="검색"
             />
-          ),
-          tabBarIcon: ({ color, focused }) => (
-            <View style={styles.tabIconContainer}>
-              <Image
-                source={
-                  focused
-                    ? require('@/assets/images/search-fill.png')
-                    : require('@/assets/images/search.png')
-                }
-                style={{
-                  width: 24,
-                  height: 24,
-                  tintColor: color,
-                  opacity: focused ? 1 : 0.5,
-                }}
-              />
-              <Text style={focused ? styles.tabIconFilledext : styles.tabIconText}>
-                검색
-              </Text>
-            </View>
           ),
         }}
       />
@@ -120,36 +114,15 @@ function TabLayout() {
         name="profile"
         options={{
           tabBarLabel: () => null,
-          tabBarButton: (props) => (
-            <PlatformPressable
-              {...props}
-              android_ripple={{ color: 'transparent' }}
+          tabBarButton: renderTabButton,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={focused}
+              ActiveIcon={ProfileFillIcon}
+              InactiveIcon={ProfileIcon}
+              label="내 정보"
+              isWideText
             />
-          ),
-          tabBarIcon: ({ color, focused }) => (
-            <View style={styles.tabIconContainer}>
-              <Image
-                source={
-                  focused
-                    ? require('@/assets/images/profile-fill.png')
-                    : require('@/assets/images/profile.png')
-                }
-                style={{
-                  width: 24,
-                  height: 24,
-                  tintColor: color,
-                  opacity: focused ? 1 : 0.5,
-                }}
-              />
-              <Text
-                style={[
-                  focused ? styles.tabIconFilledext : styles.tabIconText,
-                  styles.text,
-                ]}
-              >
-                내 정보
-              </Text>
-            </View>
           ),
         }}
       />
@@ -174,18 +147,29 @@ function TabLayout() {
 export default TabLayout;
 
 export const styles = StyleSheet.create({
+  tabBarStyle: {
+    height: 60,
+    paddingTop: 10,
+    backgroundColor: gray[5],
+    borderTopWidth: 0,
+  },
   tabIconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 3,
   },
-  text: {
+  tabIconActiveText: {
+    color: gray[100],
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  tabIconInactiveText: {
+    color: gray[30],
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  wideText: {
     width: 100,
     textAlign: 'center',
-  },
-  tabIconText: {
-    color: gray[30],
-  },
-  tabIconFilledext: {
-    color: gray[100],
   },
 });
