@@ -17,7 +17,6 @@ import { showErrorAlert } from '@/utils/error-handler';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
-  Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Pressable,
@@ -81,8 +80,9 @@ function Index() {
       const radius = 1000;
       const maxCount = 10;
       const params = {
-        latitude: latitude,
-        longitude: longitude,
+        // TODO: 임시로 고정 값 사용, 추후 위치 기반으로 수정
+        latitude: 37.5665,
+        longitude: 126.978,
 
         radius,
         maxCount,
@@ -132,8 +132,7 @@ function Index() {
               <View style={styles.section}>
                 <Pressable style={styles.titleBarContainer}>
                   <View style={styles.titleBar}>
-                    <Text style={styles.title}>근처 러너들이 달리는 코스</Text>
-                    <Image source={require('@/assets/images/fire.png')} />
+                    <Text style={styles.title}>근처 러너들이 달리는 코스 🔥</Text>
                   </View>
                   <Ionicons
                     name="chevron-forward"
@@ -169,8 +168,7 @@ function Index() {
               <View style={styles.section}>
                 <View style={styles.titleBarContainer}>
                   <View style={styles.titleBar}>
-                    <Text style={styles.title}>인기코스</Text>
-                    <Image source={require('@/assets/images/thumbs-up.png')} />
+                    <Text style={styles.title}>인기코스 👍🏻</Text>
                   </View>
                 </View>
                 {popularCoursesData.length > 0 ? (

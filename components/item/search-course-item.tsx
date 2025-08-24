@@ -3,6 +3,7 @@ import { PopularCoursesResponse } from '@/types/course';
 import { showErrorAlert } from '@/utils/error-handler';
 import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { HeartIcon, HeartFillIcon } from '@/components/icons/CommonIcon';
 import CourseLevelBadge from '../badge/course-level-badge';
 
 // searchItem은 popular item이다.
@@ -56,13 +57,11 @@ function SearchCourseItem({
         </View>
       </Pressable>
       <Pressable onPress={() => handleCourseLike(id)}>
-        <Image
-          source={
-            isLiked
-              ? require('@/assets/images/heart-fill.png')
-              : require('@/assets/images/heart.png')
-          }
-        />
+        {isLiked ? (
+          <HeartFillIcon width={24} height={24} />
+        ) : (
+          <HeartIcon width={24} height={24} />
+        )}
       </Pressable>
     </View>
   );

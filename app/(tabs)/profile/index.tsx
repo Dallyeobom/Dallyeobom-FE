@@ -1,5 +1,6 @@
 import NicknameEditCard from '@/components/card/nickname-edit-card';
 import ProfileImageEditCard from '@/components/card/profileImage-edit-card';
+import { CameraIcon, ModeIcon } from '@/components/icons/ProfileIcon';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useControlTabBar } from '@/hooks/use-control-tarbar';
 import { base, gray } from '@/styles/color';
@@ -77,18 +78,18 @@ function Profile() {
             style={styles.cameraImageContainer}
             onPress={handleEditProfileImageModal}
           >
-            <Image
-              source={require('@/assets/images/camera.png')}
-              style={{ width: 35, height: 35 }}
+            <CameraIcon
+              width={35}
+              height={35}
             />
           </Pressable>
         </View>
         <View style={styles.nameContainer}>
           <Text style={styles.nameText}>{userNickname}</Text>
           <Pressable onPress={handleEditNameModal}>
-            <Image
-              source={require('@/assets/images/mode.png')}
-              style={{ width: 35, height: 35 }}
+            <ModeIcon
+              width={30}
+              height={30}
             />
           </Pressable>
         </View>

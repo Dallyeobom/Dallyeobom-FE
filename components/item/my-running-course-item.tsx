@@ -2,6 +2,7 @@ import { courseLike } from '@/api/course/course.service';
 import { RecordedCourseHistoryItem } from '@/types/course-complete';
 import { useRouter } from 'expo-router';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { HeartIcon, HeartFillIcon } from '@/components/icons/CommonIcon';
 import CourseLevelBadge from '../badge/course-level-badge';
 
 type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
@@ -54,13 +55,11 @@ function MyRunningCourseItem({
         </View>
       </Pressable>
       <Pressable onPress={() => handleCourseLike(id)}>
-        <Image
-          source={
-            isLiked
-              ? require('@/assets/images/heart-fill.png')
-              : require('@/assets/images/heart.png')
-          }
-        />
+        {isLiked ? (
+          <HeartFillIcon width={24} height={24} />
+        ) : (
+          <HeartIcon width={24} height={24} />
+        )}
       </Pressable>
     </View>
   );
