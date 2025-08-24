@@ -13,7 +13,6 @@ import { useLocationStore } from '@/stores/location-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base, gray } from '@/styles/color';
 import type { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/course';
-import { getDifficultyText } from '@/utils/difficulty';
 import { showErrorAlert } from '@/utils/error-handler';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
@@ -89,11 +88,7 @@ function Index() {
         maxCount,
       };
       const response = await popularCourses(params);
-      const transformedData = (response ?? []).map((course) => ({
-        ...course,
-        level: getDifficultyText(course.level),
-      }));
-      setPopularCoursesData(transformedData);
+      setPopularCoursesData(response ?? []);
     } catch (error) {
       showErrorAlert(error, 'POPULAR_COURSES', '인기 코스를 불러오는데 실패했습니다.');
       setPopularCoursesData([]);

@@ -7,6 +7,6 @@ export const getDifficultyText = (level: string): string => {
     case 'HIGH':
       return '어려움';
     default:
-      return '보통';
+      return '난이도';
   }
 };

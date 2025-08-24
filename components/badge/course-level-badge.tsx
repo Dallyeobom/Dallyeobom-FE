@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { getDifficultyText } from '@/utils/difficulty';
 
 interface CourseLevelBadgeProps {
   level: string;
@@ -10,7 +11,7 @@ function CourseLevelBadge({ level }: CourseLevelBadgeProps) {
   const textStyle = getTextStyle(level);
   return (
     <View style={[styles.container, badgeStyle]}>
-      <Text style={[styles.text, textStyle]}>{level}</Text>
+      <Text style={[styles.text, textStyle]}>{getDifficultyText(level)}</Text>
     </View>
   );
 }
