@@ -25,11 +25,9 @@ function RunningCourses() {
       lastId: 10,
       size: 10,
     });
-    if (!data || data?.items.length === 0) {
-      setMyRunningCourseData([]);
-    } else {
-      setMyRunningCourseData(data?.items);
-    }
+
+    setMyRunningCourseData(data?.items || []);
+
     setLoading(false);
   };
 
@@ -62,7 +60,7 @@ function RunningCourses() {
                 },
               ]}
             >
-              <NoDataItem />
+              <NoDataItem source={require('@/assets/images/priority-high.png')} />
               <View style={styles.noDataTextContainer}>
                 <Text style={styles.noDataText}>아직 달린 코스가 없네요</Text>
                 <Text style={styles.noDataText}>첫 코스를 달려보세요!</Text>

@@ -1,6 +1,6 @@
 import { getFavoriteCourse } from '@/api/course/course.service';
 import MyFavoriteItem from '@/components/item/my-favorite-item';
-import NoFavoriteItem from '@/components/item/no-favorite-item';
+import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
 import { gray } from '@/styles/color';
@@ -24,11 +24,8 @@ function FavoriteCourses() {
       lastId: 10,
       size: 10,
     });
-    if (!data || data?.items.length === 0) {
-      setFavoriteCourseData([]);
-    } else {
-      setFavoriteCourseData(data?.items);
-    }
+
+    setFavoriteCourseData(data?.items || []);
     setLoading(false);
   };
 
@@ -61,7 +58,7 @@ function FavoriteCourses() {
                 },
               ]}
             >
-              <NoFavoriteItem />
+              <NoDataItem source={require('@/assets/images/dot.png')} />
               <View style={styles.noDataTextContainer}>
                 <Text style={styles.noDataText}>아직 찜한 코스가 없네요</Text>
                 <Text style={styles.noDataText}>코스를 찜하면 모아볼 수 있어요</Text>
