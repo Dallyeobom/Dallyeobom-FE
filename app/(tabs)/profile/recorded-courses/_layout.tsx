@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap: 100,
+    columnGap: 130,
     paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: base['white'],

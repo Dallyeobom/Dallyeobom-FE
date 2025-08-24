@@ -1,9 +1,8 @@
 import { getFavoriteCourse } from '@/api/course/course.service';
 import MyFavoriteItem from '@/components/item/my-favorite-item';
-import NoDataItem from '@/components/item/no-data-item';
+import NoFavoriteItem from '@/components/item/no-favorite-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
-import { examplefavoriteCourses } from '@/mocks/data';
 import { gray } from '@/styles/color';
 import { FavoriteCourseItem } from '@/types/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,8 +25,7 @@ function FavoriteCourses() {
       size: 10,
     });
     if (!data || data?.items.length === 0) {
-      // TODO: UI확인을 위해 임시로 넣음
-      setFavoriteCourseData(examplefavoriteCourses);
+      setFavoriteCourseData([]);
     } else {
       setFavoriteCourseData(data?.items);
     }
@@ -59,15 +57,14 @@ function FavoriteCourses() {
               style={[
                 styles.noDataPopularCourseContainer,
                 {
-                  marginTop: '34%',
-                  marginBottom: '20%',
+                  marginTop: '60%',
                 },
               ]}
             >
-              <NoDataItem />
+              <NoFavoriteItem />
               <View style={styles.noDataTextContainer}>
-                <Text style={styles.noDataText}>현재 내가 선택한</Text>
-                <Text style={styles.noDataText}>찜 코스가 없습니다.</Text>
+                <Text style={styles.noDataText}>아직 찜한 코스가 없네요</Text>
+                <Text style={styles.noDataText}>코스를 찜하면 모아볼 수 있어요</Text>
               </View>
             </View>
           )}
