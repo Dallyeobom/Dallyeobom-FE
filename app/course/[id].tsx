@@ -1,10 +1,23 @@
-import { renderRankIcon } from '@/components/item/rank-icon';
+import {
+  courseDetail,
+  courseLike,
+  getCourseImages,
+  getCourseRank,
+} from '@/api/course/course.service';
+import NoDataItem from '@/components/item/no-data-item';
+import ImageViewerModal from '@/components/modal/image-viewer-modal';
 import { base, gray, main } from '@/styles/color';
+import type {
+  CourseDetailResponse,
+  CourseImagesResponse,
+  CourseRankResponse,
+} from '@/types/course';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Dimensions,
   Image,
@@ -17,19 +30,66 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const { width, height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
+  const [courseData, setCourseData] = useState<CourseDetailResponse | null>(null);
+  const [courseImages, setCourseImages] = useState<CourseImagesResponse | null>(null);
+  const [courseRanking, setCourseRanking] = useState<CourseRankResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
+
   const bottomSheetHeight = height;
-  const minBottomSheetHeight = height * 0.45; // 펼치기 전 화면 높이 45%
+  const minBottomSheetHeight = height * 0.45;
   const translateY = useRef(
     new Animated.Value(bottomSheetHeight - minBottomSheetHeight),
   ).current;
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const fetchCourseData = useCallback(async () => {
+    if (!id || Array.isArray(id)) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const courseId = parseInt(id, 10);
+      if (isNaN(courseId)) {
+        setError('유효하지 않은 코스 ID입니다.');
+        return;
+      }
+
+      const data = await courseDetail(courseId);
+      if (data) {
+        setCourseData(data);
+
+        const [imagesData, rankingData] = await Promise.all([
+          getCourseImages(courseId),
+          getCourseRank(courseId),
+        ]);
+
+        setCourseImages(imagesData);
+        setCourseRanking(rankingData);
+      } else {
+        setError('코스 정보를 불러올 수 없습니다.');
+      }
+    } catch {
+      setError('코스 정보를 불러오는 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchCourseData();
+  }, [fetchCourseData, id]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -68,24 +128,24 @@ export default function CourseDetailScreen() {
     }),
   ).current;
 
-  // TODO: 임시 데이터 - 실제로는 API에서 가져올 데이터
-  const courseData = {
-    id: id,
-    title: '영등대교 - 청담대교',
-    description: '영등대교에서 청담대교까지 이어지는 코스입니다.',
-    distance: '10.2km',
-    difficulty: '어려움',
-    completedUsers: [
-      { id: 1, nickname: '오늘도 화이팅', time: '1시간 30분' },
-      { id: 2, nickname: '오늘도 화이팅', time: '1시간 30분' },
-      { id: 3, nickname: '오늘도화이팅오늘도화이팅', time: '1시간 30분' },
-      { id: 4, nickname: '오늘도 화이팅', time: '1시간 40분' },
-      { id: 5, nickname: '오늘도 화이팅', time: '1시간 40분' },
-    ],
-    photos: Array.from({ length: 12 }, (_, i) => ({
-      id: i + 1,
-      url: `https://picsum.photos/seed/course${i + 1}/400/300`,
-    })),
+  const getDifficultyText = (level: string) => {
+    switch (level) {
+      case 'LOW':
+        return '쉬움';
+      case 'MEDIUM':
+        return '보통';
+      case 'HIGH':
+        return '어려움';
+      default:
+        return level;
+    }
+  };
+
+  const formatDistance = (lengthInMeters: number) => {
+    if (lengthInMeters >= 1000) {
+      return `${(lengthInMeters / 1000).toFixed(1)}km`;
+    }
+    return `${lengthInMeters}m`;
   };
 
   const toggleBottomSheet = () => {
@@ -150,83 +210,204 @@ export default function CourseDetailScreen() {
     </View>
   );
 
-  const renderCourseInfo = () => (
-    <View
-      style={styles.courseInfoContainer}
-      {...panResponder.panHandlers}
-    >
-      <View style={styles.courseInfoHeader}>
-        <View style={styles.difficultyBadge}>
-          <Text style={styles.difficulty}>{courseData.difficulty}</Text>
-        </View>
-        <Text style={styles.courseTitle}>{courseData.title}</Text>
-        <Text style={styles.courseDescription}>{courseData.description}</Text>
-        <Text style={styles.distance}>{courseData.distance}</Text>
-      </View>
-    </View>
-  );
+  const renderCourseInfo = () => {
+    if (!courseData) return null;
 
-  const renderCompletedUsers = () => (
-    <View style={styles.completedUsersContainer}>
-      <Text style={styles.sectionTitle}>이 코스를 완주한 유저</Text>
-      {courseData.completedUsers.map((user, index) => (
-        <View
-          key={user.id}
-          style={styles.userItem}
-        >
-          {renderRankIcon(index)}
-          <Image
-            source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
-            style={styles.userAvatar}
-          />
-          <View style={styles.userInfo}>
-            <Text
-              style={styles.userName}
-              numberOfLines={1}
-            >
-              {user.nickname}
+    return (
+      <View
+        style={styles.courseInfoContainer}
+        {...panResponder.panHandlers}
+      >
+        <View style={styles.courseInfoHeader}>
+          <View style={styles.difficultyBadge}>
+            <Text style={styles.difficulty}>
+              {getDifficultyText(courseData.courseLevel)}
             </Text>
           </View>
-          <Text style={[styles.userTime, index < 3 && styles.userTimeBold]}>
-            {user.time}
-          </Text>
+          <Text style={styles.courseTitle}>{courseData.name}</Text>
+          <Text style={styles.courseDescription}>{courseData.description}</Text>
+          <Text style={styles.distance}>{formatDistance(courseData.length)}</Text>
         </View>
-      ))}
-    </View>
-  );
+      </View>
+    );
+  };
+
+  const renderRankIcon = (index: number) => {
+    if (index < 3) {
+      const trophyColors = ['#FFD700', '#C0C0C0', '#CD7F32'];
+      return (
+        <View style={styles.userRankNumber}>
+          <Ionicons
+            name="trophy"
+            size={24}
+            color={trophyColors[index]}
+          />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.userRankNumber}>
+        <Text style={styles.rankNumberText}>{index + 1}</Text>
+      </View>
+    );
+  };
+
+  const formatTime = (intervalMs: number) => {
+    const seconds = Math.floor(intervalMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+
+    if (hours > 0) {
+      return `${hours}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+    }
+    return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
+  };
+
+  const handleLikeToggle = async () => {
+    if (!courseData || !id || Array.isArray(id)) return;
+
+    const courseId = parseInt(id, 10);
+    if (isNaN(courseId)) return;
+
+    const previousLikeState = courseData.isLiked;
+    setCourseData((prev) => (prev ? { ...prev, isLiked: !prev.isLiked } : null));
+
+    try {
+      await courseLike(courseId);
+    } catch (error) {
+      setCourseData((prev) => (prev ? { ...prev, isLiked: previousLikeState } : null));
+      console.error('좋아요 토글 실패:', error);
+    }
+  };
+
+  const handleImagePress = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setIsImageViewerVisible(true);
+  };
+
+  const handleCloseImageViewer = () => {
+    setIsImageViewerVisible(false);
+    setSelectedImage(null);
+  };
+
+  const renderCompletedUsers = () => {
+    if (!courseRanking || !courseRanking.items || courseRanking.items.length === 0) {
+      return (
+        <View style={[styles.noDataCourseContainer]}>
+          <NoDataItem />
+          <Text style={styles.noDataText}>이 코스를 완주하고 랭킹에 도전하세요</Text>
+          <Pressable style={styles.challengeButton}>
+            <Text style={styles.challengeButtonText}>이 코스로 달리기</Text>
+          </Pressable>
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.completedUsersContainer}>
+        <Text style={styles.sectionTitle}>이 코스를 완주한 유저</Text>
+        {courseRanking.items.map((rankItem, index) => (
+          <View
+            key={rankItem.user.id}
+            style={styles.userItem}
+          >
+            {renderRankIcon(index)}
+            <Image
+              source={{
+                uri:
+                  rankItem.user.profileImage ||
+                  'https://randomuser.me/api/portraits/men/1.jpg',
+              }}
+              style={styles.userAvatar}
+            />
+            <View style={styles.userInfo}>
+              <Text
+                style={styles.userName}
+                numberOfLines={1}
+              >
+                {rankItem.user.nickname}
+              </Text>
+            </View>
+            <Text style={[styles.userTime, index < 3 && styles.userTimeBold]}>
+              {formatTime(rankItem.interval)}
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
 
   const renderPhotos = () => {
-    const photoSize = (width - 64) / 4; // 20px padding * 2 + 8px gap * 3 = 64px
+    if (!courseImages || !courseImages.items || courseImages.items.length === 0) {
+      return (
+        <View style={styles.photosContainer}>
+          <Text style={styles.sectionTitle}>코스 사진</Text>
+          <View style={styles.emptyContent}>
+            <Text style={styles.emptyText}>등록된 사진이 없습니다.</Text>
+          </View>
+        </View>
+      );
+    }
+
+    const photoSize = (width - 64) / 4;
+    const displayImages = courseImages.items.slice(0, 4);
 
     return (
       <View style={styles.photosContainer}>
         <Text style={styles.sectionTitle}>코스 사진</Text>
         <View style={styles.photosGrid}>
-          {courseData.photos.slice(0, 4).map((photo, index) => (
-            <Pressable
-              key={photo.id}
-              style={styles.photoItemContainer}
-              onPress={() => {
-                if (index === 3 && courseData.photos.length > 4) {
-                  router.push(`/course/${id}/photos`);
-                }
-              }}
+          {displayImages.map((imageUrl, index) => (
+            <View
+              key={imageUrl}
+              style={[styles.photoItemContainer, { width: photoSize, height: photoSize }]}
             >
-              <Image
-                source={{ uri: photo.url }}
-                style={[styles.photoItem, { width: photoSize, height: photoSize }]}
-              />
-              {index === 3 && courseData.photos.length > 4 && (
-                <View style={styles.photoOverlay}>
+              <Pressable
+                onPress={() => handleImagePress(imageUrl)}
+                style={styles.photoItem}
+              >
+                <Image
+                  source={{ uri: imageUrl }}
+                  style={styles.photoItemImage}
+                />
+              </Pressable>
+              {index === 3 && courseImages.items.length > 4 && (
+                <Pressable
+                  style={styles.photoOverlay}
+                  onPress={() => {
+                    router.push(`/course/${id}/photos`);
+                  }}
+                >
                   <Text style={styles.photoOverlayText}>+ 더보기</Text>
-                </View>
+                </Pressable>
               )}
-            </Pressable>
+            </View>
           ))}
         </View>
       </View>
     );
   };
+
+  const renderLoadingState = () => (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator
+        size="large"
+        color={main[80]}
+      />
+      <Text style={styles.loadingText}>코스 정보를 불러오는 중...</Text>
+    </View>
+  );
+
+  const renderErrorState = () => (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText}>{error}</Text>
+      <Pressable
+        style={styles.retryButton}
+        onPress={fetchCourseData}
+      >
+        <Text style={styles.retryButtonText}>다시 시도</Text>
+      </Pressable>
+    </View>
+  );
 
   const renderFloatingButton = () => (
     <View style={styles.floatingButtonContainer}>
@@ -235,11 +416,14 @@ export default function CourseDetailScreen() {
         style={styles.floatingButtonBackground}
       />
       <View style={styles.floatingButtonRow}>
-        <Pressable style={styles.heartButton}>
+        <Pressable
+          style={styles.heartButton}
+          onPress={handleLikeToggle}
+        >
           <Ionicons
-            name="heart-outline"
+            name={courseData?.isLiked ? 'heart' : 'heart-outline'}
             size={24}
-            color={gray[40]}
+            color={courseData?.isLiked ? '#FF4B6A' : gray[40]}
           />
         </Pressable>
         <Pressable style={styles.floatingButton}>
@@ -254,6 +438,35 @@ export default function CourseDetailScreen() {
       </View>
     </View>
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        {renderHeader()}
+        {renderLoadingState()}
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        {renderHeader()}
+        {renderErrorState()}
+      </View>
+    );
+  }
+
+  if (!courseData) {
+    return (
+      <View style={styles.container}>
+        {renderHeader()}
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>코스 정보를 찾을 수 없습니다.</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -280,8 +493,13 @@ export default function CourseDetailScreen() {
           {renderPhotos()}
         </ScrollView>
       </Animated.View>
-
       {renderFloatingButton()}
+
+      <ImageViewerModal
+        visible={isImageViewerVisible}
+        imageUrl={selectedImage || ''}
+        onClose={handleCloseImageViewer}
+      />
     </View>
   );
 }
@@ -475,9 +693,15 @@ const styles = StyleSheet.create({
   },
   photoItemContainer: {
     position: 'relative',
-    flex: 1,
   },
   photoItem: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
+  photoItemImage: {
+    width: '100%',
+    height: '100%',
     borderRadius: 8,
   },
   photoOverlay: {
@@ -566,5 +790,74 @@ const styles = StyleSheet.create({
     color: base.white,
     fontSize: 16,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: gray[40],
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    color: gray[40],
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: main[80],
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: base.white,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  emptyContent: {
+    padding: 40,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: gray[40],
+    textAlign: 'center',
+  },
+  noDataCourseContainer: {
+    marginVertical: 85,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  },
+  noDataText: {
+    color: gray[30],
+    fontSize: 13,
+  },
+  challengeButton: {
+    width: 200,
+    height: 44,
+    borderWidth: 1,
+    borderColor: gray[15],
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: base.white,
+    marginTop: 12,
+  },
+  challengeButtonText: {
+    fontSize: 14,
+    color: gray[80],
+    fontWeight: '500',
   },
 });

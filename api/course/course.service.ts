@@ -1,5 +1,7 @@
 import {
   CourseDetailResponse,
+  CourseImagesResponse,
+  CourseRankResponse,
   CourseLikeRespone,
   FavoriteCourseItemsResponse,
   FavoriteCourseParams,
@@ -15,6 +17,8 @@ import client from '../client';
 import {
   courseLikeUrl,
   getCourseDetailUrl,
+  getCourseImagesUrl,
+  getCourseRankUrl,
   getFavoriteCourseUrl,
   getNearRunnerCourseUrl,
   getPopularCourseUrl,
@@ -100,6 +104,38 @@ export const getRunningCourse = async (
     return data;
   } catch (error) {
     console.error('내가 달린 코스 API 에러', error);
+    return null;
+  }
+};
+
+export const getCourseImages = async (
+  courseId: number,
+  params?: { lastId?: number; size?: number },
+): Promise<CourseImagesResponse | null> => {
+  try {
+    const { data } = await client.get(getCourseImagesUrl(courseId), { params });
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'getCourseImages');
+    if (__DEV__) {
+      console.error('[COURSE] 코스 이미지 API 요청 중 에러 발생:', appError);
+    }
+    return null;
+  }
+};
+
+export const getCourseRank = async (
+  courseId: number,
+  params?: { lastId?: number; size?: number },
+): Promise<CourseRankResponse | null> => {
+  try {
+    const { data } = await client.get(getCourseRankUrl(courseId), { params });
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'getCourseRank');
+    if (__DEV__) {
+      console.error('[COURSE] 코스 랭킹 API 요청 중 에러 발생:', appError);
+    }
     return null;
   }
 };
