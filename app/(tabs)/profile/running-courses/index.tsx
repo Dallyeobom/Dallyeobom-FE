@@ -3,7 +3,6 @@ import MyRunningCourseItem from '@/components/item/my-running-course-item';
 import NoDataItem from '@/components/item/no-data-item';
 import VerticalList from '@/components/list/verical-list';
 import LoadingSpinner from '@/components/loading';
-import { exampleCourseCompleteHistory } from '@/mocks/data';
 import { gray } from '@/styles/color';
 import { RunningCourseItem } from '@/types/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,12 +25,9 @@ function RunningCourses() {
       lastId: 10,
       size: 10,
     });
-    if (!data || data?.items.length === 0) {
-      // TODO: UI확인을 위해 임시로 넣음
-      setMyRunningCourseData(exampleCourseCompleteHistory);
-    } else {
-      setMyRunningCourseData(data?.items);
-    }
+
+    setMyRunningCourseData(data?.items || []);
+
     setLoading(false);
   };
 
@@ -60,15 +56,14 @@ function RunningCourses() {
               style={[
                 styles.noDataPopularCourseContainer,
                 {
-                  marginTop: '34%',
-                  marginBottom: '20%',
+                  marginTop: '60%',
                 },
               ]}
             >
-              <NoDataItem />
+              <NoDataItem source={require('@/assets/images/priority-high.png')} />
               <View style={styles.noDataTextContainer}>
-                <Text style={styles.noDataText}>내가 완주한 코스가</Text>
-                <Text style={styles.noDataText}>없습니다.</Text>
+                <Text style={styles.noDataText}>아직 달린 코스가 없네요</Text>
+                <Text style={styles.noDataText}>첫 코스를 달려보세요!</Text>
               </View>
             </View>
           )}

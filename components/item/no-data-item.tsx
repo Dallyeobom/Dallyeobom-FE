@@ -1,11 +1,15 @@
 import { gray } from '@/styles/color';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
-function NoDataItem() {
+interface NoDataItemProps {
+  source: ImageSourcePropType;
+}
+
+function NoDataItem({ source }: NoDataItemProps) {
   return (
     <View style={styles.image}>
-      <Image source={require('@/assets/images/priority-high.png')} />
+      <Image source={source} />
     </View>
   );
 }
