@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import client from '../client';
 import {
   changeNicknameUrl,
-  changeUserProfileImageUrl,
+  getProfileImageUrl,
   getUserInfoUrl,
   getUserRankingUrl,
 } from './urls';
@@ -61,7 +61,7 @@ export const changeNickname = async (nickname: string) => {
 
 export const changeUserProfileImage = async (formData: FormData) => {
   try {
-    const { status } = await client.put(changeUserProfileImageUrl(), formData, {
+    const { status } = await client.put(getProfileImageUrl(), formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -69,6 +69,16 @@ export const changeUserProfileImage = async (formData: FormData) => {
     return status;
   } catch (error) {
     const appError = handleError(error, 'changeUserProfileImage');
+    throw appError;
+  }
+};
+
+export const deleteUserProfileImage = async () => {
+  try {
+    const { status } = await client.delete(getProfileImageUrl());
+    return status;
+  } catch (error) {
+    const appError = handleError(error, 'deleteUserProfileImage');
     throw appError;
   }
 };

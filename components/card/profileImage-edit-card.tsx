@@ -1,4 +1,8 @@
-import { changeUserProfileImage, userInfo } from '@/api/user/user.service';
+import {
+  changeUserProfileImage,
+  deleteUserProfileImage,
+  userInfo,
+} from '@/api/user/user.service';
 import { useCameraRequest } from '@/hooks/use-camera-request';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
 import { showErrorAlert } from '@/utils/error-handler';
@@ -7,13 +11,17 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AsyncAlert from '../alert/async-alert';
 
 interface ProfileImageEditCardProps {
+  userProfileImage: null | string;
   setIsProfileImageModal: React.Dispatch<React.SetStateAction<boolean>>;
   setProfileImageChangeSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsProfileImageDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function ProfileImageEditCard({
+  userProfileImage,
   setIsProfileImageModal,
   setProfileImageChangeSaved,
+  setIsProfileImageDelete,
 }: ProfileImageEditCardProps) {
   const { handleCamera } = useCameraRequest();
   const { handlePictures } = usePicturesRequest();
@@ -48,8 +56,24 @@ function ProfileImageEditCard({
     setIsProfileImageModal(false);
   };
 
-  // TODO: 사진 delete 구현하기
-  const handleDeletePictures = async () => {};
+  const handleDeletePictures = async () => {
+    if (!userProfileImage) {
+      await AsyncAlert({ message: '프로필 사진을 먼저 업로드해주세요.' });
+      return;
+    }
+    try {
+      const response = await deleteUserProfileImage();
+      if (response === 200) {
+        setIsProfileImageDelete(true);
+        await AsyncAlert({ message: '프로필 사진이 삭제되었습니다.' });
+        await userInfo();
+        setIsProfileImageDelete(false);
+      }
+    } catch (error) {
+      showErrorAlert(error, 'PROFILE_IMAGE_DELETE', '프로필 사진 삭제 실패');
+    }
+    setIsProfileImageModal(false);
+  };
 
   return (
     <View style={styles.container}>
