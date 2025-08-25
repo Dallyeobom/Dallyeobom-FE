@@ -72,3 +72,13 @@ export const changeUserProfileImage = async (formData: FormData) => {
     throw appError;
   }
 };
+
+export const deleteUserProfileImage = async () => {
+  try {
+    const { status } = await client.delete(changeUserProfileImageUrl());
+    return status;
+  } catch (error) {
+    const appError = handleError(error, 'deleteUserProfileImage');
+    throw appError;
+  }
+};
