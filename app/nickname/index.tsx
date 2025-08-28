@@ -1,5 +1,9 @@
 import AsyncAlert from '@/components/alert/async-alert';
+import { CloseIcon } from '@/components/icons/CommonIcon';
 import TermsAndConditionlist from '@/components/list/agreement-list';
+import PrivacyServiceList from '@/components/list/privacy-service-list';
+import PushServiceList from '@/components/list/push-service-list';
+import TermsServiceList from '@/components/list/terms-service-list';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import { useAuthStore } from '@/stores/auth-store';
 import { base, main } from '@/styles/color';
@@ -7,15 +11,16 @@ import { AgreementsSchema } from '@/types/auth';
 import { showErrorAlert } from '@/utils/error-handler';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { CloseIcon } from '@/components/icons/CommonIcon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Index() {
   const [nickname, onChangeNickname] = useState('');
   const [isAgreementModal, setIsAgreementModal] = useState(false);
+  const [agreemenDatailNumber, setAgreementDetailNumber] = useState<number | null>(null);
   const [termsAndConditionData, setTermsAndConditionData] = useState<AgreementsSchema[]>(
     [],
   );
+
   const doubleCheckNickname = useAuthStore((state) => state.doubleCheckNickname);
   const termsList = useAuthStore((state) => state.termsList);
 
@@ -74,7 +79,10 @@ function Index() {
               style={styles.image}
               onPress={handleDelete}
             >
-              <CloseIcon width={24} height={24} />
+              <CloseIcon
+                width={24}
+                height={24}
+              />
             </Pressable>
           )}
         </View>
@@ -101,7 +109,15 @@ function Index() {
             nickname={nickname}
             setIsAgreementModal={setIsAgreementModal}
             termsAndConditionData={termsAndConditionData}
+            setAgreementDetailNumber={setAgreementDetailNumber}
           />
+        </BottomUpModal>
+      )}
+      {agreemenDatailNumber && (
+        <BottomUpModal close={() => setAgreementDetailNumber(null)}>
+          {agreemenDatailNumber === 4 && <TermsServiceList />}
+          {agreemenDatailNumber === 2 && <PrivacyServiceList />}
+          {agreemenDatailNumber === 3 && <PushServiceList />}
         </BottomUpModal>
       )}
     </View>

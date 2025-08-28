@@ -7,7 +7,6 @@ function NicknameLayout() {
   return (
     <Stack
       screenOptions={{
-        // NicknameLayout에서 정의한 헤더를 보여줄지의 여부
         headerShown: true,
 
         headerTintColor: '#fff',

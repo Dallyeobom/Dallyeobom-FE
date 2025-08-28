@@ -3,8 +3,8 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useModalStore } from '@/stores/modal-store';
 import { base, main } from '@/styles/color';
 import { AgreementsSchema } from '@/types/auth';
-import { processAgreementData, processTermsData } from '@/utils/signup';
 import { showErrorAlert } from '@/utils/error-handler';
+import { processAgreementData, processTermsData } from '@/utils/signup';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
@@ -14,12 +14,14 @@ interface TermsAndConditionlistProps {
   nickname: string;
   setIsAgreementModal: React.Dispatch<React.SetStateAction<boolean>>;
   termsAndConditionData: AgreementsSchema[];
+  setAgreementDetailNumber: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 function TermsAndConditionlist({
   nickname,
   setIsAgreementModal,
   termsAndConditionData,
+  setAgreementDetailNumber,
 }: TermsAndConditionlistProps) {
   const [agreementData, setGreemenetData] = useState(
     processAgreementData(termsAndConditionData),
@@ -140,6 +142,7 @@ function TermsAndConditionlist({
               type={type}
               isCheck={isCheck}
               onToggle={() => handleToggle(type)}
+              setAgreementDetailNumber={setAgreementDetailNumber}
             />
           );
         })}
