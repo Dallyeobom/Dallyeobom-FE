@@ -1,4 +1,3 @@
-import { TermsDetail } from '@/api/auth/auth.service';
 import PurPleCheckBox from '@/components/checkbox';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -24,8 +23,6 @@ function TermsAndConditionAgreement({
 }: TermsAndConditionAgreementProps) {
   const handlePress = async (id: number) => {
     setAgreementDetailNumber(id);
-    const result = await TermsDetail(id);
-    console.log('RESULT입니다아 ===>', result);
   };
 
   return (

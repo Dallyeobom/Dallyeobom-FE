@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 function Index() {
   const [nickname, onChangeNickname] = useState('');
   const [isAgreementModal, setIsAgreementModal] = useState(false);
-  const [agreemenDatailNumber, setAgreementDetailNumber] = useState<number | null>(null);
+  const [agreemenDetailNumber, setAgreementDetailNumber] = useState<number | null>(null);
   const [termsAndConditionData, setTermsAndConditionData] = useState<AgreementsSchema[]>(
     [],
   );
@@ -113,19 +113,19 @@ function Index() {
           />
         </BottomUpModal>
       )}
-      {agreemenDatailNumber && (
+      {agreemenDetailNumber && (
         <BottomUpModal
           borderRadius={0}
           height="100%"
           close={() => setAgreementDetailNumber(null)}
         >
-          {agreemenDatailNumber === 2 && (
+          {agreemenDetailNumber === 2 && (
             <PrivacyServiceList setAgreementDetailNumber={setAgreementDetailNumber} />
           )}
-          {agreemenDatailNumber === 3 && (
+          {agreemenDetailNumber === 3 && (
             <PushServiceList setAgreementDetailNumber={setAgreementDetailNumber} />
           )}
-          {agreemenDatailNumber === 4 && (
+          {agreemenDetailNumber === 4 && (
             <TermsServiceList setAgreementDetailNumber={setAgreementDetailNumber} />
           )}
         </BottomUpModal>

@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   headerTitle: {
-    fontWeight: 700,
+    fontWeight: '700',
   },
   wrapper: {
     flex: 1,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   title: {
-    fontWeight: 700,
+    fontWeight: '700',
     marginBottom: 6,
   },
   body: {
