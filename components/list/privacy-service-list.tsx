@@ -1,10 +1,32 @@
 import { termsOfPrivacy } from '@/utils/agreement-detail';
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-function PrivacyServiceList() {
+interface PrivacyServiceListProps {
+  setAgreementDetailNumber: React.Dispatch<React.SetStateAction<number | null>>;
+}
+
+function PrivacyServiceList({ setAgreementDetailNumber }: PrivacyServiceListProps) {
   return (
     <SafeAreaView style={styles.safeArea}>
+      <TouchableOpacity
+        style={styles.header}
+        onPress={() => {
+          setAgreementDetailNumber(null);
+        }}
+      >
+        <Image source={require('@/assets/images/back.png')} />
+        <Text style={styles.headerTitle}>개인정보 수집 및 이용 동의</Text>
+      </TouchableOpacity>
+
       <ScrollView style={styles.wrapper}>
         {termsOfPrivacy.map((term, index) => {
           return (
@@ -26,11 +48,23 @@ export default PrivacyServiceList;
 
 const styles = StyleSheet.create({
   safeArea: {
-    height: 800,
+    flex: 1,
+    paddingHorizontal: 16,
   },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 24,
+    columnGap: 90,
+    paddingVertical: 10,
+  },
+  headerTitle: {
+    fontWeight: 700,
+  },
+
   wrapper: {
     flex: 1,
-    padding: 16,
+    paddingBottom: 40,
   },
   term: {
     marginBottom: 20,

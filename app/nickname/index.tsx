@@ -114,10 +114,20 @@ function Index() {
         </BottomUpModal>
       )}
       {agreemenDatailNumber && (
-        <BottomUpModal close={() => setAgreementDetailNumber(null)}>
-          {agreemenDatailNumber === 4 && <TermsServiceList />}
-          {agreemenDatailNumber === 2 && <PrivacyServiceList />}
-          {agreemenDatailNumber === 3 && <PushServiceList />}
+        <BottomUpModal
+          borderRadius={0}
+          height="100%"
+          close={() => setAgreementDetailNumber(null)}
+        >
+          {agreemenDatailNumber === 2 && (
+            <PrivacyServiceList setAgreementDetailNumber={setAgreementDetailNumber} />
+          )}
+          {agreemenDatailNumber === 3 && (
+            <PushServiceList setAgreementDetailNumber={setAgreementDetailNumber} />
+          )}
+          {agreemenDatailNumber === 4 && (
+            <TermsServiceList setAgreementDetailNumber={setAgreementDetailNumber} />
+          )}
         </BottomUpModal>
       )}
     </View>

@@ -8,7 +8,6 @@ function NicknameLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
-
         headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: 'bold',
