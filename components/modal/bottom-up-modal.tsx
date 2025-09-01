@@ -9,12 +9,19 @@ import {
   View,
 } from 'react-native';
 
-interface Props {
+interface BottomUpModalProps {
   children: React.ReactNode;
   close: () => void;
+  borderRadius?: number;
+  height?: number | `${number}%`;
 }
 
-export default function BottomUpModal({ children, close }: Props) {
+export default function BottomUpModal({
+  children,
+  close,
+  borderRadius = 26,
+  height,
+}: BottomUpModalProps) {
   return (
     <Modal
       animationType="slide"
@@ -30,7 +37,20 @@ export default function BottomUpModal({ children, close }: Props) {
           style={styles.backdrop}
           onPress={close}
         />
-        <View style={styles.modalContent}>{children}</View>
+        <View
+          style={[
+            styles.modalContent,
+            {
+              //     height !== undefined && { height }, // ✅ height 있을 때만 적용
+
+              height: height ? height : null,
+              borderTopLeftRadius: borderRadius,
+              borderTopRightRadius: borderRadius,
+            },
+          ]}
+        >
+          {children}
+        </View>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -48,6 +68,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
+    // height: '100%',
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
     backgroundColor: base.white,

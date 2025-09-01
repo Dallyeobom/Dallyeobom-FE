@@ -2,14 +2,15 @@ import PurPleCheckBox from '@/components/checkbox';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-interface TermsAndConditionAgreementProps  {
-  id: number,
-  name:string,
-  type:string,
-  isCheck: boolean,
-  onToggle: ()=>void;
+interface TermsAndConditionAgreementProps {
+  id: number;
+  name: string;
+  type: string;
+  isCheck: boolean;
+  onToggle: () => void;
+  setAgreementDetailNumber: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 function TermsAndConditionAgreement({
@@ -18,7 +19,12 @@ function TermsAndConditionAgreement({
   type,
   isCheck,
   onToggle,
+  setAgreementDetailNumber,
 }: TermsAndConditionAgreementProps) {
+  const handlePress = async (id: number) => {
+    setAgreementDetailNumber(id);
+  };
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
@@ -31,13 +37,13 @@ function TermsAndConditionAgreement({
           <Text>{name}</Text>
         </View>
         {type !== 'all' && (
-          <View>
+          <Pressable onPress={() => handlePress(id)}>
             <Ionicons
               name="chevron-forward"
               size={20}
               color="gray"
             />
-          </View>
+          </Pressable>
         )}
       </View>
     </View>
