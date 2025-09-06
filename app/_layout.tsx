@@ -87,6 +87,10 @@ export default function RootLayout() {
             name="(tabs)"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="tracking"
+            options={{ headerShown: true }}
+          />
         </Stack.Protected>
       </Stack>
     </ThemeProvider>
