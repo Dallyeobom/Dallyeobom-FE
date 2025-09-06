@@ -16,11 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyCQkJsROyX5g75uHAFv4XkqLo_Hgsty9DQ"
-        }
-      },
+
       "edgeToEdgeEnabled": true,
       "package": "com.dallyeobom.dallyeobomapp"
     },
