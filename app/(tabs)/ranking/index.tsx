@@ -77,7 +77,7 @@ function Ranking() {
           </View>
         ) : (
           <View style={[styles.noDataRankingCourseContainer, { marginTop: '60%' }]}>
-            <NoDataItem />
+            <NoDataItem source={require('@/assets/images/priority-high.png')} />
             <View style={styles.noDataTextContainer}>
               <Text style={styles.noDataText}>아직 1위 주자가 없습니다!</Text>
               <Text style={styles.noDataText}>코스를 완주하고 첫 랭커에 도전하세요!</Text>

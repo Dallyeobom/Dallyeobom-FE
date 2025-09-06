@@ -16,6 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+
       "edgeToEdgeEnabled": true,
       "package": "com.dallyeobom.dallyeobomapp"
     },
@@ -68,7 +69,14 @@
           }
         }
       ],
-      ["expo-location", { "isAndroidForegroundServiceEnabled": true }]
+      ["expo-location", { "isAndroidForegroundServiceEnabled": true }],
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

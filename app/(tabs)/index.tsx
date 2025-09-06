@@ -154,7 +154,7 @@ function Index() {
                       { marginTop: '20%', marginBottom: '20%' },
                     ]}
                   >
-                    <NoDataItem />
+                    <NoDataItem source={require('@/assets/images/priority-high.png')} />
                     <View style={styles.noDataTextContainer}>
                       <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
                       <Text style={styles.noDataText}>
@@ -192,7 +192,7 @@ function Index() {
                       },
                     ]}
                   >
-                    <NoDataItem />
+                    <NoDataItem source={require('@/assets/images/priority-high.png')} />
                     <View style={styles.noDataTextContainer}>
                       <Text style={styles.noDataText}>다른 위치로 설정하면</Text>
                       <Text style={styles.noDataText}>인기코스를 확인할 수 있어요.</Text>
