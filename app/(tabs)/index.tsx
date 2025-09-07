@@ -15,6 +15,7 @@ import { base, gray } from '@/styles/color';
 import type { NearUserCoursesResponse, PopularCoursesResponse } from '@/types/course';
 import { showErrorAlert } from '@/utils/error-handler';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   NativeScrollEvent,
@@ -34,6 +35,7 @@ function Index() {
   const [isButtonTextVisible, setIsButtonTextVisible] = useState(true);
 
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { selectedLocation, selectedCoords } = useLocationStore();
   const { modalVisible, setModalVisible } = useModalStore();
 
@@ -81,8 +83,8 @@ function Index() {
       const maxCount = 10;
       const params = {
         // TODO: 임시로 고정 값 사용, 추후 위치 기반으로 수정
-        latitude: 37.5665,
-        longitude: 126.978,
+        latitude: latitude,
+        longitude: longitude,
 
         radius,
         maxCount,
@@ -93,6 +95,10 @@ function Index() {
       showErrorAlert(error, 'POPULAR_COURSES', '인기 코스를 불러오는데 실패했습니다.');
       setPopularCoursesData([]);
     }
+  };
+
+  const handleTracking = () => {
+    router.push('/tracking');
   };
 
   useEffect(() => {
@@ -205,6 +211,7 @@ function Index() {
               buttonText={isButtonTextVisible ? '기록하기' : ''}
               width={isButtonTextVisible ? 120 : 52}
               height={52}
+              onPress={handleTracking}
             />
           </View>
         )}

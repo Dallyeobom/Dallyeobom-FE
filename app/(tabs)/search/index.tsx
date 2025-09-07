@@ -231,7 +231,7 @@ function Search() {
           searchResults.length === 0 &&
           searchResultCourseArr.length === 0 && (
             <View style={[styles.noDataNearRunnerCourseContainer, { marginTop: '50%' }]}>
-              <NoDataItem />
+              <NoDataItem source={require('@/assets/images/priority-high.png')} />
               <View style={styles.noDataTextContainer}>
                 <Text style={styles.noDataText}>검색 결과가 없어요.</Text>
                 <Text style={styles.noDataText}>다른 키워드로 다시 찾아보세요!</Text>

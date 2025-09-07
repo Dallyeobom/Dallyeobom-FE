@@ -282,7 +282,7 @@ export default function CourseDetailScreen() {
     if (!courseRanking || !courseRanking.items || courseRanking.items.length === 0) {
       return (
         <View style={[styles.noDataCourseContainer]}>
-          <NoDataItem />
+          <NoDataItem source={require('@/assets/images/priority-high.png')} />
           <Text style={styles.noDataText}>이 코스를 완주하고 랭킹에 도전하세요</Text>
           <Pressable style={styles.challengeButton}>
             <Text style={styles.challengeButtonText}>이 코스로 달리기</Text>
