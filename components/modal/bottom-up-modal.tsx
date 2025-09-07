@@ -41,8 +41,6 @@ export default function BottomUpModal({
           style={[
             styles.modalContent,
             {
-              //     height !== undefined && { height }, // ✅ height 있을 때만 적용
-
               height: height ? height : null,
               borderTopLeftRadius: borderRadius,
               borderTopRightRadius: borderRadius,
@@ -68,7 +66,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    // height: '100%',
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
     backgroundColor: base.white,
