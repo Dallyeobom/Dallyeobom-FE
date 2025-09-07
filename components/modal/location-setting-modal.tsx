@@ -66,7 +66,7 @@ export default function LocationSettingModal({
       const districts = new Set<string>();
 
       const searchRadius = NEARBY_SEARCH_RADIUS_DEGREES;
-      const stepSize = 0.005; // 간격 약 550m
+      const stepSize = 0.005;
       const searchPoints: { lat: number; lng: number }[] = [];
 
       for (
