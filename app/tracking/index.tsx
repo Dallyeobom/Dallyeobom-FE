@@ -3,7 +3,8 @@ import LoadingSpinner from '@/components/loading';
 import ModalBackground from '@/components/modal/modal-background';
 import { gray } from '@/styles/color';
 import * as Location from 'expo-location';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 
@@ -15,13 +16,60 @@ interface LocationType {
 function Index() {
   const [location, setLocation] = useState<LocationType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModal, setIsModal] = useState(false);
+
+  // for timer
   const [hour, setHour] = useState(0);
   const [minute, setMinute] = useState(0);
-  const [isModal, setIsModal] = useState(false);
+  const [isPause, setIsPause] = useState(false);
+  const [remainingTime, setRemainigTime] = useState(10000);
+
+  const startTimeRef = useRef<number | null>(null); // 시간은 ref로.
+  const timerIdRef = useRef<number | null>(null); // pause할떄 삭제하기 위한 timerId
+  const router = useRouter();
 
   const handleOpenModal = () => {
     setIsModal(true);
+    pauseTime();
   };
+
+  const handleTerminate = () => {
+    if (!timerIdRef.current || !startTimeRef.current) return;
+    setIsModal(false);
+    setIsPause(true);
+    clearTimeout(timerIdRef.current);
+    clearTimeout(startTimeRef.current);
+    router.push('/tracking/complete');
+  };
+
+  const startTime = () => {
+    startTimeRef.current = Date.now();
+    timerIdRef.current = setTimeout(() => {
+      setMinute((prev) => (prev === 59 ? 0 : prev + 1));
+      setHour((prev) => {
+        if (minute === 59) {
+          return prev + 1;
+        }
+        return prev;
+      });
+      setRemainigTime(10000);
+    }, remainingTime);
+  };
+
+  const pauseTime = () => {
+    setIsPause(true);
+    if (timerIdRef.current && startTimeRef.current) {
+      clearTimeout(timerIdRef.current);
+      const elapsedTime = Date.now() - startTimeRef.current;
+      setRemainigTime(elapsedTime);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPause) {
+      startTime();
+    }
+  }, [minute, isPause]);
 
   useEffect(() => {
     async function getCurrentLocation() {
@@ -39,18 +87,6 @@ function Index() {
     }
     getCurrentLocation();
   }, []);
-
-  useEffect(() => {
-    console.log('useEFfect실행');
-    const IntervalId = setInterval(() => {
-      setMinute((prev) => prev + 1);
-    }, 60000);
-
-    return () => {
-      console.log('끗!===>> INTERVALID', IntervalId);
-      clearInterval(IntervalId);
-    };
-  }, [minute]);
 
   return (
     <View style={styles.container}>
@@ -120,7 +156,6 @@ function Index() {
           </View>
         </View>
       ) : (
-        //   구글 맵 나오기전까지 LOADING
         <LoadingSpinner />
       )}
       {isModal && (
@@ -130,8 +165,10 @@ function Index() {
             subTitle="한 번 종료하면 다시 이어서 기록할 수 없어요."
             whiteButtonText="종료하기"
             purpleButtonText="아니요"
+            onPressWhiteButton={handleTerminate}
             onPressPurPleButton={() => {
               setIsModal(false);
+              setIsPause(false);
             }}
           />
         </ModalBackground>
