@@ -18,3 +18,7 @@ export const getCourseImagesUrl = (courseId: number) =>
 // 코스 랭킹
 export const getCourseRankUrl = (courseId: number) =>
   `/api/v1/course/${courseId}/rank`;
+
+// 코스 리뷰
+export const getCourseReviewUrl = (courseId: number) =>
+  `/api/v1/course/${courseId}/review`;
