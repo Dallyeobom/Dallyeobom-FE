@@ -152,3 +152,34 @@ const courseRankResponseSchema = z.object({
 
 export type UserRank = z.infer<typeof userRankSchema>;
 export type CourseRankResponse = z.infer<typeof courseRankResponseSchema>;
+
+const courseReviewUserSchema = z.object({
+  id: z.number().int(),
+  nickname: z.string(),
+  profileImage: z.string().url().optional(),
+});
+
+const courseReviewItemSchema = z.object({
+  id: z.number().int(),
+  user: courseReviewUserSchema,
+  review: z.string(),
+  completionImages: z.array(z.string().url()),
+  createdAt: z.string(),
+});
+
+const courseReviewResponseSchema = z.object({
+  items: z.array(courseReviewItemSchema),
+  lastId: z.number().int(),
+  hasNext: z.boolean(),
+});
+
+export type CourseReviewUser = z.infer<typeof courseReviewUserSchema>;
+export type CourseReviewItem = z.infer<typeof courseReviewItemSchema>;
+export type CourseReviewResponse = z.infer<typeof courseReviewResponseSchema>;
+
+export const courseReviewParamsSchema = z.object({
+  lastId: z.number().optional(),
+  size: z.number().optional(),
+});
+
+export type CourseReviewParams = z.infer<typeof courseReviewParamsSchema>;
