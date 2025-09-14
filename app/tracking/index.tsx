@@ -1,14 +1,16 @@
 import TwoButtonAlert from '@/components/alert/two-button-alert';
 import LoadingSpinner from '@/components/loading';
 import ModalBackground from '@/components/modal/modal-background';
+import { useTrackingStore } from '@/stores/tracking-store';
 import { gray } from '@/styles/color';
+import { calculateTotalDistance } from '@/utils/tracking';
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 
-interface LocationType {
+export interface LocationType {
   latitude: number;
   longitude: number;
 }
@@ -23,10 +25,27 @@ function Index() {
   const [minute, setMinute] = useState(0);
   const [isPause, setIsPause] = useState(false);
   const [remainingTime, setRemainigTime] = useState(10000);
+  const [distance, setDistance] = useState(0);
 
   const startTimeRef = useRef<number | null>(null); // 시간은 ref로.
   const timerIdRef = useRef<number | null>(null); // pause할떄 삭제하기 위한 timerId
   const router = useRouter();
+
+  const handleTotalTrackingHour = useTrackingStore(
+    (state) => state.handleTotalTrackingHour,
+  );
+
+  const handleTotalTrackingMinute = useTrackingStore(
+    (state) => state.handleTotalTrackingMinute,
+  );
+
+  const handleTotalTrackingDistance = useTrackingStore(
+    (state) => state.handleTotalTrackingDistance,
+  );
+
+  const handleTotalTrackingLocation = useTrackingStore(
+    (state) => state.handleTotalTrackingLocation,
+  );
 
   const handleOpenModal = () => {
     setIsModal(true);
@@ -39,6 +58,15 @@ function Index() {
     setIsPause(true);
     clearTimeout(timerIdRef.current);
     clearTimeout(startTimeRef.current);
+    handleTotalTrackingHour(hour);
+    handleTotalTrackingMinute(minute);
+    handleTotalTrackingDistance(distance);
+    // reset
+    setHour(0);
+    setMinute(0);
+    setDistance(0);
+    handleTotalTrackingLocation(location);
+    getCurrentLocation();
     router.push('/tracking/complete');
   };
 
@@ -64,7 +92,19 @@ function Index() {
       setRemainigTime(elapsedTime);
     }
   };
+  async function getCurrentLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
+    const { latitude, longitude } = location.coords;
 
+    setLocation([{ latitude: latitude, longitude: longitude }]);
+    setIsLoading(false);
+  }
   useEffect(() => {
     if (!isPause) {
       startTime();
@@ -72,19 +112,11 @@ function Index() {
   }, [minute, isPause]);
 
   useEffect(() => {
-    async function getCurrentLocation() {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-      const { latitude, longitude } = location.coords;
+    const result = calculateTotalDistance(location);
+    setDistance(result);
+  }, [location.length]);
 
-      setLocation([{ latitude: latitude, longitude: longitude }]);
-      setIsLoading(false);
-    }
+  useEffect(() => {
     getCurrentLocation();
   }, []);
 
@@ -143,7 +175,7 @@ function Index() {
               </View>
               <View style={styles.timeItem}>
                 <Text style={styles.timeText}>거리</Text>
-                <Text style={styles.timeNumber}>15.2KM</Text>
+                <Text style={styles.timeNumber}>{distance}KM</Text>
               </View>
             </View>
             <Pressable

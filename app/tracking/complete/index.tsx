@@ -2,16 +2,23 @@ import TwoButtonAlert from '@/components/alert/two-button-alert';
 import TrackingRecordCard from '@/components/card/tracking-record-card';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import ModalBackground from '@/components/modal/modal-background';
+import { useTrackingStore } from '@/stores/tracking-store';
 import { gray } from '@/styles/color';
+import { getTodayDate } from '@/utils/tracking';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 
 function Index() {
   const [isModal, setIsModal] = useState(false);
   const [isRecordModal, setIsRecordModal] = useState(false);
   const router = useRouter();
+
+  const totalTrackingHour = useTrackingStore((state) => state.totalTrackingHour);
+  const totalTrackingMinute = useTrackingStore((state) => state.totalTrackingMinute);
+  const totalTrackingDistance = useTrackingStore((state) => state.totalTrackingDistance);
+  const totalTrackingLocation = useTrackingStore((state) => state.totalTrackingLocation);
 
   const handleOpenModal = () => {
     setIsModal(true);
@@ -19,20 +26,24 @@ function Index() {
 
   const handleRecord = () => {
     setIsRecordModal(true);
-    // router.push('/tracking/record');
   };
+  const { month, day } = getTodayDate();
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Text style={styles.date}>8월 2일 기록</Text>
+        <Text style={styles.date}>
+          {month}월 {day}일 기록
+        </Text>
         <View style={styles.timerContainer}>
           <View style={styles.timeItem}>
             <Text style={styles.timeText}>시간</Text>
-            <Text style={styles.timeNumber}>1:20</Text>
+            <Text style={styles.timeNumber}>
+              {totalTrackingHour}:{totalTrackingMinute}
+            </Text>
           </View>
           <View style={styles.timeItem}>
             <Text style={styles.timeText}>거리</Text>
-            <Text style={styles.timeNumber}>15.2km</Text>
+            <Text style={styles.timeNumber}>{totalTrackingDistance}km</Text>
           </View>
         </View>
         <View style={styles.mapViewContainer}>
@@ -40,24 +51,22 @@ function Index() {
             style={styles.map}
             provider={PROVIDER_GOOGLE}
             initialRegion={{
-              latitude: 37.4975991,
-              longitude: 126.7728823,
+              latitude: totalTrackingLocation[0].latitude,
+              longitude: totalTrackingLocation[0].longitude,
               latitudeDelta: 0.1,
               longitudeDelta: 0.1,
             }}
-            onRegionChange={(region) => {}}
-            onRegionChangeComplete={(region) => {}}
           >
-            {/* <Marker
-          coordinate={}
-          title="Start"
-        />ㅁ
+            <Marker
+              coordinate={totalTrackingLocation[0]}
+              title="Start"
+            />
 
-        <Polyline
-          coordinates={''}
-          strokeColor="#00BFFF"
-          strokeWidth={4}
-        /> */}
+            <Polyline
+              coordinates={totalTrackingLocation}
+              strokeColor="#00BFFF"
+              strokeWidth={4}
+            />
           </MapView>
         </View>
         <View style={styles.buttonContainer}>
