@@ -4,3 +4,7 @@ export const getMyRecordedCourseHistory = (userId: number) =>
 
 // 코스 완주 기록 생성 API
 export const createCourse = () => '/api/v1/course-completion-history';
+
+// 코스 완주 기록 상세 API
+export const getCompleteCourseDetail = (courseId: number) =>
+  `/api/v1/course-completion-history/${courseId}`;

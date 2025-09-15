@@ -12,6 +12,7 @@ import type {
   CourseImagesResponse,
   CourseRankResponse,
 } from '@/types/course';
+import { formatDistance } from '@/utils/course';
 import { getDifficultyText } from '@/utils/difficulty';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -129,12 +130,12 @@ export default function CourseDetailScreen() {
     }),
   ).current;
 
-  const formatDistance = (lengthInMeters: number) => {
-    if (lengthInMeters >= 1000) {
-      return `${(lengthInMeters / 1000).toFixed(1)}km`;
-    }
-    return `${lengthInMeters}m`;
-  };
+  // const formatDistance = (lengthInMeters: number) => {
+  //   if (lengthInMeters >= 1000) {
+  //     return `${(lengthInMeters / 1000).toFixed(1)}km`;
+  //   }
+  //   return `${lengthInMeters}m`;
+  // };
 
   const toggleBottomSheet = () => {
     const targetValue = isExpanded ? bottomSheetHeight - minBottomSheetHeight : 0;

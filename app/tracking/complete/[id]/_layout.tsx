@@ -1,9 +1,9 @@
 import { base } from '@/styles/color';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-function TrackingCompleteLayout() {
+function TrackingCompleteDetailLayout() {
   const router = useRouter();
 
   return (
@@ -23,22 +23,15 @@ function TrackingCompleteLayout() {
                 resizeMode="contain"
               />
             </Pressable>
+            <Text style={styles.title}>코스 정보</Text>
           </View>
         ),
       }}
-    >
-      <Stack.Screen name="index" />
-      <Stack.Screen
-        name="[id]"
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack>
+    />
   );
 }
 
-export default TrackingCompleteLayout;
+export default TrackingCompleteDetailLayout;
 const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
@@ -60,5 +53,9 @@ const styles = StyleSheet.create({
   },
   chevronIcon: {
     marginTop: 4,
+  },
+
+  title: {
+    fontWeight: '700',
   },
 });

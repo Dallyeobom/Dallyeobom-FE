@@ -5,7 +5,11 @@ import {
 } from '@/types/course-complete';
 import { handleError } from '@/utils/error-handler';
 import client from '../client';
-import { createCourse, getMyRecordedCourseHistory } from './urls';
+import {
+  createCourse,
+  getCompleteCourseDetail,
+  getMyRecordedCourseHistory,
+} from './urls';
 
 export const myRecordedCourseHistory = async (
   params: RecordedCourseHistoryParams,
@@ -40,6 +44,19 @@ export const createMyCourse = async (
     const appError = handleError(error, 'courseComplete');
     if (__DEV__) {
       console.error('[COURSE_COMPLETE] 나의 createCourse 에러:', appError);
+    }
+    return null;
+  }
+};
+
+export const completeCourseDetail = async (id: number) => {
+  try {
+    const { data } = await client.get(getCompleteCourseDetail(id));
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'courseCompleteDetail');
+    if (__DEV__) {
+      console.error('[COURSE_COMPLETE] 코스 상세 API 요청 중 에러 발생:', appError);
     }
     return null;
   }

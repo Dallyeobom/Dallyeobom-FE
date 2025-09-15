@@ -11,7 +11,7 @@ import {
 
 interface BottomUpModalProps {
   children: React.ReactNode;
-  close: () => void;
+  close?: () => void;
   borderRadius?: number;
   height?: number | `${number}%`;
 }
