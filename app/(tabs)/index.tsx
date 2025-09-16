@@ -126,7 +126,9 @@ function Index() {
   }, []);
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View
+      style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
+    >
       <View style={styles.subContainer}>
         {selectedLocation && (
           <View style={styles.locationTextContainer}>

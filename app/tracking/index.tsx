@@ -1,4 +1,5 @@
 import TwoButtonAlert from '@/components/alert/two-button-alert';
+import CoursePath from '@/components/line/course-path';
 import LoadingSpinner from '@/components/loading';
 import ModalBackground from '@/components/modal/modal-background';
 import { useTrackingStore } from '@/stores/tracking-store';
@@ -8,7 +9,7 @@ import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 export interface LocationType {
   latitude: number;
@@ -105,6 +106,8 @@ function Index() {
     setLocation([{ latitude: latitude, longitude: longitude }]);
     setIsLoading(false);
   }
+
+  const renderPolyLine = CoursePath();
   useEffect(() => {
     if (!isPause) {
       startTime();
@@ -159,11 +162,8 @@ function Index() {
               title="Start"
             />
 
-            <Polyline
-              coordinates={location}
-              strokeColor="#00BFFF"
-              strokeWidth={4}
-            />
+            {/* 경로 path  */}
+            {renderPolyLine(location)}
           </MapView>
           <View style={styles.timerContainer}>
             <View style={styles.time}>
@@ -271,5 +271,17 @@ const styles = StyleSheet.create({
     width: 8,
     height: '40%',
     backgroundColor: '#fff',
+  },
+  startMarker: {
+    backgroundColor: '#6C5CE7',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    width: 200,
+  },
+  startText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
 });

@@ -1,5 +1,7 @@
 import TwoButtonAlert from '@/components/alert/two-button-alert';
 import TrackingRecordCard from '@/components/card/tracking-record-card';
+import { PinIcon } from '@/components/icons/TrackingIcon';
+import CoursePath from '@/components/line/course-path';
 import BottomUpModal from '@/components/modal/bottom-up-modal';
 import ModalBackground from '@/components/modal/modal-background';
 import { useTrackingStore } from '@/stores/tracking-store';
@@ -8,7 +10,7 @@ import { getTodayDate } from '@/utils/tracking';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 function Index() {
   const [isModal, setIsModal] = useState(false);
@@ -28,6 +30,9 @@ function Index() {
     setIsRecordModal(true);
   };
   const { month, day } = getTodayDate();
+
+  const renderPolyLine = CoursePath();
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -61,12 +66,16 @@ function Index() {
               coordinate={totalTrackingLocation[0]}
               title="Start"
             />
-
-            <Polyline
-              coordinates={totalTrackingLocation}
-              strokeColor="#00BFFF"
-              strokeWidth={4}
-            />
+            <Marker
+              coordinate={totalTrackingLocation[totalTrackingLocation.length - 1]}
+              title="End"
+            >
+              <PinIcon
+                width={35}
+                height={35}
+              />
+            </Marker>
+            {renderPolyLine(totalTrackingLocation)}
           </MapView>
         </View>
         <View style={styles.buttonContainer}>

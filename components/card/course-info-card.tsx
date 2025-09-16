@@ -1,23 +1,22 @@
-import { gray } from '@/styles/color';
-import { CourseDetailResponse } from '@/types/course';
+import { gray, main } from '@/styles/color';
+import { CourseDetailResponse, CourseRankResponse } from '@/types/course';
 import { formatDistance } from '@/utils/course';
 import { getDifficultyText } from '@/utils/difficulty';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { renderCompletedUsers } from '../item/complete-user-item';
 
 interface CourseInfoCardProps {
-  courseData: CourseDetailResponse;
+  courseData: CourseDetailResponse | null;
+  courseRanking: CourseRankResponse | null;
 }
 
-function CourseInfoCard({ courseData }: CourseInfoCardProps) {
+function CourseInfoCard({ courseData, courseRanking }: CourseInfoCardProps) {
   const renderCourseInfo = () => {
     if (!courseData) return null;
 
     return (
-      <View
-        style={styles.courseInfoContainer}
-        // {...PanResponder.panHandlers}
-      >
+      <View style={styles.courseInfoContainer}>
         <View style={styles.courseInfoHeader}>
           <View style={styles.difficultyBadge}>
             <Text style={styles.difficulty}>
@@ -32,7 +31,20 @@ function CourseInfoCard({ courseData }: CourseInfoCardProps) {
     );
   };
 
-  return <View style={styles.container}>{renderCourseInfo()}</View>;
+  return (
+    <View style={styles.container}>
+      {renderCourseInfo()}
+      {renderCompletedUsers(courseRanking)}
+      <View style={styles.buttonContainer}>
+        <Pressable style={styles.editButton}>
+          <Text style={styles.editButtonText}>수정하기</Text>
+        </Pressable>
+        <Pressable style={styles.challengeButton}>
+          <Text style={styles.challengeButtonText}>이 코스로 달리기</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
 }
 
 export default CourseInfoCard;
@@ -86,5 +98,41 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: gray[100],
+  },
+
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    columnGap: 8,
+  },
+  editButton: {
+    width: 112,
+    height: 56,
+    borderWidth: 1,
+    borderColor: '#f4f4f4',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f4f4f4',
+  },
+  editButtonText: {
+    color: '#121212',
+  },
+  challengeButton: {
+    width: 200,
+    height: 56,
+    borderWidth: 1,
+    borderColor: main[80],
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: main[80],
+  },
+  challengeButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#fff',
   },
 });

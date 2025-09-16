@@ -2,7 +2,7 @@ import {
   completeCourseDetail,
   createMyCourse,
 } from '@/api/course-complete/course-complete.service';
-import { CourseCameraIcon } from '@/components/icons/TrackingIcon';
+import { CourseCameraIcon, PinIcon } from '@/components/icons/TrackingIcon';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
 import { useTrackingStore } from '@/stores/tracking-store';
 import { base, main } from '@/styles/color';
@@ -18,9 +18,10 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import AsyncAlert from '../alert/async-alert';
 import { CloseIcon, HeaderCloseIcon } from '../icons/CommonIcon';
+import CoursePath from '../line/course-path';
 
 type ImageData = {
   fileName: string;
@@ -121,6 +122,7 @@ function TrackingRecordCard() {
       console.error('error', error);
     }
   };
+  const renderPolyLine = CoursePath();
 
   const courseLevelText = ['어려움', '보통', '쉬움'];
 
@@ -157,12 +159,16 @@ function TrackingRecordCard() {
               coordinate={totalTrackingLocation[0]}
               title="Start"
             />
-
-            <Polyline
-              coordinates={totalTrackingLocation}
-              strokeColor="#00BFFF"
-              strokeWidth={4}
-            />
+            <Marker
+              coordinate={totalTrackingLocation[totalTrackingLocation.length - 1]}
+              title="End"
+            >
+              <PinIcon
+                width={35}
+                height={35}
+              />
+            </Marker>
+            {renderPolyLine(totalTrackingLocation)}
           </MapView>
         </View>
         <View style={styles.sectionContainer}>
@@ -475,5 +481,16 @@ const styles = StyleSheet.create({
     zIndex: 10,
     right: 0,
     top: -10,
+  },
+  startMarker: {
+    backgroundColor: '#6C5CE7',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  startText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
 });
