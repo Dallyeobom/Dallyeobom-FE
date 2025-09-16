@@ -3,6 +3,8 @@ import {
   CourseImagesResponse,
   CourseRankResponse,
   CourseLikeRespone,
+  CourseReviewParams,
+  CourseReviewResponse,
   FavoriteCourseItemsResponse,
   FavoriteCourseParams,
   NearRunnerCoursesRequest,
@@ -19,6 +21,7 @@ import {
   getCourseDetailUrl,
   getCourseImagesUrl,
   getCourseRankUrl,
+  getCourseReviewUrl,
   getFavoriteCourseUrl,
   getNearRunnerCourseUrl,
   getPopularCourseUrl,
@@ -135,6 +138,22 @@ export const getCourseRank = async (
     const appError = handleError(error, 'getCourseRank');
     if (__DEV__) {
       console.error('[COURSE] 코스 랭킹 API 요청 중 에러 발생:', appError);
+    }
+    return null;
+  }
+};
+
+export const getCourseReview = async (
+  courseId: number,
+  params?: CourseReviewParams,
+): Promise<CourseReviewResponse | null> => {
+  try {
+    const { data } = await client.get(getCourseReviewUrl(courseId), { params });
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'getCourseReview');
+    if (__DEV__) {
+      console.error('[COURSE] 코스 리뷰 API 요청 중 에러 발생:', appError);
     }
     return null;
   }

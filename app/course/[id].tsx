@@ -3,6 +3,7 @@ import {
   courseLike,
   getCourseImages,
   getCourseRank,
+  getCourseReview,
 } from '@/api/course/course.service';
 import NoDataItem from '@/components/item/no-data-item';
 import ImageViewerModal from '@/components/modal/image-viewer-modal';
@@ -11,6 +12,7 @@ import type {
   CourseDetailResponse,
   CourseImagesResponse,
   CourseRankResponse,
+  CourseReviewResponse,
 } from '@/types/course';
 import { formatDistance, formatTime } from '@/utils/course';
 import { getDifficultyText } from '@/utils/difficulty';
@@ -42,6 +44,7 @@ export default function CourseDetailScreen() {
   const [courseData, setCourseData] = useState<CourseDetailResponse | null>(null);
   const [courseImages, setCourseImages] = useState<CourseImagesResponse | null>(null);
   const [courseRanking, setCourseRanking] = useState<CourseRankResponse | null>(null);
+  const [courseReviews, setCourseReviews] = useState<CourseReviewResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,13 +75,15 @@ export default function CourseDetailScreen() {
       if (data) {
         setCourseData(data);
 
-        const [imagesData, rankingData] = await Promise.all([
+        const [imagesData, rankingData, reviewsData] = await Promise.all([
           getCourseImages(courseId),
           getCourseRank(courseId),
+          getCourseReview(courseId),
         ]);
 
         setCourseImages(imagesData);
         setCourseRanking(rankingData);
+        setCourseReviews(reviewsData);
       } else {
         setError('코스 정보를 불러올 수 없습니다.');
       }
@@ -201,8 +206,8 @@ export default function CourseDetailScreen() {
         {...panResponder.panHandlers}
       >
         <View style={styles.courseInfoHeader}>
-          <View style={styles.difficultyBadge}>
-            <Text style={styles.difficulty}>
+          <View style={[styles.difficultyBadge, getDifficultyBadgeStyle(courseData.courseLevel)]}>
+            <Text style={[styles.difficulty, getDifficultyTextStyle(courseData.courseLevel)]}>
               {getDifficultyText(courseData.courseLevel)}
             </Text>
           </View>
@@ -261,6 +266,32 @@ export default function CourseDetailScreen() {
     setSelectedImage(null);
   };
 
+  const getDifficultyTextStyle = (level: string) => {
+    switch (level) {
+      case 'LOW':
+        return { color: '#0095FF' };
+      case 'MEDIUM':
+        return { color: '#00C321' };
+      case 'HIGH':
+        return { color: '#FF0000' };
+      default:
+        return { color: '#0095FF' };
+    }
+  };
+
+  const getDifficultyBadgeStyle = (level: string) => {
+    switch (level) {
+      case 'LOW':
+        return { backgroundColor: 'rgba(0, 149, 255, 0.08)' };
+      case 'MEDIUM':
+        return { backgroundColor: 'rgba(0, 195, 33, 0.08)' };
+      case 'HIGH':
+        return { backgroundColor: 'rgba(255, 0, 0, 0.08)' };
+      default:
+        return { backgroundColor: 'rgba(0, 149, 255, 0.08)' };
+    }
+  };
+
   const renderCompletedUsers = () => {
     if (!courseRanking || !courseRanking.items || courseRanking.items.length === 0) {
       return (
@@ -309,13 +340,16 @@ export default function CourseDetailScreen() {
   };
 
   const renderPhotos = () => {
+    const reviewCount = courseReviews?.items?.length || 0;
+
     if (!courseImages || !courseImages.items || courseImages.items.length === 0) {
       return (
         <View style={styles.photosContainer}>
-          <Text style={styles.sectionTitle}>코스 사진</Text>
+          <Text style={styles.sectionTitle}>리뷰 ({reviewCount})</Text>
           <View style={styles.emptyContent}>
             <Text style={styles.emptyText}>등록된 사진이 없습니다.</Text>
           </View>
+          {renderReviewList()}
         </View>
       );
     }
@@ -325,7 +359,7 @@ export default function CourseDetailScreen() {
 
     return (
       <View style={styles.photosContainer}>
-        <Text style={styles.sectionTitle}>코스 사진</Text>
+        <Text style={styles.sectionTitle}>리뷰 ({reviewCount})</Text>
         <View style={styles.photosGrid}>
           {displayImages.map((imageUrl, index) => (
             <View
@@ -354,6 +388,58 @@ export default function CourseDetailScreen() {
             </View>
           ))}
         </View>
+        {renderReviewList()}
+      </View>
+    );
+  };
+
+  const renderReviewList = () => {
+    if (!courseReviews || !courseReviews.items || courseReviews.items.length === 0) {
+      return null;
+    }
+
+    // 최대 3개의 리뷰만 미리보기로 표시
+    const displayReviews = courseReviews.items.slice(0, 3);
+
+    return (
+      <View style={styles.reviewListContainer}>
+        {displayReviews.map((review, index) => (
+          <View key={review.id}>
+            <View style={styles.reviewItemContainer}>
+              {review.completionImages && review.completionImages.length > 0 && (
+                <View style={styles.reviewImageContainer}>
+                  <Image
+                    source={{ uri: review.completionImages[0] }}
+                    style={styles.reviewPreviewImage}
+                  />
+                </View>
+              )}
+              <View
+                style={[
+                  styles.reviewContentContainer,
+                  !(review.completionImages && review.completionImages.length > 0) &&
+                    styles.reviewContentContainerNoImage,
+                ]}
+              >
+                <Text
+                  style={styles.reviewPreviewText}
+                  numberOfLines={
+                    review.completionImages && review.completionImages.length > 0 ? 3 : 2
+                  }
+                >
+                  {review.review}
+                </Text>
+                <Text style={styles.reviewPreviewDate}>{review.createdAt}</Text>
+              </View>
+            </View>
+            {index < displayReviews.length - 1 && <View style={styles.reviewDivider} />}
+          </View>
+        ))}
+        {courseReviews.items.length > 3 && (
+          <Pressable style={styles.moreReviewsButton}>
+            <Text style={styles.moreReviewsText}>리뷰 더보기</Text>
+          </Pressable>
+        )}
       </View>
     );
   };
@@ -552,7 +638,6 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   difficultyBadge: {
-    backgroundColor: '#FF000014',
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 12,
@@ -560,7 +645,6 @@ const styles = StyleSheet.create({
   },
   difficulty: {
     fontSize: 14,
-    color: '#FF0000',
     fontWeight: '500',
   },
   courseTitle: {
@@ -830,5 +914,62 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: gray[80],
     fontWeight: '500',
+  },
+  reviewListContainer: {
+    marginTop: 20,
+  },
+  reviewItemContainer: {
+    flexDirection: 'row',
+    paddingVertical: 16,
+  },
+  reviewImageContainer: {
+    marginRight: 12,
+  },
+  reviewPreviewImage: {
+    width: 84,
+    height: 84,
+    borderRadius: 8,
+  },
+  reviewContentContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    height: 84,
+  },
+  reviewContentContainerNoImage: {
+    justifyContent: 'center',
+    height: 'auto',
+  },
+  reviewPreviewText: {
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#121212',
+    marginBottom: 4,
+  },
+  reviewPreviewDate: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: gray[30],
+  },
+  reviewDivider: {
+    height: 1,
+    backgroundColor: gray[15],
+    marginHorizontal: 0,
+  },
+  moreReviewsButton: {
+    marginTop: 20,
+    width: 320,
+    height: 48,
+    backgroundColor: '#F4F4F4',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  moreReviewsText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#000000',
   },
 });
