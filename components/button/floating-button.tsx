@@ -2,15 +2,17 @@ import { base, main } from '@/styles/color';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text } from 'react-native';
 
-interface FloatingButton {
+interface FloatingButtonProps {
   buttonText?: string;
   width: number;
   height: number;
+  onPress: () => void;
 }
 
-function FloatingButton({ buttonText, width, height }: FloatingButton) {
+function FloatingButton({ buttonText, width, height, onPress }: FloatingButtonProps) {
   return (
     <Pressable
+      onPress={onPress}
       style={[
         styles.container,
         {

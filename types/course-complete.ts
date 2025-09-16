@@ -29,3 +29,30 @@ export type RecordedCourseHistoryItem = z.infer<typeof recordedCourseHistoryItem
 export type RecordedCourseHistoryResponse = z.infer<
   typeof recordedCourseHistoryResponseSchema
 >;
+
+// 코스 생성
+const pathPointSchema = z.object({
+  latitude: z.number(),
+  longitude: z.number(),
+});
+const courseInfoSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  courseLevel: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+});
+
+export const createCourseParamsSchema = z.object({
+  review: z.string(),
+  interval: z.number(),
+  path: z.array(pathPointSchema),
+  courseVisibility: z.enum(['PUBLIC', 'PRIVATE']),
+  courseCreateInfo: courseInfoSchema,
+});
+
+export type CreateCourseParams = z.infer<typeof createCourseParamsSchema>;
+
+const createCourseResponseSchema = z.object({
+  id: z.number(),
+});
+
+export type CreateCourseRespose = z.infer<typeof createCourseResponseSchema>;

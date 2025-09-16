@@ -69,14 +69,7 @@
           }
         }
       ],
-      ["expo-location", { "isAndroidForegroundServiceEnabled": true }],
-      [
-        "expo-maps",
-        {
-          "requestLocationPermission": true,
-          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
-        }
-      ]
+      ["expo-location", { "isAndroidForegroundServiceEnabled": true }]
     ],
     "experiments": {
       "typedRoutes": true
