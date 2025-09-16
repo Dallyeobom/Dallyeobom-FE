@@ -14,7 +14,7 @@ function TrackingCompleteLayout() {
           <View style={[styles.headerContainer, { paddingTop: 40 }]}>
             <Pressable
               onPress={() => {
-                router.back();
+                router.push('/(tabs)');
               }}
             >
               <Image
