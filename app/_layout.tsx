@@ -29,8 +29,8 @@ export default function RootLayout() {
       const accessToken = await SecureStore.getItemAsync('accessToken');
       const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
-      // await SecureStore.deleteItemAsync('accessToken');
-      // await SecureStore.deleteItemAsync('refreshToken');
+      await SecureStore.deleteItemAsync('accessToken');
+      await SecureStore.deleteItemAsync('refreshToken');
       if (accessToken && refreshToken) {
         const decoded = jwtDecode<JwtToken>(accessToken);
         await AsyncStorage.setItem('userId', decoded.userId);
