@@ -136,6 +136,8 @@ function Index() {
               latitudeDelta: 0.1,
               longitudeDelta: 0.1,
             }}
+            // TODO:nRegionChange 이벤트 핸들러 내에서 setInterval을 사용하는 것은 심각한 성능 문제와 메모리 누수를 유발
+            // 사용자의 실시간 위치를 추적하려면 expo-location의 watchPositionAsync API를 사용하는 것이 올바른 방법
             onRegionChange={(region) => {
               setLocation((prev) => {
                 setInterval(() => {

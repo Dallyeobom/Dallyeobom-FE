@@ -1,7 +1,7 @@
 import { LocationType } from '@/app/tracking';
 
 const toRadians = (degrees: number) => {
-  return degrees * (Math.PI / 100);
+  return degrees * (Math.PI / 180);
 };
 
 const haversineDistance = (coord1: LocationType, coord2: LocationType) => {
