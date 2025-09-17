@@ -18,7 +18,6 @@ client.interceptors.request.use(
     }
 
     const accessToken = await SecureStore.getItemAsync('accessToken');
-    console.log('accessToken', accessToken);
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
