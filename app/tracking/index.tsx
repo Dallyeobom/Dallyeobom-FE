@@ -146,7 +146,7 @@ function Index() {
                     { latitude: region.latitude, longitude: region.longitude },
                   ];
                   return newData;
-                }, 5000);
+                }, 60000);
                 return prev;
               });
             }}
