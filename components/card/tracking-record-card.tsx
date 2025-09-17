@@ -276,39 +276,41 @@ function TrackingRecordCard() {
                   <Text>5</Text>
                 </View>
               </Pressable>
-              <View>
-                <FlatList
-                  data={courseImageUrlArr}
-                  horizontal={true}
-                  keyExtractor={(_, index) => String(index)}
-                  ItemSeparatorComponent={() => <View style={{ width: 10 }}></View>}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={({ item }) => (
-                    <View>
-                      <View style={styles.selectedImageItem}>
+              <FlatList
+                style={{ overflow: 'visible' }}
+                data={courseImageUrlArr}
+                horizontal={true}
+                keyExtractor={(_, index) => String(index)}
+                ItemSeparatorComponent={() => <View style={{ width: 10 }}></View>}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <View>
+                    <View style={styles.selectedImageItem}>
+                      <View
+                        style={{
+                          zIndex: 1,
+                          position: 'absolute',
+                        }}
+                      >
                         <Image
                           source={{ uri: item.uri }}
-                          style={{
-                            width: 60,
-                            height: 60,
-                            zIndex: 1,
-                            position: 'absolute',
-                          }}
+                          width={60}
+                          height={60}
                         />
-                        <Pressable
-                          style={styles.closeIconWrapper}
-                          onPress={() => handleDeleteCourseImage(item.fileName)}
-                        >
-                          <CloseIcon
-                            width={24}
-                            height={24}
-                          />
-                        </Pressable>
                       </View>
                     </View>
-                  )}
-                />
-              </View>
+                    <Pressable
+                      style={styles.closeIconWrapper}
+                      onPress={() => handleDeleteCourseImage(item.fileName)}
+                    >
+                      <CloseIcon
+                        width={24}
+                        height={24}
+                      />
+                    </Pressable>
+                  </View>
+                )}
+              />
             </View>
           </View>
         </View>
@@ -478,9 +480,11 @@ const styles = StyleSheet.create({
 
   closeIconWrapper: {
     position: 'absolute',
-    zIndex: 10,
-    right: 0,
-    top: -10,
+    zIndex: 100,
+    right: -7,
+    top: -7,
+
+    borderRadius: '100%',
   },
   startMarker: {
     backgroundColor: '#6C5CE7',
