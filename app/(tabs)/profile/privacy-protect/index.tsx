@@ -1,12 +1,12 @@
 import { base } from '@/styles/color';
-import { termsOfService } from '@/utils/agreement-detail';
+import { termsOfPrivacy } from '@/utils/agreement-detail';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 function Index() {
   return (
     <ScrollView style={styles.wrapper}>
-      {termsOfService.map((term, index) => {
+      {termsOfPrivacy.map((term, index) => {
         return (
           <View
             key={index}

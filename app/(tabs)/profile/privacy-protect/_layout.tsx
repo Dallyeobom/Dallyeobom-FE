@@ -12,7 +12,7 @@ function TermsServiceLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        title: '서비스 이용 약관',
+        title: '개인정보 수집',
         headerStyle: {
           backgroundColor: base['white'],
         },
@@ -31,7 +31,7 @@ function TermsServiceLayout() {
             >
               <Image source={require('@/assets/images/back.png')} />
             </Pressable>
-            <Text style={styles.headerText}>서비스 이용 약관</Text>
+            <Text style={styles.headerText}>개인정보 수집 및 이용동의</Text>
           </View>
         ),
 
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap: 100,
+    columnGap: 60,
     paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: base['white'],
