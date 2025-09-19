@@ -34,6 +34,18 @@ function ProfileLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="privacy-protect"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="terms-service"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

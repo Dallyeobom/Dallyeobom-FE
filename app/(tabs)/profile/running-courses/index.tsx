@@ -16,35 +16,40 @@ function RunningCourses() {
   const [lastId, setLastId] = useState<number>();
 
   const getMyRunningCourses = async () => {
-    if (!hasNext || loading) return;
+    try {
+      if (!hasNext || loading) return;
 
-    const userId = await AsyncStorage.getItem('userId');
-    if (!userId) {
-      return;
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        return;
+      }
+
+      setLoading(true);
+      let data;
+
+      if (!lastId) {
+        data = await getRunningCourse({
+          userId: Number(userId),
+          size: 10,
+        });
+      } else {
+        data = await getRunningCourse({
+          userId: Number(userId),
+          size: 10,
+          lastId: lastId,
+        });
+      }
+
+      if (!data || data.items.length === 0) return [];
+
+      setMyRunningCourseData((prev) => [...prev, ...data?.items]);
+      setHasNext(data?.hasNext ?? false);
+      setLastId(data?.lastId - 1);
+    } catch (error) {
+      console.error('error', error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(true);
-    let data;
-
-    if (!lastId) {
-      data = await getRunningCourse({
-        userId: Number(userId),
-        size: 10,
-      });
-    } else {
-      data = await getRunningCourse({
-        userId: Number(userId),
-        size: 10,
-        lastId: lastId,
-      });
-    }
-
-    if (!data || data.items.length === 0) return [];
-
-    setMyRunningCourseData((prev) => [...prev, ...data?.items]);
-    setHasNext(data?.hasNext ?? false);
-    setLastId(data?.lastId - 1);
-    setLoading(false);
   };
   useEffect(() => {
     getMyRunningCourses();

@@ -46,6 +46,13 @@ function Profile() {
     router.push('/(tabs)/profile/favorite-courses');
   };
 
+  const handlePrivacyProtect = () => {
+    router.push('/(tabs)/profile/privacy-protect');
+  };
+  const handleTermsService = () => {
+    router.push('/(tabs)/profile/terms-service');
+  };
+
   // 닉네임 모달 띄우기
   const handleEditNameModal = () => {
     setIsNicknameModal(!isNicknameModal);
@@ -141,11 +148,13 @@ function Profile() {
       </View>
       <View style={styles.gap} />
 
-      {/* 기록 컨테이너 */}
       <View style={styles.section}>
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handlePrivacyProtect}
+        >
           <View style={styles.titleBar}>
-            <Text style={styles.title}>개인정보 보호</Text>
+            <Text style={styles.title}>개인정보 수집 및 이용동의</Text>
           </View>
           <Ionicons
             name="chevron-forward"
@@ -154,7 +163,10 @@ function Profile() {
           />
         </Pressable>
 
-        <Pressable style={styles.titleBarContainer}>
+        <Pressable
+          style={styles.titleBarContainer}
+          onPress={handleTermsService}
+        >
           <View style={styles.titleBar}>
             <Text style={styles.title}>서비스 이용 약관</Text>
           </View>

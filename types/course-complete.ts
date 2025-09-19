@@ -1,19 +1,32 @@
 import { z } from 'zod';
-
+const pathPointSchema = z.object({
+  latitude: z.number(),
+  longitude: z.number(),
+});
 export const recordedCourseHistoryParamsSchema = z.object({
   userId: z.number(),
   lastId: z.number().optional(),
   size: z.number().optional(),
 });
 
-const recordedCourseHistoryItemSchema = z.object({
+const completeCourseItemSchema = z.object({
   id: z.number().int(),
   name: z.string(),
-  location: z.string(),
   overViewImageUrl: z.string(),
-  length: z.number().int(),
+  length: z.number(),
   level: z.string(),
   isLiked: z.boolean(),
+});
+export type CompleteCourseItem = z.infer<typeof completeCourseItemSchema>;
+
+const recordedCourseHistoryItemSchema = z.object({
+  id: z.number().int(),
+  courseId: z.number().int(),
+  title: z.string(),
+  interval: z.number(),
+  length: z.number(),
+  completeDate: z.string(),
+  path: z.array(pathPointSchema),
 });
 
 const recordedCourseHistoryResponseSchema = z.object({
@@ -31,10 +44,7 @@ export type RecordedCourseHistoryResponse = z.infer<
 >;
 
 // 코스 생성
-const pathPointSchema = z.object({
-  latitude: z.number(),
-  longitude: z.number(),
-});
+
 const courseInfoSchema = z.object({
   name: z.string(),
   description: z.string(),

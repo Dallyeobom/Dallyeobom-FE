@@ -4,16 +4,15 @@ import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function FavoriteCoursesLayout() {
+function TermsServiceLayout() {
   const insets = useSafeAreaInsets();
-
   const router = useRouter();
 
   return (
     <Stack
       screenOptions={{
         headerShown: true,
-        title: '내 찜 코스',
+        title: '서비스 이용 약관',
         headerStyle: {
           backgroundColor: base['white'],
         },
@@ -30,13 +29,9 @@ function FavoriteCoursesLayout() {
                 router.back();
               }}
             >
-              <Image
-                source={require('@/assets/images/left-chevron.png')}
-                style={styles.leftChevronImage}
-                resizeMode="contain"
-              />
+              <Image source={require('@/assets/images/back.png')} />
             </Pressable>
-            <Text style={styles.headerText}>내 찜 코스</Text>
+            <Text style={styles.headerText}>서비스 이용 약관</Text>
           </View>
         ),
 
@@ -49,14 +44,14 @@ function FavoriteCoursesLayout() {
   );
 }
 
-export default FavoriteCoursesLayout;
+export default TermsServiceLayout;
 
 const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap: 120,
+    columnGap: 100,
     paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: base['white'],

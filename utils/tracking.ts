@@ -66,3 +66,8 @@ export const getDifficultyLevel = (level: string) => {
   }
   return answer;
 };
+
+export const returnFormatDate = (date: string) => {
+  const [year, month, day] = date.split('-');
+  return `${year}.${month}.${day}`;
+};
