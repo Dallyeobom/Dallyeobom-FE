@@ -34,6 +34,12 @@ function ProfileLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="terms-service"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

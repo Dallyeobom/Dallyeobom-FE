@@ -141,7 +141,6 @@ function Profile() {
       </View>
       <View style={styles.gap} />
 
-      {/* 기록 컨테이너 */}
       <View style={styles.section}>
         <Pressable style={styles.titleBarContainer}>
           <View style={styles.titleBar}>
