@@ -18,8 +18,12 @@ function RunningCoursesLayout() {
         },
         headerShadowVisible: false,
         header: () => (
-          // insets.top이 paddingTop에 적용이 잘 안되는듯?
-          <View style={[styles.headerContainer, { paddingTop: 40 }]}>
+          <View
+            style={[
+              styles.headerContainer,
+              { paddingTop: insets.top, paddingBottom: insets.bottom },
+            ]}
+          >
             <Pressable
               onPress={() => {
                 router.back();

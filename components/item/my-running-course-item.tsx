@@ -1,8 +1,8 @@
 import { courseLike } from '@/api/course/course.service';
+import { HeartFillIcon, HeartIcon } from '@/components/icons/CommonIcon';
 import { RecordedCourseHistoryItem } from '@/types/course-complete';
 import { useRouter } from 'expo-router';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { HeartIcon, HeartFillIcon } from '@/components/icons/CommonIcon';
 import CourseLevelBadge from '../badge/course-level-badge';
 
 type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
@@ -12,7 +12,6 @@ type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
 function MyRunningCourseItem({
   id,
   name,
-  location,
   overViewImageUrl,
   length,
   level,
@@ -56,9 +55,15 @@ function MyRunningCourseItem({
       </Pressable>
       <Pressable onPress={() => handleCourseLike(id)}>
         {isLiked ? (
-          <HeartFillIcon width={24} height={24} />
+          <HeartFillIcon
+            width={24}
+            height={24}
+          />
         ) : (
-          <HeartIcon width={24} height={24} />
+          <HeartIcon
+            width={24}
+            height={24}
+          />
         )}
       </Pressable>
     </View>

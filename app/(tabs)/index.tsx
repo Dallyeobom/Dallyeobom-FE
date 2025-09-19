@@ -82,10 +82,8 @@ function Index() {
       const radius = 1000;
       const maxCount = 10;
       const params = {
-        // TODO: 임시로 고정 값 사용, 추후 위치 기반으로 수정
         latitude: latitude,
         longitude: longitude,
-
         radius,
         maxCount,
       };

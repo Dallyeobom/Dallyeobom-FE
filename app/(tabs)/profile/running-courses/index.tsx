@@ -12,25 +12,40 @@ import { StyleSheet, Text, View } from 'react-native';
 function RunningCourses() {
   const [myRunningCourseData, setMyRunningCourseData] = useState<RunningCourseItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hasNext, setHasNext] = useState(true);
+  const [lastId, setLastId] = useState<number>();
 
-  // refetch할..
   const getMyRunningCourses = async () => {
-    setLoading(true);
+    if (!hasNext || loading) return;
+
     const userId = await AsyncStorage.getItem('userId');
     if (!userId) {
       return;
     }
-    const data = await getRunningCourse({
-      userId: Number(userId),
-      lastId: 10,
-      size: 10,
-    });
 
-    setMyRunningCourseData(data?.items || []);
+    setLoading(true);
+    let data;
 
+    if (!lastId) {
+      data = await getRunningCourse({
+        userId: Number(userId),
+        size: 10,
+      });
+    } else {
+      data = await getRunningCourse({
+        userId: Number(userId),
+        size: 10,
+        lastId: lastId,
+      });
+    }
+
+    if (!data || data.items.length === 0) return [];
+
+    setMyRunningCourseData((prev) => [...prev, ...data?.items]);
+    setHasNext(data?.hasNext ?? false);
+    setLastId(data?.lastId - 1);
     setLoading(false);
   };
-
   useEffect(() => {
     getMyRunningCourses();
   }, []);
@@ -50,6 +65,7 @@ function RunningCourses() {
                   handleFetch={getMyRunningCourses}
                 />
               )}
+              fetchMoreCallback={getMyRunningCourses}
             />
           ) : (
             <View
@@ -78,9 +94,9 @@ export default RunningCourses;
 const styles = StyleSheet.create({
   section: {
     display: 'flex',
-    padding: 8,
-    flex: 1,
+    paddingHorizontal: 20,
     backgroundColor: '#fff',
+    height: '100%',
   },
   titleBarContainer: {
     display: 'flex',

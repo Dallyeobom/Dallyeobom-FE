@@ -14,21 +14,36 @@ function RecordedCourses() {
     RecordedCourseHistoryItem[]
   >([]);
   const [loading, setLoading] = useState(false);
+  const [hasNext, setHasNext] = useState(true);
+  const [lastId, setLastId] = useState<number>();
 
-  // refetch할..
   const getMyRecordedCourses = async () => {
-    setLoading(true);
+    if (!hasNext || loading) return;
+
     const userId = await AsyncStorage.getItem('userId');
     if (!userId) {
       return;
     }
-    const data = await myRecordedCourseHistory({
-      userId: Number(userId),
-      lastId: 10,
-      size: 10,
-    });
 
-    setMyRecordedCourseData(data?.items || []);
+    setLoading(true);
+    let data;
+    if (!lastId) {
+      data = await myRecordedCourseHistory({
+        userId: Number(userId),
+        size: 10,
+      });
+    } else {
+      data = await myRecordedCourseHistory({
+        userId: Number(userId),
+        size: 10,
+        lastId: lastId,
+      });
+    }
+    if (!data || data.items.length === 0) return [];
+
+    setMyRecordedCourseData((prev) => [...prev, ...data?.items]);
+    setHasNext(data?.hasNext ?? false);
+    setLastId(data?.lastId - 1);
     setLoading(false);
   };
 

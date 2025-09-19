@@ -12,21 +12,42 @@ import { StyleSheet, Text, View } from 'react-native';
 function FavoriteCourses() {
   const [favoriteCourseData, setFavoriteCourseData] = useState<FavoriteCourseItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hasNext, setHasNext] = useState(true);
+  const [lastId, setLastId] = useState<number>();
 
   const getMyFavoriteCourses = async () => {
-    setLoading(true);
-    const userId = await AsyncStorage.getItem('userId');
-    if (!userId) {
-      return;
-    }
-    const data = await getFavoriteCourse({
-      userId: Number(userId),
-      lastId: 10,
-      size: 10,
-    });
+    try {
+      if (!hasNext || loading) return;
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        return;
+      }
 
-    setFavoriteCourseData(data?.items || []);
-    setLoading(false);
+      setLoading(true);
+      let data;
+
+      if (!lastId) {
+        data = await getFavoriteCourse({
+          userId: Number(userId),
+          size: 10,
+        });
+      } else {
+        data = await getFavoriteCourse({
+          userId: Number(userId),
+          size: 10,
+          lastId: lastId,
+        });
+      }
+      if (!data || data.items.length === 0) return [];
+
+      setFavoriteCourseData((prev) => [...prev, ...data?.items]);
+      setHasNext(data?.hasNext ?? false);
+      setLastId(data?.lastId - 1);
+    } catch (error) {
+      console.error('error', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -76,8 +97,8 @@ export default FavoriteCourses;
 const styles = StyleSheet.create({
   section: {
     display: 'flex',
-    padding: 8,
-    flex: 1,
+    paddingHorizontal: 20,
+    height: '100%',
     backgroundColor: '#fff',
   },
   titleBarContainer: {
