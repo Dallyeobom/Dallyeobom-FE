@@ -14,7 +14,7 @@ const completeCourseItemSchema = z.object({
   name: z.string(),
   overViewImageUrl: z.string(),
   length: z.number(),
-  level: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+  level: z.string(),
   isLiked: z.boolean(),
 });
 export type CompleteCourseItem = z.infer<typeof completeCourseItemSchema>;
