@@ -1,8 +1,10 @@
-import { courseLike } from '@/api/course/course.service';
+import { gray } from '@/styles/color';
 import { RecordedCourseHistoryItem } from '@/types/course-complete';
-import { useRouter } from 'expo-router';
-import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import CourseLevelBadge from '../badge/course-level-badge';
+import { returnFormatDate } from '@/utils/tracking';
+import { StyleSheet, Text, View } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { PinIcon } from '../icons/TrackingIcon';
+import CoursePath from '../line/course-path';
 
 type MyRecordedCourseItemProps = RecordedCourseHistoryItem & {
   handleFetch: () => void;
@@ -10,58 +12,51 @@ type MyRecordedCourseItemProps = RecordedCourseHistoryItem & {
 
 function MyRecordedCourseItem({
   id,
-  name,
-  location,
-  overViewImageUrl,
+  courseId,
+  title,
+  interval,
   length,
-  level,
-  isLiked,
-  handleFetch,
+  completeDate,
+  path,
 }: MyRecordedCourseItemProps) {
-  const router = useRouter();
-
-  const handlePress = () => {
-    router.push(`/course/${id}`);
-  };
-
-  const handleCourseLike = async (id: number) => {
-    const result = await courseLike(id);
-    if (!result) {
-      Alert.alert('좋아요 반영에 실패하였습니다.');
-      return;
-    }
-    handleFetch();
-  };
+  const renderPolyLine = CoursePath();
 
   return (
     <View style={styles.container}>
-      <Pressable
-        onPress={handlePress}
-        style={styles.subContainer}
-      >
-        <Image
-          source={{ uri: overViewImageUrl }}
-          style={styles.image}
-        />
-        <View style={styles.textContainer}>
-          <View style={styles.text}>
-            <View>
-              <CourseLevelBadge level={level} />
-              <Text style={styles.courseName}>{name}</Text>
-            </View>
-            <Text style={styles.distance}>{`${length}km`}</Text>
-          </View>
-        </View>
-      </Pressable>
-      <Pressable onPress={() => handleCourseLike(id)}>
-        <Image
-          source={
-            isLiked
-              ? require('@/assets/images/heart-fill.png')
-              : require('@/assets/images/heart.png')
-          }
-        />
-      </Pressable>
+      <View style={styles.mapContainer}>
+        <MapView
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: path[0].latitude,
+            longitude: path[0].longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          }}
+        >
+          <Marker
+            coordinate={path[0]}
+            title="Start"
+          />
+          <Marker
+            coordinate={path[path.length - 1]}
+            title="End"
+          >
+            <PinIcon
+              width={35}
+              height={35}
+            />
+          </Marker>
+
+          {renderPolyLine(path)}
+        </MapView>
+      </View>
+
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.date}>{returnFormatDate(completeDate)}</Text>
+        <Text style={styles.distance}>{length}km</Text>
+      </View>
     </View>
   );
 }
@@ -70,47 +65,33 @@ export default MyRecordedCourseItem;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    rowGap: 14,
+    marginBottom: 14,
   },
-  subContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    columnGap: 10,
-    flex: 3,
+  mapContainer: {
+    borderRadius: 20,
+    width: '100%',
+    height: 160,
+    overflow: 'hidden',
+    alignSelf: 'center',
   },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 12,
+  map: {
+    width: '100%',
+    height: '100%',
+    zIndex: 10,
   },
-  textContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+
+  title: {
+    fontWeight: '400',
+    marginBottom: 2,
   },
-  text: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-  },
-  difficulty: {
-    fontSize: 12,
-    color: '#666',
+  date: {
+    color: gray[30],
     marginBottom: 4,
   },
-  courseName: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
-  },
   distance: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 20,
+    fontWeight: '700',
   },
 });

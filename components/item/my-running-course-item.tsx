@@ -1,11 +1,11 @@
 import { courseLike } from '@/api/course/course.service';
 import { HeartFillIcon, HeartIcon } from '@/components/icons/CommonIcon';
-import { RecordedCourseHistoryItem } from '@/types/course-complete';
+import { CompleteCourseItem } from '@/types/course-complete';
 import { useRouter } from 'expo-router';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CourseLevelBadge from '../badge/course-level-badge';
 
-type MyRunningCourseItemProps = RecordedCourseHistoryItem & {
+type MyRunningCourseItemProps = CompleteCourseItem & {
   handleFetch: () => void;
 };
 

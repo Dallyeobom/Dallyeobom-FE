@@ -2,8 +2,11 @@ import { base } from '@/styles/color';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function FavoriteCoursesLayout() {
+  const insets = useSafeAreaInsets();
+
   const router = useRouter();
 
   return (
@@ -16,7 +19,12 @@ function FavoriteCoursesLayout() {
         },
         headerShadowVisible: false,
         header: () => (
-          <View style={[styles.headerContainer, { paddingTop: 40 }]}>
+          <View
+            style={[
+              styles.headerContainer,
+              { paddingTop: insets.top, paddingBottom: insets.bottom },
+            ]}
+          >
             <Pressable
               onPress={() => {
                 router.back();

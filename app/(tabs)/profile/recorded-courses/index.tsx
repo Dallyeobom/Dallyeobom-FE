@@ -93,9 +93,8 @@ export default RecordedCourses;
 
 const styles = StyleSheet.create({
   section: {
-    display: 'flex',
-    padding: 8,
-    flex: 1,
+    height: '100%',
+    paddingHorizontal: 20,
     backgroundColor: '#fff',
   },
 
