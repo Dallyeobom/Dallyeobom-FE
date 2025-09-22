@@ -53,7 +53,7 @@ function MyFavoriteItem({
           </View>
         </View>
       </Pressable>
-      <Pressable onPress={() => handleCourseLike(id)}>
+      <Pressable onPress={() => handleCourseLike(courseId)}>
         <Image
           source={
             isLiked

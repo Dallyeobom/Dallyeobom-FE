@@ -18,33 +18,38 @@ function RecordedCourses() {
   const [lastId, setLastId] = useState<number>();
 
   const getMyRecordedCourses = async () => {
-    if (!hasNext || loading) return;
+    try {
+      if (!hasNext || loading) return;
 
-    const userId = await AsyncStorage.getItem('userId');
-    if (!userId) {
-      return;
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        return;
+      }
+
+      setLoading(true);
+      let data;
+      if (!lastId) {
+        data = await myRecordedCourseHistory({
+          userId: Number(userId),
+          size: 10,
+        });
+      } else {
+        data = await myRecordedCourseHistory({
+          userId: Number(userId),
+          size: 10,
+          lastId: lastId,
+        });
+      }
+      if (!data || data.items.length === 0) return [];
+
+      setMyRecordedCourseData((prev) => [...prev, ...data?.items]);
+      setHasNext(data?.hasNext ?? false);
+      setLastId(data?.lastId - 1);
+    } catch (error) {
+      console.error('error', error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(true);
-    let data;
-    if (!lastId) {
-      data = await myRecordedCourseHistory({
-        userId: Number(userId),
-        size: 10,
-      });
-    } else {
-      data = await myRecordedCourseHistory({
-        userId: Number(userId),
-        size: 10,
-        lastId: lastId,
-      });
-    }
-    if (!data || data.items.length === 0) return [];
-
-    setMyRecordedCourseData((prev) => [...prev, ...data?.items]);
-    setHasNext(data?.hasNext ?? false);
-    setLastId(data?.lastId - 1);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -66,6 +71,7 @@ function RecordedCourses() {
                   handleFetch={getMyRecordedCourses}
                 />
               )}
+              fetchMoreCallback={getMyRecordedCourses}
             />
           ) : (
             <View
@@ -93,9 +99,8 @@ export default RecordedCourses;
 
 const styles = StyleSheet.create({
   section: {
-    display: 'flex',
-    padding: 8,
-    flex: 1,
+    height: '100%',
+    paddingHorizontal: 20,
     backgroundColor: '#fff',
   },
 

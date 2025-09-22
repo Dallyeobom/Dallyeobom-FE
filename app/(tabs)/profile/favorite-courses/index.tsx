@@ -69,6 +69,7 @@ function FavoriteCourses() {
                   handleFetch={getMyFavoriteCourses}
                 />
               )}
+              fetchMoreCallback={getMyFavoriteCourses}
             />
           ) : (
             <View
