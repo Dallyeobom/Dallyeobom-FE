@@ -4,7 +4,7 @@ import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function TermsServiceLayout() {
+function PrivacyProtectLayout() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
@@ -44,7 +44,7 @@ function TermsServiceLayout() {
   );
 }
 
-export default TermsServiceLayout;
+export default PrivacyProtectLayout;
 
 const styles = StyleSheet.create({
   headerContainer: {
