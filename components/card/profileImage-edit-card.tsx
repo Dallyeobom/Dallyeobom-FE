@@ -24,6 +24,8 @@ function ProfileImageEditCard({
   setIsProfileImageDelete,
 }: ProfileImageEditCardProps) {
   const { handleCamera } = useCameraRequest();
+
+  // 사진 업로드
   const { handlePictures } = usePicturesRequest();
 
   const handleUploadPictures = async () => {
