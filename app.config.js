@@ -24,6 +24,7 @@ export default {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff',
       },
+      permission: ['ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION'],
       edgeToEdgeEnabled: true,
       package: 'com.dallyeobom.dallyeobomapp',
     },

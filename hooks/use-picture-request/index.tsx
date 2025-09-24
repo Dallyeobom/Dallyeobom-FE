@@ -6,20 +6,24 @@ export const usePicturesRequest = () => {
   const handlePictures = async () => {
     const { granted } = await ImagePicker.getMediaLibraryPermissionsAsync();
 
-    if (granted) {
-      const result = await ImagePicker.launchImageLibraryAsync();
-      if (result.canceled || !result.assets?.length) return;
-      const { fileName, mimeType, uri } = result.assets[0];
-
-      return {
-        fileName,
-        mimeType,
-        uri,
-      };
+    if (!granted) {
+      const response = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (response.status !== 'granted') {
+        await AsyncAlert({ message: '설정 > 앱에서 사진 권한을 허용해 주세요.' });
+        Linking.openSettings();
+        return;
+      }
     }
 
-    await AsyncAlert({ message: '설정 > 앱에서 카메라 권한을 직접 허용해주세요.' });
-    Linking.openSettings();
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (result.canceled || !result.assets?.length) return;
+    const { fileName, mimeType, uri } = result.assets[0];
+
+    return {
+      fileName,
+      mimeType,
+      uri,
+    };
   };
   return {
     handlePictures,
