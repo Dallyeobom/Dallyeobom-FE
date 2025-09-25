@@ -27,7 +27,12 @@ function TrackingCompleteLayout() {
         ),
       }}
     >
-      <Stack.Screen name="index" />
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: true,
+        }}
+      />
       <Stack.Screen
         name="[id]"
         options={{

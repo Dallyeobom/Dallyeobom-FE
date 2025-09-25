@@ -28,7 +28,11 @@ type ImageData = {
   uri: string;
 };
 
-function TrackingRecordCard() {
+interface TrackingRecordCardProps {
+  isHeaderShown?: boolean;
+}
+
+function TrackingRecordCard({ isHeaderShown = true }: TrackingRecordCardProps) {
   const router = useRouter();
   const [courseTitle, onChangeCourseTitle] = useState('');
   const [courseLevel, setCourseLevel] = useState('');
@@ -128,21 +132,24 @@ function TrackingRecordCard() {
 
   return (
     <View>
-      <View style={styles.headerContainer}>
-        <View style={styles.headerRecordContainer}>
-          <Text style={styles.title}>기록하기</Text>
-          <Pressable
-            onPress={() => {
-              router.back();
-            }}
-          >
-            <HeaderCloseIcon
-              width={24}
-              height={24}
-            />
-          </Pressable>
+      {isHeaderShown && (
+        <View style={styles.headerContainer}>
+          <View style={styles.headerRecordContainer}>
+            <Text style={styles.title}>기록하기</Text>
+            <Pressable
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <HeaderCloseIcon
+                width={24}
+                height={24}
+              />
+            </Pressable>
+          </View>
         </View>
-      </View>
+      )}
+
       <View style={styles.mainContainer}>
         <View style={styles.mapViewContainer}>
           <MapView

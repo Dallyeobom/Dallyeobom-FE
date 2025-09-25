@@ -89,7 +89,7 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="tracking"
-            options={{ headerShown: true }}
+            options={{ headerShown: false }}
           />
         </Stack.Protected>
       </Stack>
