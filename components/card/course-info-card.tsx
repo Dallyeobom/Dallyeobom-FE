@@ -8,14 +8,21 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { renderCompletedUsers } from '../item/complete-user-item';
 
 interface CourseInfoCardProps {
+  completeCourseId: number | number[];
   courseData: CourseDetailResponse | null;
   courseRanking: CourseRankResponse | null;
 }
 
-function CourseInfoCard({ courseData, courseRanking }: CourseInfoCardProps) {
+function CourseInfoCard({
+  completeCourseId,
+  courseData,
+  courseRanking,
+}: CourseInfoCardProps) {
   const router = useRouter();
   const handleEditCourse = () => {
-    router.push(`/tracking/edit/${courseData?.id}`);
+    if (typeof completeCourseId === 'number') {
+      router.push(`/tracking/edit/${completeCourseId}`);
+    }
   };
 
   const renderCourseInfo = () => {

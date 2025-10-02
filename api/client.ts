@@ -18,6 +18,7 @@ client.interceptors.request.use(
     }
 
     const accessToken = await SecureStore.getItemAsync('accessToken');
+    console.log('Access Token in client.ts: ===>', accessToken);
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -76,6 +77,7 @@ client.interceptors.response.use(
         });
       }
 
+      // TODO: Alert figma있는대로 수정하기
       Alert.alert('유효하지 않은 로그인', '로그인을 다시 해주세요', [
         {
           text: '확인',

@@ -6,9 +6,11 @@ import {
 import { handleError } from '@/utils/error-handler';
 import client from '../client';
 import {
-  createCourse,
-  getCompleteCourseDetail,
-  getMyRecordedCourseHistory,
+  createCourseUrl,
+  deleteCompleteCourseUrl,
+  editCompleteCourseUrl,
+  getCompleteCourseDetailUrl,
+  getMyRecordedCourseHistoryUrl,
 } from './urls';
 
 export const myRecordedCourseHistory = async (
@@ -16,7 +18,7 @@ export const myRecordedCourseHistory = async (
 ): Promise<RecordedCourseHistoryResponse | null> => {
   try {
     const { userId, lastId, size } = params;
-    const { data } = await client.get(getMyRecordedCourseHistory(userId), {
+    const { data } = await client.get(getMyRecordedCourseHistoryUrl(userId), {
       params: { lastId, size },
     });
     return data;
@@ -33,7 +35,7 @@ export const createMyCourse = async (
   formData: FormData,
 ): Promise<CreateCourseRespose | null> => {
   try {
-    const { data } = await client.post(createCourse(), formData, {
+    const { data } = await client.post(createCourseUrl(), formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -51,12 +53,38 @@ export const createMyCourse = async (
 
 export const completeCourseDetail = async (id: number) => {
   try {
-    const { data } = await client.get(getCompleteCourseDetail(id));
+    const { data } = await client.get(getCompleteCourseDetailUrl(id));
     return data;
   } catch (error) {
     const appError = handleError(error, 'courseCompleteDetail');
     if (__DEV__) {
       console.error('[COURSE_COMPLETE] 코스 상세 API 요청 중 에러 발생:', appError);
+    }
+    return null;
+  }
+};
+
+export const deleteCompleteCourse = async (id: number) => {
+  try {
+    const { status } = await client.delete(deleteCompleteCourseUrl(id));
+    return status;
+  } catch (error) {
+    const appError = handleError(error, 'deleteCompleteCourse');
+    if (__DEV__) {
+      console.error('[deleteCompleteCourse] 코스 삭제 API 요청 중 에러 발생:', appError);
+    }
+    return null;
+  }
+};
+
+export const editCompleteCourse = async (id: number) => {
+  try {
+    const { data } = await client.patch(editCompleteCourseUrl(id));
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'editCompleteCourse');
+    if (__DEV__) {
+      console.error('[deleteCompleteCourse] 코스 삭제 API 요청 중 에러 발생:', appError);
     }
     return null;
   }

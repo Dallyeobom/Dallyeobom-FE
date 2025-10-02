@@ -1,7 +1,4 @@
-import {
-  completeCourseDetail,
-  createMyCourse,
-} from '@/api/course-complete/course-complete.service';
+import { createMyCourse } from '@/api/course-complete/course-complete.service';
 import { CourseCameraIcon, PinIcon } from '@/components/icons/TrackingIcon';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
 import { useTrackingStore } from '@/stores/tracking-store';
@@ -119,8 +116,7 @@ function TrackingRecordCard({ isHeaderShown = true }: TrackingRecordCardProps) {
         await AsyncAlert({ message: '코스 등록에 실패하였습니다.' });
         return;
       }
-      const result2 = await completeCourseDetail(Number(result.id));
-      router.push(`/tracking/complete/${result2.courseId}`);
+      router.push(`/tracking/complete/${result.id}`);
     } catch (error) {
       router.push('/login');
       console.error('error', error);

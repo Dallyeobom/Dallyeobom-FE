@@ -1,8 +1,8 @@
 import {
   CourseDetailResponse,
   CourseImagesResponse,
-  CourseRankResponse,
   CourseLikeRespone,
+  CourseRankResponse,
   CourseReviewParams,
   CourseReviewResponse,
   FavoriteCourseItemsResponse,
@@ -18,6 +18,7 @@ import { handleError } from '@/utils/error-handler';
 import client from '../client';
 import {
   courseLikeUrl,
+  deleteCourseUrl,
   getCourseDetailUrl,
   getCourseImagesUrl,
   getCourseRankUrl,
@@ -149,6 +150,19 @@ export const getCourseReview = async (
 ): Promise<CourseReviewResponse | null> => {
   try {
     const { data } = await client.get(getCourseReviewUrl(courseId), { params });
+    return data;
+  } catch (error) {
+    const appError = handleError(error, 'getCourseReview');
+    if (__DEV__) {
+      console.error('[COURSE] 코스 리뷰 API 요청 중 에러 발생:', appError);
+    }
+    return null;
+  }
+};
+
+export const deleteCourse = async () => {
+  try {
+    const { data } = await client.delete(deleteCourseUrl());
     return data;
   } catch (error) {
     const appError = handleError(error, 'getCourseReview');

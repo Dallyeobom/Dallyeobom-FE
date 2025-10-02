@@ -28,7 +28,15 @@ type ImageData = {
   uri: string;
 };
 
-function TrackingEditRecordCard() {
+interface TrackingEditRecordCardProps {
+  setIsDeleteCourseModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditCourseModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function TrackingEditRecordCard({
+  setIsDeleteCourseModal,
+  setIsEditCourseModal,
+}: TrackingEditRecordCardProps) {
   const router = useRouter();
   const [courseTitle, onChangeCourseTitle] = useState('');
   const [courseLevel, setCourseLevel] = useState('');
@@ -121,6 +129,16 @@ function TrackingEditRecordCard() {
       router.push('/login');
       console.error('error', error);
     }
+  };
+
+  // 삭제 모달 여는 펑션
+  const handleDeleteCourseModal = () => {
+    setIsDeleteCourseModal(true);
+  };
+
+  // 수정 모달 여는 펑션
+  const handleEditCourseModal = () => {
+    setIsEditCourseModal(true);
   };
   const renderPolyLine = CoursePath();
 
@@ -296,10 +314,16 @@ function TrackingEditRecordCard() {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.deleteButton}>
+        <Pressable
+          style={styles.deleteButton}
+          onPress={handleDeleteCourseModal}
+        >
           <Text style={styles.deleteButtonText}>삭제하기</Text>
         </Pressable>
-        <Pressable style={styles.challengeButton}>
+        <Pressable
+          style={styles.challengeButton}
+          onPress={handleEditCourseModal}
+        >
           <Text style={styles.challengeButtonText}>작성완료</Text>
         </Pressable>
       </View>

@@ -1,3 +1,4 @@
+import { completeCourseDetail } from '@/api/course-complete/course-complete.service';
 import { courseDetail, getCourseRank } from '@/api/course/course.service';
 import CourseInfoCard from '@/components/card/course-info-card';
 import { PinIcon } from '@/components/icons/TrackingIcon';
@@ -18,9 +19,10 @@ function Index() {
   const [isLoading, setIsLoading] = useState(true);
 
   const getCompleteCourseDetail = async (id: string) => {
+    const result2 = await completeCourseDetail(Number(id));
     const [courseDetailData, courseRankData] = await Promise.all([
-      courseDetail(Number(id)),
-      getCourseRank(Number(id)),
+      courseDetail(Number(result2.courseId)),
+      getCourseRank(Number(result2.courseId)),
     ]);
     setCourseData(courseDetailData);
     setCourseRanking(courseRankData);
@@ -65,6 +67,7 @@ function Index() {
             {renderPolyLine(courseData.path)}
           </MapView>
           <CourseInfoCard
+            completeCourseId={Number(id)}
             courseData={courseData}
             courseRanking={courseRanking}
           />
