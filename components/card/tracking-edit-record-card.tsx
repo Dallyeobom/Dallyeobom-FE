@@ -1,12 +1,7 @@
-import {
-  completeCourseDetail,
-  createMyCourse,
-} from '@/api/course-complete/course-complete.service';
 import { CourseCameraIcon, PinIcon } from '@/components/icons/TrackingIcon';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
 import { useTrackingStore } from '@/stores/tracking-store';
 import { base, main } from '@/styles/color';
-import { getDifficultyLevel } from '@/utils/tracking';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -100,35 +95,6 @@ function TrackingEditRecordCard({
       const filteredArr = prev.filter((item) => item.fileName !== fileName);
       return filteredArr;
     });
-  };
-
-  const handleComplete = async () => {
-    try {
-      const formData = new FormData();
-      formData.append(
-        'request',
-        JSON.stringify({
-          interval: 3600,
-          path: totalTrackingLocation,
-          courseVisibility: 'PUBLIC',
-          courseCreateInfo: {
-            description: courseDescription,
-            name: courseTitle,
-            courseLevel: getDifficultyLevel(courseLevel),
-          },
-        }),
-      );
-      const result = await createMyCourse(formData);
-      if (!result) {
-        await AsyncAlert({ message: '코스 등록에 실패하였습니다.' });
-        return;
-      }
-      const result2 = await completeCourseDetail(Number(result.id));
-      router.push(`/tracking/complete/${result2.courseId}`);
-    } catch (error) {
-      router.push('/login');
-      console.error('error', error);
-    }
   };
 
   // 삭제 모달 여는 펑션

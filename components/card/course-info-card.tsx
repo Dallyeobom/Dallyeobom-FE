@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
   courseInfoContainer: {
     paddingHorizontal: 20,
     paddingBottom: 16,
-    // backgroundColor: 'green',
   },
   courseInfoHeader: {
     gap: 8,
