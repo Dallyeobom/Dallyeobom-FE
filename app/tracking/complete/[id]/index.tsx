@@ -39,7 +39,7 @@ function Index() {
   return (
     <View style={styles.container}>
       {!isLoading && courseData?.path ? (
-        <View style={styles.mapViewContainer}>
+        <View>
           <MapView
             style={styles.map}
             provider={PROVIDER_GOOGLE}
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
-  mapViewContainer: {},
   map: {
     width: '100%',
     height: '100%',

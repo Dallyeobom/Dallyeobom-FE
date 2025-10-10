@@ -84,7 +84,7 @@ export const editCompleteCourse = async (id: number) => {
   } catch (error) {
     const appError = handleError(error, 'editCompleteCourse');
     if (__DEV__) {
-      console.error('[editompleteCourse] 코스 삭제 API 요청 중 에러 발생:', appError);
+      console.error('[editCompleteCourse] 코스 삭제 API 요청 중 에러 발생:', appError);
     }
     return null;
   }
