@@ -438,8 +438,6 @@ const styles = StyleSheet.create({
     zIndex: 100,
     right: -7,
     top: -7,
-
-    borderRadius: '100%',
   },
   startMarker: {
     backgroundColor: '#6C5CE7',
