@@ -25,7 +25,7 @@ function Index() {
   };
 
   const handleEditCourse = async (id: number) => {
-    console.log('현재 완주한 코스를 수정합니다 ===>>', id);
+    alert('개발중');
   };
 
   return (
