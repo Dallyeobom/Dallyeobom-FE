@@ -1,8 +1,8 @@
 import {
   CourseDetailResponse,
   CourseImagesResponse,
-  CourseRankResponse,
   CourseLikeRespone,
+  CourseRankResponse,
   CourseReviewParams,
   CourseReviewResponse,
   FavoriteCourseItemsResponse,

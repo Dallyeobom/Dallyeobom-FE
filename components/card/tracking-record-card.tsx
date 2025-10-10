@@ -1,7 +1,4 @@
-import {
-  completeCourseDetail,
-  createMyCourse,
-} from '@/api/course-complete/course-complete.service';
+import { createMyCourse } from '@/api/course-complete/course-complete.service';
 import { CourseCameraIcon, PinIcon } from '@/components/icons/TrackingIcon';
 import { usePicturesRequest } from '@/hooks/use-picture-request';
 import { useTrackingStore } from '@/stores/tracking-store';
@@ -28,7 +25,11 @@ type ImageData = {
   uri: string;
 };
 
-function TrackingRecordCard() {
+interface TrackingRecordCardProps {
+  isHeaderShown?: boolean;
+}
+
+function TrackingRecordCard({ isHeaderShown = true }: TrackingRecordCardProps) {
   const router = useRouter();
   const [courseTitle, onChangeCourseTitle] = useState('');
   const [courseLevel, setCourseLevel] = useState('');
@@ -115,8 +116,7 @@ function TrackingRecordCard() {
         await AsyncAlert({ message: '코스 등록에 실패하였습니다.' });
         return;
       }
-      const result2 = await completeCourseDetail(Number(result.id));
-      router.push(`/tracking/complete/${result2.courseId}`);
+      router.push(`/tracking/complete/${result.id}`);
     } catch (error) {
       router.push('/login');
       console.error('error', error);
@@ -128,21 +128,24 @@ function TrackingRecordCard() {
 
   return (
     <View>
-      <View style={styles.headerContainer}>
-        <View style={styles.headerRecordContainer}>
-          <Text style={styles.title}>기록하기</Text>
-          <Pressable
-            onPress={() => {
-              router.back();
-            }}
-          >
-            <HeaderCloseIcon
-              width={24}
-              height={24}
-            />
-          </Pressable>
+      {isHeaderShown && (
+        <View style={styles.headerContainer}>
+          <View style={styles.headerRecordContainer}>
+            <Text style={styles.title}>기록하기</Text>
+            <Pressable
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <HeaderCloseIcon
+                width={24}
+                height={24}
+              />
+            </Pressable>
+          </View>
         </View>
-      </View>
+      )}
+
       <View style={styles.mainContainer}>
         <View style={styles.mapViewContainer}>
           <MapView

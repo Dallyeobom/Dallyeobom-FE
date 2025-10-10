@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
   textContainer: {
     display: 'flex',
     marginTop: 32,
-
     alignItems: 'center',
     rowGap: 10,
   },

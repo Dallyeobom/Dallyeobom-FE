@@ -2,16 +2,29 @@ import { gray, main } from '@/styles/color';
 import { CourseDetailResponse, CourseRankResponse } from '@/types/course';
 import { formatDistance } from '@/utils/course';
 import { getDifficultyText } from '@/utils/difficulty';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { renderCompletedUsers } from '../item/complete-user-item';
 
 interface CourseInfoCardProps {
+  completeCourseId: number | number[];
   courseData: CourseDetailResponse | null;
   courseRanking: CourseRankResponse | null;
 }
 
-function CourseInfoCard({ courseData, courseRanking }: CourseInfoCardProps) {
+function CourseInfoCard({
+  completeCourseId,
+  courseData,
+  courseRanking,
+}: CourseInfoCardProps) {
+  const router = useRouter();
+  const handleEditCourse = () => {
+    if (typeof completeCourseId === 'number') {
+      router.push(`/tracking/edit/${completeCourseId}`);
+    }
+  };
+
   const renderCourseInfo = () => {
     if (!courseData) return null;
 
@@ -36,7 +49,10 @@ function CourseInfoCard({ courseData, courseRanking }: CourseInfoCardProps) {
       {renderCourseInfo()}
       {renderCompletedUsers(courseRanking)}
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.editButton}>
+        <Pressable
+          style={styles.editButton}
+          onPress={handleEditCourse}
+        >
           <Text style={styles.editButtonText}>수정하기</Text>
         </Pressable>
         <Pressable style={styles.challengeButton}>
