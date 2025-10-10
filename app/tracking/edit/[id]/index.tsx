@@ -19,9 +19,11 @@ function Index() {
   >(null);
 
   const handleDeleteCourse = async (id: number) => {
-    const result = await deleteCompleteCourse(Number(id));
-    setIsDeleteCourseModal(false);
-    setIsDeleteCourseResultModal(result);
+    if (typeof id === 'string') {
+      const result = await deleteCompleteCourse(Number(id));
+      setIsDeleteCourseModal(false);
+      setIsDeleteCourseResultModal(result);
+    }
   };
 
   const handleEditCourse = async (id: number) => {
